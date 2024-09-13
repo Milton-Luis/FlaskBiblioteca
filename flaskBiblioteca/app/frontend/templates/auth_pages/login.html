@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="block-message">
+
+    {{ flash_message() }}
+</div>
+<div class="login-block">
+    <div class="login-form">
+        <form class="form login" action="{{ url_for('auth.login') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-4">
+                <div class="input-group login-group">
+                    <span class="input-group-text bi bi-at"></span>
+                    {{ form.email(class='form-control inputs') }}
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="input-group login-group">
+                    <span class="input-group-text bi bi-lock" id="lockUnlock"></span>
+                    {{ form.password(type="password", class='form-control inputs', id="checkInput") }}
+                </div>
+            </div>
+            <div class="input-group login-group">
+                {{ form.submit(class='form-control submit-login') }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

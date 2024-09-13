@@ -1,0 +1,78 @@
+/* CONFIG */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	display: grid;
+	grid-template-rows: 50px auto;
+	grid-template-columns: 2fr 5fr 5fr 1fr;
+	grid-template-areas:
+		"nav nav nav nav"
+		"aside main main main";
+	min-height: 100dvh;
+	width: 100%;
+}
+nav {
+	grid-area: nav;
+}
+
+aside {
+	grid-area: aside;
+	
+}
+
+main {
+	grid-area: main;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.notification{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+@media (width <= 1024px) {
+	body {
+		grid-template-rows: 60px auto 60px;
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"nav"
+			"main"
+			"aside";
+		overflow-x: hidden;
+	}
+	aside {
+		grid-area: aside;
+		position: fixed;
+		width: 100%;
+		bottom: 0;
+	}
+}
+@media (width <= 868px) {
+	body {
+		grid-template-rows: 60px auto 50px;
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"nav"
+			"main"
+			"aside";
+		overflow-x: hidden;
+	}
+	main {
+		max-width: 100%;
+	}
+	aside {
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+	}
+
+}

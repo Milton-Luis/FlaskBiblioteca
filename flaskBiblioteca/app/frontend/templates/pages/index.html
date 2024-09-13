@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% block content %}
+<section class="content">
+
+    <!-- painel de informações sobre devoluções e livros novos cadastrados -->
+    <section class="cards-section">
+        <div class="cards">
+            <div class="card">
+                <div class="card-info">
+                    <h2 class="card-text">Livros inseridos</h2>
+                    <p class="card-value">value</p>
+                </div>
+                <div class="card-img">
+                    <img class="card-icon" src="{{ url_for('static', filename='images/icons/add-new.png') }}"
+                        alt="add-new">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-info">
+                    <h2 class="card-text">Devoluções do dia</h2>
+                    <p class="card-value">Text</p>
+                </div>
+                <div class="card-img calendar">
+                    <img class="card-icon calendar-img"
+                        src="{{ url_for('static', filename='images/icons/calendar.png') }}" alt="add-new">
+                    <div class="calendar-info">
+                        <span class="day"></span>
+                        <span class="month"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-info">
+                    <h2 class="card-text">Devoluções em atraso</h2>
+                    <p class="card-value">Text</p>
+                </div>
+                <div class="card-img">
+                    <img class="card-icon" src="{{ url_for('static', filename='images/icons/delay.png') }}"
+                        alt="add-new">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Livros mais lidos-->
+    <section class="list-section">
+        <div class="list-group">
+            <h4>Os 10 livros mais lidos</h4>
+            <div class="book-list">
+
+            </div>
+            <div class="arrow-buttons">
+                <button class="bi bi-arrow-left-circle"></button>
+                <button class="bi bi-arrow-right-circle"></button>
+            </div>
+        </div>
+    </section>
+</section>
+
+{% endblock content %}

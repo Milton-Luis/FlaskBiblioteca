@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="search-book-section">
+        <form action="" class="form search-book-by-name">
+            {{ form.csrf_token() }}
+            <div class="input-group">
+                <span class="input-group-text bi bi-search"></span>
+                {{ form.search() }}
+            </div>
+        </form>
+    </div>
+    <div class="add_new_book_section">
+        <form action="" class="form add_new_book_form">
+            {{ form.csrf_token() }}
+            <div class="input-group">
+                <span class="input-group-text">Título do livro</span>
+                {{ form.title(class='form-control inputs') }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Autor do livro</span>
+                {{ form.author(class='form-control inputs') }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Número do isbn</span>
+                {{ form.isbnCode(class='form-control inputs') }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Total de livros</span>
+                {{ form.quantityBooks(class='form-control inputs') }}
+            </div>
+            <div class="input-group">
+                {{ form.submit(class='form-control inputs submit-book') }}
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}

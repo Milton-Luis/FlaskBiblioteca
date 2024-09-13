@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/errors.css') }}">
+    
+    {% if icon %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/error_icons/' + icon + '.png') }}"
+        type="image/x-icon">
+    {% endif %}
+    
+    {% if title %}
+    <title>{{ title }}</title>
+    {% endif %}
+</head>
+
+<body>
+    {% block body %}
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+    {% endblock body %}
+</body>
+
+</html>
