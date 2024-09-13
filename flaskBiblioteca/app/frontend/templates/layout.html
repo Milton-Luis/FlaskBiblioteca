@@ -28,8 +28,8 @@
 
 <body>
     {% if current_user.is_authenticated %}
-    <nav class="nav">
-        <div class="px-4 flex flex-row justify-between w-full">
+    <nav class="navbar">
+        <div class="container-fluid">
             <div class="navbar-menu">
                 <a href="#" class="navbar-brand">Flask Biblioteca</a>
             </div>
@@ -37,8 +37,9 @@
                 <span class="bi bi-person-circle"></span>
             </div>
         </div>
+
     </nav>
-    <aside class=" h-7 sidebar bg-blue-950">
+    <aside class="sidebar">
         <ul class="sidebar-nav">
             <li class="sidebar-item">
                 <a href="{{ url_for('main.index') }}" class="sidebar-link">

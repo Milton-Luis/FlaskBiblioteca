@@ -1,18 +1,18 @@
-const submitBtn = document.querySelector(".submit-btn");
+const submitBtn = document.querySelector(".submit-login");
 
 
 // window.location.reload()
 
 
 
-// const checkNullForm = () =>{
-// 	const inputs = document.querySelector(".inputs");
-// 	if(!(inputs.value)) return;
-// }
+const checkNullForm = () =>{
+	const inputs = document.querySelector(".checkInput");
+	if(!(inputs.value)) return;
+}
 
-// submitBtn.addEventListener("click", ()=>{
-// 	checkNullForm();
-// })
+submitBtn.addEventListener("click", ()=>{
+	checkNullForm();
+})
 
 // const add_book_btn = () =>{
 // 	fetch("/registers", {
