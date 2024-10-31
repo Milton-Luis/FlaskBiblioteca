@@ -7,27 +7,34 @@
 body{
     @apply font-sans w-screen; 
 }
-.navbar{
-    @apply flex items-center text-white bg-black text-2xl;
+
+.content{
+    @apply w-full mx-auto my-12 px-6 py-3 bg-slate-300;
 }
 
-.sidebar{
-    @apply bg-gray-800 text-white ;
-}
 .sidebar-nav{
     @apply flex flex-col p-0 max-lg:flex-row w-full;
 }
 .sidebar-item{
-    @apply list-none bg-gray-500 hover:bg-slate-400  transition ease-in-out delay-100 last:self-end;
+    @apply list-none hover:bg-slate-500 transition ease-in-out delay-100 last:absolute last:bottom-0 last:w-64 last:bg-slate-500;
 }
 
 .sidebar-link{
-    @apply  flex items-center gap-4 p-2 no-underline;
+    @apply  flex items-center gap-4 px-2 py-3 no-underline;
 }
-.sidebar-icon{
-    @apply h-5 invert;
-}
+
 .sidebar-name{
     @apply text-sm max-lg:hidden;
 }
 
+.card{
+    @apply flex flex-row gap-10 items-center w-[18rem] h-28 px-6 ;
+}
+
+.card-info{
+    @apply w-[20rem];   
+}
+
+.card-icon{
+    @apply h-20 w-20;
+}
