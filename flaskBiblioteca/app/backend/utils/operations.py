@@ -33,7 +33,7 @@ class Services:
             send_email(
                 user.email,
                 "Confirme seu email",
-                "auth_pages/email/confirm",
+                "auth/email/confirm",
                 user=user,
                 token=token,
             )
@@ -50,7 +50,7 @@ class Services:
             raise f"Ocorreu um erro ao retornar os valores ordenados - {e}"
         finally:
             db.session.close()
-    
+
     @staticmethod
     def get_one_record(model: type, id: int) -> object:
         try:
@@ -64,12 +64,15 @@ class Services:
     @staticmethod
     def get_first_record(model: type, **kwargs) -> object:
         try:
-            content = db.session.query(model).filter_by(**kwargs).first_or_404()
+            content = db.session.query(model).filter_by(**kwargs).first()
             return content
         except Exception as e:
             raise e
+        except Exception as e:
+            # General exception handling, if needed, log the exception
+            raise RuntimeError(f"An error occurred while fetching the record: {e}")
         finally:
-            db.session.close()
+            db.session.remove()
 
     @staticmethod
     def delete_value(model: type, id: int):

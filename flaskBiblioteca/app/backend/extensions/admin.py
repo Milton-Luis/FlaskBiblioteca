@@ -1,5 +1,5 @@
 from app.backend.model.models import Librarian, Students, User
-from app.backend.routes.auth.auth_forms import AddLibrarianForm, AddStudentForm
+from app.backend.routes.auth.forms import AddLibrarianForm, AddStudentForm
 from app.backend.utils.operations import Services
 from flask import abort, current_app, flash, redirect, url_for
 from flask_admin import Admin

@@ -28,7 +28,7 @@ body{
 }
 
 .card{
-    @apply flex flex-row gap-10 items-center w-[18rem] h-28 px-6 ;
+    @apply flex flex-row gap-10 items-center w-[18rem] h-28 px-6;
 }
 
 .card-info{
@@ -38,3 +38,4 @@ body{
 .card-icon{
     @apply h-20 w-20;
 }
+
