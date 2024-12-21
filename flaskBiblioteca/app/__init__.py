@@ -1,5 +1,6 @@
-from app.backend.extensions import configuration
 from flask import Flask
+
+from app.backend.extensions import configuration
 
 
 def register_blueprint_on_app(app):

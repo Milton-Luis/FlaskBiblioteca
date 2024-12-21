@@ -1,6 +1,6 @@
-from app.backend.model.models import User
-
 from flask_login import LoginManager
+
+from app.backend.model.models import User
 
 login_manager = LoginManager()
 

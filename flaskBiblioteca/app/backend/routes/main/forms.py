@@ -1,26 +1,21 @@
 from datetime import datetime
 
 from flask_wtf import FlaskForm
-from wtforms.fields import (
-    DateField,
-    IntegerField,
-    SelectField,
-    StringField,
-    SubmitField,
-)
+from wtforms.fields import (DateField, IntegerField, SelectField, StringField,
+                            SubmitField)
 from wtforms.validators import DataRequired, NumberRange
 
 
-class AddBookForm(FlaskForm):
-    search = StringField(
-        None,
-        validators=[DataRequired()],
-        render_kw={
-            "placeholder": "digite o título do livro ou nome do autor",
-            "class": "form-control",
-        },
-        id="searchBook",
-    )
+class NewBookForm(FlaskForm):
+    # search = StringField(
+    #     None,
+    #     validators=[DataRequired()],
+    #     render_kw={
+    #         "placeholder": "digite o título do livro ou nome do autor",
+    #         "class": "form-control",
+    #     },
+    #     id="searchBook",
+    # )
     title = StringField(
         "Título",
         validators=[DataRequired()],
@@ -35,22 +30,22 @@ class AddBookForm(FlaskForm):
         "ISBN",
         render_kw={"placeholder": "Digite o ISBN do livro"},
     )
-    quantityBooks = IntegerField(
-        "Quantidade de livros",
-        validators=[DataRequired(), NumberRange(min=1, max=50)],
-        render_kw={ "value": 1},
-    )
-    classification = SelectField(
-        "Classificação dos livros",
-        validators=[DataRequired()],
-        choices=[
-            ("Didático", "Didático"),
-            ("Informática", "Informática"),
-            ("Literatura", "Literatura"),
-            ("Logística", "Logísitca"),
-        ],
-    )
-    submit = SubmitField("Inserir no livro")
+    # quantityBooks = IntegerField(
+    #     "Quantidade de livros",
+    #     validators=[DataRequired(), NumberRange(min=1, max=50)],
+    #     render_kw={"value": 1},
+    # )
+    # classification = SelectField(
+    #     "Classificação dos livros",
+    #     validators=[DataRequired()],
+    #     choices=[
+    #         ("Didático", "Didático"),
+    #         ("Informática", "Informática"),
+    #         ("Literatura", "Literatura"),
+    #         ("Logística", "Logísitca"),
+    #     ],
+    # )
+    submit = SubmitField("Adicionar novo livro")
 
 
 class AddLoanForm(FlaskForm):
@@ -58,7 +53,9 @@ class AddLoanForm(FlaskForm):
         "Nome", validators=[DataRequired()], render_kw={"placeholder": "Nome"}
     )
     title = StringField(
-        "Título do livro", validators=[DataRequired()], render_kw={"desabled": "desabled"}
+        "Título do livro",
+        validators=[DataRequired()],
+        render_kw={"desabled": "desabled"},
     )
 
     loan_date = DateField("Data do empréstimo", render_kw={"value", datetime.now()})

@@ -1,12 +1,12 @@
 from datetime import datetime
 
+from flask import flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
+
 from app.backend.extensions.database import db
 from app.backend.extensions.security import check_password, validate_token
 from app.backend.model.models import User
 from app.backend.utils.operations import Services
-
-from flask import flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
 
 from . import auth
 from .forms import LoginForm
@@ -20,7 +20,9 @@ def login():
         return redirect(url_for("main.index"))
 
     if form.validate_on_submit():
-        user = Services.get_first_record(User, email=form.email.data)
+        user = db.session.query(User).filter_by(email=form.email.data).first()
+
+        # user = Services.get_first_record(User, email=form.email.data)
 
         if user and check_password(user.roles.password, form.password.data):
             login_user(user)

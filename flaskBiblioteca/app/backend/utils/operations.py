@@ -1,10 +1,9 @@
-from app.backend.extensions.database import db
-from app.backend.extensions.mail import send_email
-from app.backend.extensions.security import generate_confirmation_token
-from app.backend.model.models import Admin, User
-from flask import current_app, flash
+from flask import flash
 from sqlalchemy import asc
 from sqlalchemy.exc import SQLAlchemyError
+
+from app.backend.extensions.database import db
+from app.backend.model.models import Admin
 
 
 def check_attribute(model: type, column_name: str) -> None:
@@ -15,31 +14,20 @@ def check_attribute(model: type, column_name: str) -> None:
 class Services:
     @staticmethod
     def new_register(model: type, **kwargs):
-        check_attribute(model, **kwargs)
-        try:
-            if Admin.check_admin_permission(model):
-                content = model(**kwargs)
-                db.session.add(content)
-                db.session.commit()
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            raise e
-        finally:
-            db.session.close()
+        # check_attribute(model, **kwargs)
+        """"TO DO, reimplement this, está quebrando"""
 
-    def access_confirmation(user: User):
-        if current_app.config["ROLE_PREFIX"] in user.roles.rolename:
-            token = generate_confirmation_token(user.email)
-            send_email(
-                user.email,
-                "Confirme seu email",
-                "auth/email/confirm",
-                user=user,
-                token=token,
-            )
-            flash("Um email de confirmação foi enviado a você", "info")
-        else:
-            flash("Erro ao enviar o email de confirmação", "danger")
+
+        if Admin.check_admin_permission(model):
+            content = model(**kwargs)
+            db.session.add(content)
+            try:
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                raise e
+            finally:
+                db.session.close()
 
     @staticmethod
     def get_all_records(model: type, column_name: str) -> list:

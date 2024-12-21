@@ -2,10 +2,11 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from app.backend.extensions.database import db
 from flask import abort, current_app
 from flask_login import UserMixin, current_user
 from sqlalchemy.orm import Mapped, mapped_column
+
+from app.backend.extensions.database import db
 
 
 class LoanBooks(db.Model):
@@ -105,7 +106,7 @@ class Students(db.Model):
     classroom: Mapped[str] = mapped_column(db.String(15))
     grade: Mapped[str] = mapped_column(db.String(2))
 
-    user: Mapped["User"] = db.relationship(back_populates="student")
+    user: Mapped["User"] = db.relationship(back_populates="student", uselist=False)
 
     user_id: Mapped[str] = mapped_column(db.ForeignKey("user.id"))
 

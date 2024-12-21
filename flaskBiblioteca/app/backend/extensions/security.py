@@ -1,7 +1,10 @@
-from flask import current_app
+from flask import current_app, flash
 from flask_argon2 import Argon2
 from itsdangerous import SignatureExpired
 from itsdangerous import URLSafeTimedSerializer as Serializer
+
+from app.backend.extensions.mail import send_email
+from app.backend.model.models import User
 
 argon2 = Argon2()
 
@@ -68,6 +71,22 @@ def validate_token(token: str, expiration=3600) -> str:
     except SignatureExpired:
         return None
     return email
+
+
+def access_confirmation(user):
+    token = generate_confirmation_token(user.email)
+    try:
+        send_email(
+            user.email,
+            "Confirme seu email",
+            "auth/email/confirm",
+            user=user,
+            token=token,
+        )
+    except Exception as e:
+        flash(f"Erro ao enviar o email de confirmação {e}", "danger")
+    else:
+        flash("Um email de confirmação foi enviado a você", "info")
 
 
 def init_app(app):

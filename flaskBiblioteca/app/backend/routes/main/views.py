@@ -1,10 +1,11 @@
-from app.backend.model.models import Book, LoanBooks, User
-from app.backend.utils.operations import Services
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
+from app.backend.model.models import Book, LoanBooks, User
+from app.backend.utils.operations import Services
+
 from . import main
-from .forms import AddBookForm, AddLoanForm, SearchBookForm
+from .forms import AddLoanForm, NewBookForm, SearchBookForm
 
 
 @main.route("/")
@@ -59,23 +60,24 @@ def loanBooks():
     )
 
 
-@main.route("/livros/novo/livro", methods=["GET", "POST"])
+@main.route("/livros/novo/", methods=["GET", "POST"])
 @login_required
 def new_book():
-    form = AddBookForm()
+    form = NewBookForm()
     if form.validate_on_submit():
         Services.new_register(
             Book,
-            form.title.data.form.author.data,
-            form.quantityBooks.data,
-            form.isbnCode.data,
+            title=form.title.data,
+            author=form.author.data,
+            # quantity=form.quantityBooks.data,
+            isbn=form.isbnCode.data,
         )
         flash("Livro adicionado com sucesso!", "success")
         return redirect(url_for("main.index"))
     return render_template("pages/newBook.html", form=form, title="Novo Livro")
 
 
-@main.route("/emprestimos/novo/emprestimo/", methods=["GET", "POST"])
+@main.route("/emprestimos/novo/", methods=["GET", "POST"])
 @login_required
 def new_loan():
     form = AddLoanForm()

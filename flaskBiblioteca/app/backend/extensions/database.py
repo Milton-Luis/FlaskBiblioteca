@@ -18,6 +18,7 @@ from sqlalchemy.orm import DeclarativeBase
 #     mapper_registry = registry()
 #     return mapper_registry.generate_base()
 
+
 class Base(DeclarativeBase):
     pass
 

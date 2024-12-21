@@ -1,18 +1,20 @@
-from app.backend.model.models import User
 from flask_wtf import FlaskForm
 from wtforms import (EmailField, PasswordField, SelectField, StringField,
                      SubmitField, ValidationError)
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
+from app.backend.model.models import User
+
 
 class LoginForm(FlaskForm):
     email = StringField(
         "Email",
+        validators=[DataRequired()],
         render_kw={"placeholder": "Digite seu email"},
     )
     password = PasswordField(
         "Senha",
-        # validators=[DataRequired()],
+        validators=[DataRequired()],
         render_kw={"placeholder": "Digite sua senha"},
     )
     submit = SubmitField("Entrar")
@@ -46,7 +48,7 @@ class AddLibrarianForm(FlaskForm):
     )
     confirm_password = PasswordField(
         "Confirmar senha",
-        validators=[DataRequired(), EqualTo(password)],
+        validators=[DataRequired(), EqualTo("password", "As senhas devem conrresponder")],
         render_kw={"placeholder": "Confirme sua senha"},
     )
     signup = SubmitField("Inserir Registro")
