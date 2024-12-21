@@ -2,9 +2,10 @@
 	{% with messages = get_flashed_messages(with_categories=True) %}
 		{% for category, message in messages %}
 			<div class="alert alert-{{ category }} alert-dismissible fade show">
-				<!-- <img src="{{ url_for('static', filename='images/icons/' + category + '-icon.png') }}" alt="{{ category }} icon"> -->
-				<button class="btn-close" data-bs-dismiss="alert"></button>
 				{{ message }}
+				<div class="close">
+					<button class="fa fa-close" id="close-btn" data-bs-dismiss="alert"></button>
+				</div>
 			</div>	 
 		{% endfor %}
 	{% endwith %}

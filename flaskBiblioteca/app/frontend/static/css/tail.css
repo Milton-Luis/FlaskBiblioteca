@@ -4,38 +4,90 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    @apply font-sans w-screen; 
+:root {
+	/* ROOT COLORS */
+	--color-01: #fff; /* white */
+	--color-02: #111111; /* Night */
+	--color-03: #f6f6f8; /* anti-flash white */
+	--color-04: #0c203a; /* oxford blue */
+	--color-05: #fe4e00; /* aerospace orange */
+
+	--opacity-color-03: rgba(
+		148,
+		148,
+		148,
+		0.212
+	); /* anti-flash white opacity 50%*/
+
+	/*  FONTS */
+	--main-font-family: "Roboto";
+	--main-font-size: 12pt;
+
+	/* BASE BORDER */
+	--base-border-width-1: 1px;
+	--base-border-width-2: 2px;
+	--base-border-style: solid;
 }
 
-.content{
-    @apply w-full mx-auto my-12 px-6 py-3 bg-slate-300;
+body {
+	@apply font-sans w-screen;
 }
 
-.sidebar-nav{
-    @apply flex flex-col p-0 max-lg:flex-row w-full;
-}
-.sidebar-item{
-    @apply list-none hover:bg-slate-500 transition ease-in-out delay-100 last:absolute last:bottom-0 last:w-64 last:bg-slate-500;
+.content {
+	@apply w-full mb-4 px-4 py-3 bg-slate-200 rounded-md;
 }
 
-.sidebar-link{
-    @apply  flex items-center gap-4 px-2 py-3 no-underline;
+.sidebar-item {
+	@apply list-none hover:bg-slate-500 transition ease-in-out delay-100 lg:last:absolute lg:last:bottom-0 lg:last:bg-slate-500 lg:last:w-64;
 }
 
-.sidebar-name{
-    @apply text-sm max-lg:hidden;
+.sidebar-link {
+	@apply flex items-center gap-4 px-4 py-3 no-underline w-full;
 }
 
-.card{
-    @apply flex flex-row gap-10 items-center w-[18rem] h-28 px-6;
+.sidebar-name {
+	@apply text-sm max-lg:hidden;
 }
 
-.card-info{
-    @apply w-[20rem];   
+.card {
+	@apply flex flex-row justify-between gap-x-8 items-center text-center w-[14rem] h-32 px-3 py-4 border-l-[8px] max-lg:flex-col-reverse max-lg:w-[220px] max-lg:h-[8rem] max-lg:pb-2 max-sm:w-[192px] bg-white rounded-lg;
 }
 
-.card-icon{
-    @apply h-20 w-20;
+.card-icon {
+	@apply h-20 w-20;
 }
 
+.card-value{
+	@apply text-xl font-bold rounded-[50%] w-7 h-7 max-lg:bg-red-700 max-lg:absolute max-lg:top-[1rem] max-lg:left-[9rem] max-lg:text-white;
+}
+
+.input-group{
+	@apply flex items-center border border-gray-300 rounded-md;
+}
+
+.input-group-text{
+	@apply bg-gray-200 text-gray-700 px-3 py-3 rounded-l-md
+}
+
+.form-control{
+	@apply flex-1 border-0 p-2 focus:ring-0 rounded-r-md
+}
+.alert{
+	@apply flex items-center justify-between font-semibold px-4 py-3 rounded-md border-l-8;
+}
+
+.alert-danger{
+	@apply bg-red-200 border-l-red-500 ;
+}
+
+.alert-warning{
+	@apply bg-yellow-200 border-l-yellow-300 ;
+}
+
+.alert-success{
+	@apply bg-green-200 border-l-green-500 ;
+	}
+
+.alert-info{
+	@apply bg-blue-200 border-l-blue-500 ;
+}

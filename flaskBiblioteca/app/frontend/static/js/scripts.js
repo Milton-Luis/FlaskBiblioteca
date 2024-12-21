@@ -1,3 +1,4 @@
+// window.location.reload();
 const lock = () => {
 	let password = document.querySelector("input[type='password']");
 	let lockIcon = document.getElementById("lockUnlock");
@@ -16,7 +17,6 @@ lock();
 
 const submitBtn = document.querySelector(".submit-login");
 
-// window.location.reload()
 
 const checkNullForm = () => {
 	const inputs = document.querySelector(".checkInput");

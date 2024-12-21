@@ -2,30 +2,33 @@
 
 {% block content %}
 <section class="content">
-    <div class="navbar-book">
-        <div class="register-book">
-            <a href="{{ url_for('main.new_book') }}" id="add_book" class="btn-item">
-                <span class="nav-link-name">Inserir Livro</span>
+    <div class="flex items-center gap-x-8">
+        <div class="">
+            <a href="{{ url_for('main.new_book') }}" id="add_book"
+                class="flex items-center max-lg:items-start gap-x-4 w-[150px] bg-blue-700 text-center  text-white py-3 px-4 max-lg:px-3 max-lg:py3 rounded-lg max-lg:w-10 max-lg:h-10">
+                <span class="nav-link-name max-md:visible fa fa-plus"></span>
+                <span class="nav-link-name max-lg:invisible font-xl">Inserir Livro</span>
             </a>
         </div>
-        
-        <form action="" class="form search-book-by-name">
+
+        <form action="" class="w-[50rem] max-lg:w-[22rem]" method="get">
             {{ form.csrf_token() }}
             <div class="input-group">
-                <span class="input-group-text bi bi-search"></span>
+                <span class="input-group-text fa fa-search "></span>
                 {{ form.search() }}
             </div>
-        </form> 
+        </form>
     </div>
-    
-    <div class="books-list">
+</section>
+<section class="w-full h-full overflow-y-auto">
+
+    <div class="flex flex-wrap justify-start items-start gap-x-8 gap-y-6 max-lg:justify-around">
         {% for book in books %}
-        <div class="thumbnail">
+        <div class="h-[230px] w-[150px] border">
             <div class="panel-content">
                 {% if book.title %}
                 <a href="{{ url_for('main.showBook', book_id=book.id) }}">
                     <img src="" alt="{{book.title}}" class="thumb-img">
-                    <!-- <span class="panel-title">{{ book.title }}</span> -->
                 </a>
                 {% endif %}
             </div>
@@ -36,11 +39,12 @@
         </div>
         {% endfor %}
     </div>
+
     
-    <div class="pagination">
-        {% from "macros/pagination/pagination.html" import render_pagination %}
-        {{ render_pagination(books, endpoint) }}
-    </div>
 </section>
+<div class="pagination">
+    {% from "macros/pagination/pagination.html" import render_pagination %}
+    {{ render_pagination(books, endpoint) }}
+</div>
 
 {% endblock content %}

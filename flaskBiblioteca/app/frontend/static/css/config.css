@@ -13,7 +13,7 @@ body {
 		"nav nav nav nav"
 		"aside main main main";
 	min-height: 100dvh;
-	width: 100%;
+	overflow-x: hidden;
 }
 nav {
 	grid-area: nav;
@@ -35,9 +35,11 @@ main {
 			"nav"
 			"main"
 			"aside";
-		overflow-x: hidden;
+		
 	}
 	aside {
 		grid-area: aside;
+		position: fixed;
+		bottom: 0;
 	}
 }
