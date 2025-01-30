@@ -81,7 +81,7 @@ def new_book():
 @main.route("/emprestimos/novo/", methods=["GET", "POST"])
 @login_required
 def new_loan():
-    form = AddLoanForm()
+    form = LendingForm()
     if form.validate_on_submit():
         # get_book = Services.get_one_record(Book, Book.id)
 
@@ -97,5 +97,5 @@ def new_loan():
         flash("Empréstimo realizado!", "success")
         return redirect(url_for("main.index"))
     return render_template(
-        "pages/newLoan.html", form=form, get_book=get_book, title="Novo empréstimo"
+        "pages/newLoan.html", form=form, title="Novo empréstimo"
     )
