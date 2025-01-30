@@ -9,15 +9,29 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.backend.extensions.database import db
 
 
-class LoanBooks(db.Model):
-    __tablename__ = "loanbooks"
+class LendingBook(db.Model):
+    __tablename__ = "lending_book"
     id: Mapped[int] = mapped_column(primary_key=True)
-    book_id: Mapped[int] = mapped_column(db.ForeignKey("book.id"), nullable=False)
-    user_id: Mapped[int] = mapped_column(db.ForeignKey("user.id"), nullable=False)
+    book_id: Mapped[int] = mapped_column(
+        db.ForeignKey("book.id"), primary_key=True, nullable=False
+    )
+    user_id: Mapped[int] = mapped_column(
+        db.ForeignKey("user.id"), primary_key=True, nullable=False
+    )
 
-    loan_date: Mapped[datetime]
+    users: Mapped["User"] = db.relationship(back_populates="books")
+    books: Mapped["Books"] = db.relationship(back_populates="users")
+
+    lending_date: Mapped[datetime] = mapped_column(
+        nullable=False, default=datetime.now()
+    )
     return_date: Mapped[datetime]
-    quantityBooks: Mapped[int] = mapped_column(nullable=False)
+    quantity_lent: Mapped[int] = mapped_column(nullable=False, default=1)
+
+    def get_formated_date(self, date: datetime):
+        self.formated_date = date.strftime("%d/%m/%Y")
+        [self.lending_date, self.return_date] = self.formated_date
+        return self.formated_date
 
 
 class User(db.Model, UserMixin):
@@ -37,7 +51,7 @@ class User(db.Model, UserMixin):
         nullable=True, default=datetime.now()
     )
 
-    roles: Mapped[List["Role"]] = db.relationship(
+    roles: Mapped["Role"] = db.relationship(
         back_populates="user",
         uselist=False,
         cascade="all, delete-orphan",
@@ -48,9 +62,7 @@ class User(db.Model, UserMixin):
         back_populates="user", cascade="all, delete-orphan"
     )
 
-    books: Mapped[list["Book"]] = db.relationship(
-        secondary="loanbooks", back_populates="users"
-    )
+    books: Mapped[list["LendingBook"]] = db.relationship(back_populates="users")
 
     def __str__(self) -> str:
         return f"User {self.email}"
@@ -111,14 +123,13 @@ class Students(db.Model):
     user_id: Mapped[str] = mapped_column(db.ForeignKey("user.id"))
 
 
-class Book(db.Model):
+class Books(db.Model):
     __tablename__ = "book"
 
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     title: Mapped[str] = mapped_column(db.String(60))
     author: Mapped[str] = mapped_column(db.String(60))
     isbn: Mapped[str] = mapped_column(db.String(20))
+    quantity_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
 
-    users: Mapped[list["User"]] = db.relationship(
-        secondary="loanbooks", back_populates="books"
-    )
+    users: Mapped[list["LendingBook"]] = db.relationship(back_populates="books")

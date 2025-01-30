@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="menu-loan">
+    </div>
+    <div class="table-widget">
+        <table>
+            <caption>
+                <h4>Empréstimos</h4>
+            </caption>
+            <thead>
+                <tr class="table-header-row">
+                    <th class="table-heading-column">Livro</th>
+                    <th class="table-heading-column">Nome</th>
+                    <!-- <th class="table-heading-column">Qtd. Livros</th>
+                    <th class="table-heading-column">Data do empréstimo</th>
+                    <th class="table-heading-column">Data da devolução</th> -->
+                    <th class="table-heading-column">opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr class="table-body-row">
+                    <td class="table-body-column">{{ loan.title }}</td>
+                    <td class="table-body-column">{{ loan.author }}</td>
+                    <td class="table-body-column"><a href="{{ url_for('main.new_loan', id=loan.id) }}"
+                            class="btn btn-default">Renovar</a></td>
+                    <td class="table-body-column"><a href="#" class="btn btn-warning">Devolver</a></td>
+                    <!-- <td class="table-body-column">Fortaleza digital</td>
+                        <td class="table-body-column">Milton Luís de Carvalho Monteiro</td>
+                        <td class="table-body-column">1</td>
+                        <td class="table-body-column">06/06/2024</td>
+                        <td class="table-body-column">12/06/2024</td> -->
+                </tr>
+                {% endfor %}
+                <tr class="table-body-row">
+
+                    <!-- <td class="table-body-column">Fortaleza digital</td>
+                    <td class="table-body-column">Milton Luís de Carvalho Monteiro</td>
+                    <td class="table-body-column">1</td>
+                    <td class="table-body-column">06/06/2024</td>
+                    <td class="table-body-column">12/06/2024</td> -->
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <section class="pagination">
+        {% from "macros/pagination/pagination.html" import render_pagination %}
+        {{ render_pagination(loans, endpoint) }}
+    </section>
+</section>
+{% endblock content %}

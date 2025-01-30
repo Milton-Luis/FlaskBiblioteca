@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+<div class="w-[30rem] relative right-28 top-20 max-lg:w-[25rem] max-lg:right-0">
+    {{ flash_message() }}
+</div>
+{% block content %}
+
+
+<section class=" ">
+    
+    <div class="">
+        <form action="{{ url_for('main.new_book') }}"  method="POST" class="w-[30rem]">
+            {{ form.csrf_token() }}
+            <div class="">
+                {{ form.title.label }}
+                {{ form.title(class='form-control' ) }}
+            </div>
+            <div class="">
+                {{ form.author.label }}
+                <!-- <h2 class="">Autor do livro</h2> -->
+                {{ form.author(class='form-control' ) }}
+            </div>
+            <div class="">
+                {{ form.isbn.label }}
+                <!-- <span class="">Número do isbn</span> -->
+                {{ form.isbn(class='form-control' ) }}
+            </div>
+            <div class="">
+                <!-- <span class="">Total de livros</span> -->
+                {{ form.quantity.label }}
+                {{ form.quantity(class='form-control' ) }}
+            </div>
+            <div class="">
+                {{ form.submit(class='form-control bg-blue-700') }}
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}

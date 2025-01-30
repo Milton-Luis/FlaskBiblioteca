@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="">
+
+    <div class="add-new-book">
+        <form action="{{ url_for('main.new_loan', id=get_book.id) }}">
+            {{ form.csrf_token() }}
+            <div class="input-group">
+                <!-- <span class="input-group-text bi bi-search"></span> -->
+                {{ form.person(value=get_book.users.fisrtname) }}
+            </div>
+            <div class="input-group">
+                <!-- <span class="input-group-text bi bi-search"></span> -->
+                {{ form.title(value=get_book.title) }}
+            </div>
+            <div class="input-group">
+                <!-- <span class="input-group-text bi bi-search"></span> -->
+                {{ form.quantity(value=get_book.users) }}
+            </div>
+            <div class="input-group">
+                <!-- <span class="input-group-text bi bi-search"></span> -->
+                {{ form.loan_date(value="") }}
+            </div>
+            <div class="input-group">
+                <!-- <span class="input-group-text bi bi-search"></span> -->
+                {{ form.return_date() }}
+            </div>
+            <div class="input-group">
+                <!-- <span class="input-group-text bi bi-search"></span> -->
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}
