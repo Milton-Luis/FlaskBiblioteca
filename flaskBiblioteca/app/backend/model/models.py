@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.backend.extensions.database import db
 
 
-class LendingBook(db.Model):
+class LendingBooks(db.Model):
     __tablename__ = "lending_book"
     id: Mapped[int] = mapped_column(primary_key=True)
     book_id: Mapped[int] = mapped_column(
@@ -62,7 +62,7 @@ class User(db.Model, UserMixin):
         back_populates="user", cascade="all, delete-orphan"
     )
 
-    books: Mapped[list["LendingBook"]] = db.relationship(back_populates="users")
+    books: Mapped[list["LendingBooks"]] = db.relationship(back_populates="users")
 
     def __str__(self) -> str:
         return f"User {self.email}"
@@ -132,4 +132,4 @@ class Books(db.Model):
     isbn: Mapped[str] = mapped_column(db.String(20))
     quantity_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
 
-    users: Mapped[list["LendingBook"]] = db.relationship(back_populates="books")
+    users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
