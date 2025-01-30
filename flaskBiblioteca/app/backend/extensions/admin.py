@@ -1,10 +1,10 @@
 from app.backend.model.models import Librarian, Students, User
 from app.backend.routes.auth.forms import AddLibrarianForm, AddStudentForm
-from app.backend.utils.operations import Services
 from flask import abort, current_app, flash, redirect, url_for
 from flask_admin import Admin
 from flask_admin.base import AdminIndexView, expose
 from flask_login import current_user, login_required
+from app.backend.extensions.database import db
 
 admin = Admin()
 
@@ -30,8 +30,7 @@ class AdminAccess(AdminIndexView):
         form = AddLibrarianForm()
 
         if form.validate_on_submit():
-            Services.new_register(
-                User,
+            librarian = User(
                 firstname=form.firstname.data,
                 lastname=form.lastname.data,
                 email=form.email.data,
@@ -41,6 +40,8 @@ class AdminAccess(AdminIndexView):
                     password=form.password.data,
                 ),
             )
+            db.session.add(librarian)
+            db.session.commit()
             flash("Inserido com sucesso", "success")
             return redirect(url_for("admin.index"))
         return self.render("admin/addLibrarian.html", form=form, title="New Register")
@@ -51,8 +52,7 @@ class AdminAccess(AdminIndexView):
         form = AddStudentForm()
 
         if form.validate_on_submit():
-            Services.new_register(
-                User,
+            student = User(
                 firstname=form.firstname.data,
                 lastname=form.lastname.data,
                 email=form.email.data,
@@ -61,6 +61,8 @@ class AdminAccess(AdminIndexView):
                     Students(classroom=form.classroom.data, grade=form.grade.data)
                 ],
             )
+            db.session.add(student)
+            db.session.commit()
 
             flash("Inserido com sucesso", "success")
             return redirect(url_for("admin.index"))
