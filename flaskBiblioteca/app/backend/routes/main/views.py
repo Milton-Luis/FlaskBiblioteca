@@ -1,12 +1,11 @@
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
-from app.backend.model.models import Book, LoanBooks, User
-from app.backend.utils.operations import Services
+from app.backend.model.models import Books, LendingBooks, User
 
 from . import main
-from .forms import AddLoanForm, NewBookForm, SearchBookForm
-
+from .forms import LendingForm, NewBookForm, SearchBookForm
+from app.backend.extensions.database import db
 
 @main.route("/")
 def index():
@@ -22,7 +21,7 @@ def books():
 
     page = request.args.get("page", 1, type=int)
 
-    books = Services.get_all_records(Book, Book.title).paginate(
+    books = db.session.query(Books).filter(Books.title).paginate(
         page=page, per_page=10, error_out=True
     )
     return render_template(
@@ -37,7 +36,7 @@ def books():
 @main.route("/livros/<int:book_id>/", methods=["GET", "POST"])
 @login_required
 def showBook(book_id):
-    book = Services.get_one_record(Book, book_id)
+    book = db.session.query(Books).get(book_id)
     return render_template(
         "pages/showbook.html",
         book=book,
@@ -48,7 +47,7 @@ def showBook(book_id):
 @main.route("/emprestimos/")
 @login_required
 def loanBooks():
-    loans = Services.get_all_records(Book, Book.title).paginate(
+    loans = db.session.query(Books).filter(Books.title).paginate(
         page=1, per_page=5, error_out=True
     )
 
@@ -65,13 +64,15 @@ def loanBooks():
 def new_book():
     form = NewBookForm()
     if form.validate_on_submit():
-        Services.new_register(
-            Book,
+        books = Books(
             title=form.title.data,
             author=form.author.data,
-            # quantity=form.quantityBooks.data,
+            quantity_of_books=form.quantity.data,
             isbn=form.isbnCode.data,
         )
+        db.session.add(books)
+        db.session.commit()
+
         flash("Livro adicionado com sucesso!", "success")
         return redirect(url_for("main.index"))
     return render_template("pages/newBook.html", form=form, title="Novo Livro")
@@ -82,18 +83,16 @@ def new_book():
 def new_loan():
     form = AddLoanForm()
     if form.validate_on_submit():
-        get_book = Services.get_one_record(Book, Book.id)
+        # get_book = Services.get_one_record(Book, Book.id)
 
-        get_user = Services.get_first_record(User, User.firstname)
+        # get_user = Services.get_first_record(User, User.firstname)
 
-        Services.new_register(
-            LoanBooks,
+        lending = LendingForm(
             quantityBooks=form.quantity.data,
             loan_date=form.loan_date.data,
             return_date=form.return_date.data,
-            user_id=get_user.id,
-            book_id=get_book.id,
         )
+        lending.save()
 
         flash("Empréstimo realizado!", "success")
         return redirect(url_for("main.index"))
