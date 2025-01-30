@@ -1,5 +1,5 @@
 from app.backend.extensions.database import db
-from app.backend.model.models import (Admin, Book, Librarian, LoanBooks, Role,
+from app.backend.model.models import (Admin, Books, Librarian, LendingBooks, Role,
                                       Students, User)
 
 
@@ -28,6 +28,6 @@ def init_app(app):
             "students": Students,
             "admin": Admin,
             "librarian": Librarian,
-            "book": Book,
-            "loanBook": LoanBooks
+            "book": Books,
+            "LendingBooks": LendingBooks
         }
