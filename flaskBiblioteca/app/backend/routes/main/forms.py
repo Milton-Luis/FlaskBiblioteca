@@ -26,15 +26,15 @@ class NewBookForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "Digite o autor do livro"},
     )
-    isbnCode = StringField(
+    isbn = StringField(
         "ISBN",
         render_kw={"placeholder": "Digite o ISBN do livro"},
     )
-    # quantityBooks = IntegerField(
-    #     "Quantidade de livros",
-    #     validators=[DataRequired(), NumberRange(min=1, max=50)],
-    #     render_kw={"value": 1},
-    # )
+    quantity = IntegerField(
+        "Quantidade de livros",
+        validators=[DataRequired(), NumberRange(min=1, max=50)],
+        render_kw={"value": 1},
+    )
     # classification = SelectField(
     #     "Classificação dos livros",
     #     validators=[DataRequired()],
@@ -48,7 +48,7 @@ class NewBookForm(FlaskForm):
     submit = SubmitField("Adicionar novo livro")
 
 
-class AddLoanForm(FlaskForm):
+class LendingForm(FlaskForm):
     person = StringField(
         "Nome", validators=[DataRequired()], render_kw={"placeholder": "Nome"}
     )
@@ -58,7 +58,7 @@ class AddLoanForm(FlaskForm):
         render_kw={"desabled": "desabled"},
     )
 
-    loan_date = DateField("Data do empréstimo", render_kw={"value", datetime.now()})
+    loan_date = DateField("Data do empréstimo", render_kw={"disabled", "disabled"})
     return_date = DateField("Data do empréstimo")
     quantity = IntegerField(
         "Quantidade de livros", validators=[DataRequired(), NumberRange(min=1, max=50)]
