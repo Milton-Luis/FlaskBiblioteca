@@ -1,3 +1,4 @@
+from app.backend.extensions.security import access_confirmation, generate_password
 from app.backend.model.models import Librarian, Students, User
 from app.backend.routes.auth.forms import AddLibrarianForm, AddStudentForm
 from flask import abort, current_app, flash, redirect, url_for
@@ -37,11 +38,14 @@ class AdminAccess(AdminIndexView):
                 phone=form.phone.data,
                 roles=Librarian(
                     rolename=current_app.config["ROLE_PREFIX"],
-                    password=form.password.data,
+                    password=generate_password(form.password.data),
                 ),
             )
             db.session.add(librarian)
             db.session.commit()
+
+            access_confirmation(librarian)
+            
             flash("Inserido com sucesso", "success")
             return redirect(url_for("admin.index"))
         return self.render("admin/addLibrarian.html", form=form, title="New Register")
