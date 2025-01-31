@@ -6,7 +6,7 @@ from wtforms.fields import (DateField, IntegerField, SelectField, StringField,
 from wtforms.validators import DataRequired, NumberRange
 
 
-class NewBookForm(FlaskForm):
+class BookForm(FlaskForm):
     # search = StringField(
     #     None,
     #     validators=[DataRequired()],
@@ -55,7 +55,6 @@ class LendingForm(FlaskForm):
     title = StringField(
         "Título do livro",
         validators=[DataRequired()],
-        render_kw={"desabled": "desabled"},
     )
 
     loan_date = DateField("Data do empréstimo", render_kw={"disabled", "disabled"})
