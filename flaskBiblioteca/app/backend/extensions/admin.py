@@ -1,11 +1,12 @@
-from app.backend.extensions.security import access_confirmation, generate_password
+from app.backend.extensions.database import db
+from app.backend.extensions.security import (access_confirmation,
+                                             generate_password)
 from app.backend.model.models import Librarian, Students, User
 from app.backend.routes.auth.forms import AddLibrarianForm, AddStudentForm
 from flask import abort, current_app, flash, redirect, url_for
 from flask_admin import Admin
 from flask_admin.base import AdminIndexView, expose
 from flask_login import current_user, login_required
-from app.backend.extensions.database import db
 
 admin = Admin()
 

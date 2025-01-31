@@ -1,7 +1,7 @@
 from app.backend.extensions.database import db
 from app.backend.extensions.security import generate_password
-from app.backend.model.models import (Admin, Books, Librarian, LendingBooks, Role,
-                                      Students, User)
+from app.backend.model.models import (Admin, Books, LendingBooks, Librarian,
+                                      Role, Students, User)
 
 
 def create_db():
