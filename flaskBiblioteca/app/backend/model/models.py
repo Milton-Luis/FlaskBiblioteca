@@ -11,7 +11,6 @@ from app.backend.extensions.database import db
 
 class LendingBooks(db.Model):
     __tablename__ = "lending_book"
-    id: Mapped[int] = mapped_column(primary_key=True)
     book_id: Mapped[int] = mapped_column(
         db.ForeignKey("book.id"), primary_key=True, nullable=False
     )
@@ -32,6 +31,12 @@ class LendingBooks(db.Model):
         self.formated_date = date.strftime("%d/%m/%Y")
         [self.lending_date, self.return_date] = self.formated_date
         return self.formated_date
+    
+    def get_book_info(self):
+        return self.books
+
+    def get_delayed_return(self):
+        return 12
 
 
 class User(db.Model, UserMixin):
@@ -51,25 +56,25 @@ class User(db.Model, UserMixin):
         nullable=True, default=datetime.now()
     )
 
+    roles_id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"))
+
     roles: Mapped["Role"] = db.relationship(
         back_populates="user",
-        uselist=False,
-        cascade="all, delete-orphan",
-        lazy="subquery",
+       
     )
 
     student: Mapped[List["Students"]] = db.relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
 
-    books: Mapped[list["LendingBooks"]] = db.relationship(back_populates="users")
+    books: Mapped[list["LendingBooks"]] = db.relationship(back_populates="users", cascade="all, delete-orphan")
 
     def __str__(self) -> str:
         return f"User {self.email}"
 
 
 class Role(db.Model):
-    __tablename__ = "role"
+    __tablename__ = "roles"
 
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     rolename: Mapped[str] = mapped_column(db.String(2), nullable=False, default="LB")
@@ -77,8 +82,9 @@ class Role(db.Model):
     is_confirmed: Mapped[bool] = mapped_column(default=False)
     type: Mapped[str]
 
-    user_id: Mapped[int] = mapped_column(db.ForeignKey("user.id"))
-    user: Mapped["User"] = db.relationship(back_populates="roles")
+    
+    user: Mapped["User"] = db.relationship(back_populates="roles",  uselist=False,
+        lazy="subquery", cascade="all, delete-orphan")
 
     __mapper_args__ = {
         "polymorphic_identity": "role",
@@ -89,7 +95,7 @@ class Role(db.Model):
 class Admin(Role):
     __tablename__ = "admin"
 
-    id: Mapped[int] = mapped_column(db.ForeignKey("role.id"), primary_key=True)
+    id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), primary_key=True)
     is_admin: Mapped[bool] = mapped_column(default=False, unique=True)
 
     __mapper_args__ = {"polymorphic_identity": "admin"}
@@ -106,7 +112,7 @@ class Admin(Role):
 class Librarian(Role):
     __tablename__ = "librarian"
 
-    id: Mapped[int] = mapped_column(db.ForeignKey("role.id"), primary_key=True)
+    id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), primary_key=True)
 
     __mapper_args__ = {"polymorphic_identity": "librarian"}
 
@@ -133,3 +139,10 @@ class Books(db.Model):
     quantity_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
 
     users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
+
+    def get_total_books(self):
+        total_books = Books.query.all()
+        if total_books:
+            return total_books.count()
+        else:
+            return 0
