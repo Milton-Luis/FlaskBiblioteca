@@ -2,11 +2,11 @@ import uuid
 from datetime import datetime
 from typing import List
 
+from app.backend.extensions.database import db
 from flask import abort, current_app
 from flask_login import UserMixin, current_user
+from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
-
-from app.backend.extensions.database import db
 
 
 class LendingBooks(db.Model):
@@ -31,12 +31,6 @@ class LendingBooks(db.Model):
         self.formated_date = date.strftime("%d/%m/%Y")
         [self.lending_date, self.return_date] = self.formated_date
         return self.formated_date
-    
-    def get_book_info(self):
-        return self.books
-
-    def get_delayed_return(self):
-        return 12
 
 
 class User(db.Model, UserMixin):
@@ -56,18 +50,21 @@ class User(db.Model, UserMixin):
         nullable=True, default=datetime.now()
     )
 
-    roles_id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"))
-
-    roles: Mapped["Role"] = db.relationship(
-        back_populates="user",
-       
-    )
+    roles_id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), nullable=True)
+    roles: Mapped["Role"] = db.relationship(back_populates="user")
 
     student: Mapped[List["Students"]] = db.relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
 
-    books: Mapped[list["LendingBooks"]] = db.relationship(back_populates="users", cascade="all, delete-orphan")
+    books: Mapped[list["LendingBooks"]] = db.relationship(
+        back_populates="users", cascade="all, delete-orphan"
+    )
+
+    @property
+    def get_fullname(self):
+        return f"{self.firstname} {self.lastname}"
+
 
     def __str__(self) -> str:
         return f"User {self.email}"
@@ -82,9 +79,12 @@ class Role(db.Model):
     is_confirmed: Mapped[bool] = mapped_column(default=False)
     type: Mapped[str]
 
-    
-    user: Mapped["User"] = db.relationship(back_populates="roles",  uselist=False,
-        lazy="subquery", cascade="all, delete-orphan")
+    user: Mapped["User"] = db.relationship(
+        back_populates="roles",
+        uselist=False,
+        lazy="subquery",
+        cascade="all, delete-orphan",
+    )
 
     __mapper_args__ = {
         "polymorphic_identity": "role",
@@ -141,8 +141,12 @@ class Books(db.Model):
     users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
 
     def get_total_books(self):
-        total_books = Books.query.all()
-        if total_books:
-            return total_books.count()
-        else:
-            return 0
+        total_books = db.session.query(func.sum(Books.quantity_of_books)).scalar()
+        return total_books if total_books else 0
+
+    def get_title(self):
+        return self.title
+
+    def get_delayed_books(self):
+        delayed_books = db.session.query(func.sum(LendingBooks.return_date)).scalar()
+        return delayed_books if delayed_books else 0
