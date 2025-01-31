@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <section class="content">
     <div class="flex items-center gap-x-8">
@@ -25,10 +24,10 @@
     <div class="flex flex-wrap justify-start items-start gap-x-8 gap-y-6 max-lg:justify-around">
         {% for book in books %}
         <div class="h-[230px] w-[150px] border">
-            <div class="panel-content">
+            <div class="">
                 {% if book.title %}
-                <a href="{{ url_for('main.showBook', book_id=book.id) }}">
-                    <img src="" alt="{{book.title}}" class="thumb-img">
+                <a href="{{ url_for('main.book_details', book_id=book.id) }}">
+                    <img src="" alt="{{book.get_title()}}" class="thumb-img">
                 </a>
                 {% endif %}
             </div>
@@ -44,7 +43,7 @@
 </section>
 <div class="pagination">
     {% from "macros/pagination/pagination.html" import render_pagination %}
-    {{ render_pagination(books, endpoint) }}
+    {#{ render_pagination(books, endpoint) }#}
 </div>
 
 {% endblock content %}
