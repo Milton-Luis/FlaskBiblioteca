@@ -556,40 +556,6 @@ video {
   --tw-contain-style:  ;
 }
 
-.container{
-  width: 100%;
-}
-
-@media (min-width: 640px){
-  .container{
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px){
-  .container{
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px){
-  .container{
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px){
-  .container{
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px){
-  .container{
-    max-width: 1536px;
-  }
-}
-
 .static{
   position: static;
 }
@@ -647,16 +613,8 @@ video {
   height: 230px;
 }
 
-.h-\[60px\]{
-  height: 60px;
-}
-
 .h-full{
   height: 100%;
-}
-
-.w-6\/12{
-  width: 50%;
 }
 
 .w-64{
@@ -681,30 +639,6 @@ video {
 
 .w-screen{
   width: 100vw;
-}
-
-.w-1{
-  width: 0.25rem;
-}
-
-.w-\[15\]{
-  width: 15;
-}
-
-.w-\[15rem\]{
-  width: 15rem;
-}
-
-.w-\[2rem\]{
-  width: 2rem;
-}
-
-.w-\[45rem\]{
-  width: 45rem;
-}
-
-.w-\[40rem\]{
-  width: 40rem;
 }
 
 .flex-row{
@@ -753,20 +687,12 @@ video {
   row-gap: 1.5rem;
 }
 
-.gap-y-8{
-  row-gap: 2rem;
-}
-
 .self-end{
   align-self: flex-end;
 }
 
 .overflow-y-auto{
   overflow-y: auto;
-}
-
-.overscroll-none{
-  overscroll-behavior: none;
 }
 
 .rounded-lg{
@@ -847,11 +773,6 @@ video {
 .py-3{
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-}
-
-.py-4{
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 
 .py-5{
