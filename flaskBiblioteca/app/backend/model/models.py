@@ -61,10 +61,8 @@ class User(db.Model, UserMixin):
         back_populates="users", cascade="all, delete-orphan"
     )
 
-    @property
     def get_fullname(self):
         return f"{self.firstname} {self.lastname}"
-
 
     def __str__(self) -> str:
         return f"User {self.email}"
