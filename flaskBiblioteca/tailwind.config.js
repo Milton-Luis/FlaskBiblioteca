@@ -7,13 +7,10 @@ module.exports = {
   theme: {
     
     fontFamily:{
-      sans: ['Roboto', 'Helvética', "sans-"],
+      sans: ["Helvética", "sans-serif"],
+      serif: ["Roboto","Times", "serif"],
     },
     extend: {
-      gridTemplateColumns:{
-        'struct': '2fr 5fr 5fr 1fr;',
-        '16': 'repeat(16, minmax(0, 1fr))',
-      },
 
     },
   },
