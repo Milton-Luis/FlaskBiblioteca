@@ -48,8 +48,8 @@
         </table>
     </div>
     <section class="pagination">
-        {% from "macros/pagination/pagination.html" import render_pagination %}
-        {{ render_pagination(loans, endpoint) }}
+        {% from "macros/pagination/render_pagination.html" import render_pagination %}
+            {{ render_pagination(lends, endpoint) }}
     </section>
 </section>
 {% endblock content %}
