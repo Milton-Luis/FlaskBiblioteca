@@ -73,7 +73,7 @@
     <main class="flex flex-col justify-center;
 	items-center h-full py-5 mx-5">
         <section class="alert-messages-section">
-            {% from "macros/messages/flash_messages.html" import flash_message %}
+            {% from "macros/messages/render_messages.html" import render_message %}
         </section>
         {% block content %}{% endblock content %}
     </main>
