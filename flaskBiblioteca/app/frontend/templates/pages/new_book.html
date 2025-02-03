@@ -1,37 +1,33 @@
 {% extends "layout.html" %}
 
-<div class="w-[30rem] relative right-28 top-20 max-lg:w-[25rem] max-lg:right-0">
-    {{ flash_message() }}
+<div class="w-[30rem] relative right-28 top-20 max-lg:w-[25rem] max-lg:right-0">    
+    {{ render_message() }}
 </div>
 {% block content %}
 
 
-<section class=" ">
-    
+<section class="w-[40rem] bg-white/20 rounded-lg shadow-lg shadow-black/10 backdrop-blur-[6.7px] border border-white/30 px-[15px] py-[30px]"">
     <div class="">
-        <form action="{{ url_for('main.new_book') }}"  method="POST" class="w-[30rem]">
+        <form action="{{ url_for('main.new_book') }}" method="POST" >
             {{ form.csrf_token() }}
-            <div class="">
-                {{ form.title.label }}
-                {{ form.title(class='form-control' ) }}
+            <div class="mt-3">
+                {{ form.title.label(class="label") }}
+                {{ form.title(class="form-control" ) }}
             </div>
-            <div class="">
-                {{ form.author.label }}
-                <!-- <h2 class="">Autor do livro</h2> -->
-                {{ form.author(class='form-control' ) }}
+            <div class="mt-3">
+                {{ form.author.label(class="label") }}
+                {{ form.author(class="form-control" ) }}
             </div>
-            <div class="">
-                {{ form.isbn.label }}
-                <!-- <span class="">Número do isbn</span> -->
-                {{ form.isbn(class='form-control' ) }}
+            <div class="mt-3">
+                {{ form.isbn.label(class="label") }}
+                {{ form.isbn(class="form-control" ) }}
             </div>
-            <div class="">
-                <!-- <span class="">Total de livros</span> -->
-                {{ form.quantity.label }}
-                {{ form.quantity(class='form-control' ) }}
+            <div class="mt-3">
+                {{ form.quantity.label(class="label") }}
+                {{ form.quantity(class="form-control" ) }}
             </div>
-            <div class="">
-                {{ form.submit(class='form-control bg-blue-700') }}
+            <div class="mt-3">
+                {{ form.submit(class="form-control bg-blue-950 hover:bg-blue-700 text-white text-base cursor-pointer") }}
             </div>
         </form>
     </div>
