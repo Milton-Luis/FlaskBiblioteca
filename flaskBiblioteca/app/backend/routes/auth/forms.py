@@ -1,7 +1,13 @@
 from app.backend.model.models import User
 from flask_wtf import FlaskForm
-from wtforms import (EmailField, PasswordField, SelectField, StringField,
-                     SubmitField, ValidationError)
+from wtforms import (
+    EmailField,
+    PasswordField,
+    SelectField,
+    StringField,
+    SubmitField,
+    ValidationError,
+)
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 
@@ -47,7 +53,10 @@ class AddLibrarianForm(FlaskForm):
     )
     confirm_password = PasswordField(
         "Confirmar senha",
-        validators=[DataRequired(), EqualTo("password", "As senhas devem conrresponder")],
+        validators=[
+            DataRequired(),
+            EqualTo("password", "As senhas devem conrresponder"),
+        ],
         render_kw={"placeholder": "Confirme sua senha"},
     )
     signup = SubmitField("Inserir Registro")
@@ -56,26 +65,27 @@ class AddLibrarianForm(FlaskForm):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError("Email already registered.")
 
+
 class AddStudentForm(FlaskForm):
     firstname = StringField(
         "Nome do Aluno",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o nome do aluno"},
+        render_kw={"placeholder": "nome do aluno"},
     )
     lastname = StringField(
         "sobrenome do Aluno",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o sobrenome do aluno"},
+        render_kw={"placeholder": "sobrenome do aluno"},
     )
     phone = StringField(
         "Número do telefone",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o número de telefone"},
+        render_kw={"placeholder": "número de telefone"},
     )
     email = StringField(
         "email",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o email do aluno"},
+        render_kw={"placeholder": "email do aluno"},
     )
     classroom = SelectField(
         "Curso",
@@ -90,6 +100,6 @@ class AddStudentForm(FlaskForm):
     grade = StringField(
         "Ano escolar",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o ano escolar do aluno. "},
+        render_kw={"placeholder": "ano escolar do aluno. "},
     )
     submit = SubmitField("Inserir aluno")

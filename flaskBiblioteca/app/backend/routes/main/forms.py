@@ -1,8 +1,13 @@
 from datetime import datetime
 
 from flask_wtf import FlaskForm
-from wtforms.fields import (DateField, IntegerField, SelectField, StringField,
-                            SubmitField)
+from wtforms.fields import (
+    DateField,
+    IntegerField,
+    SelectField,
+    StringField,
+    SubmitField,
+)
 from wtforms.validators import DataRequired, NumberRange
 
 
@@ -11,7 +16,7 @@ class BookForm(FlaskForm):
     #     None,
     #     validators=[DataRequired()],
     #     render_kw={
-    #         "placeholder": "digite o título do livro ou nome do autor",
+    #         "placeholder": "título do livro ou nome do autor",
     #         "class": "form-control",
     #     },
     #     id="searchBook",
@@ -19,16 +24,16 @@ class BookForm(FlaskForm):
     title = StringField(
         "Título",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o título do livro"},
+        render_kw={"placeholder": "título do livro"},
     )
     author = StringField(
         "Autor",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o autor do livro"},
+        render_kw={"placeholder": "autor do livro"},
     )
     isbn = StringField(
         "ISBN",
-        render_kw={"placeholder": "Digite o ISBN do livro"},
+        render_kw={"placeholder": "ISBN do livro"},
     )
     quantity = IntegerField(
         "Quantidade de livros",
@@ -70,7 +75,7 @@ class SearchBookForm(FlaskForm):
         None,
         validators=[DataRequired()],
         render_kw={
-            "placeholder": "digite o título do livro ou nome do autor",
+            "placeholder": "título do livro ou nome do autor",
             "class": "form-control",
         },
         id="searchBook",
