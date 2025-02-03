@@ -19,11 +19,11 @@
         </form>
     </div>
 </section>
-<section class="w-full h-full overflow-y-auto">
+<section class="w-full h-full overflow-y-auto p-1">
 
-    <div class="flex flex-wrap justify-start items-start gap-x-8 gap-y-6 max-lg:justify-around">
+    <div class="flex flex-wrap justify-start items-start gap-x-8 gap-y-3 max-lg:justify-around">
         {% for book in books %}
-        <div class="h-[230px] w-[150px] border">
+        <div class="h-[220px] w-[140px] border">
             <div class="">
                 {% if book.title %}
                 <a href="{{ url_for('main.book_details', book_id=book.id) }}">
@@ -38,12 +38,10 @@
         </div>
         {% endfor %}
     </div>
-
-    
 </section>
-<div class="pagination">
+<div class="fixed bottom-2">
     {% from "macros/pagination/pagination.html" import render_pagination %}
-    {#{ render_pagination(books, endpoint) }#}
+    {{ render_pagination(books, endpoint) }}
 </div>
 
 {% endblock content %}
