@@ -52,7 +52,7 @@ def book_details(book_id):
 @main.route("/emprestimos/")
 @login_required
 def lendings():
-    loans = (
+    lends = (
         db.session.query(Books)
         .filter(Books.title)
         .order_by(asc(Books.title))
@@ -60,7 +60,7 @@ def lendings():
     )
 
     context = {
-        "loans": loans,
+        "lends": lends,
         "endpoint": "main.lendings",
         "title": "Empréstimos",
     }
