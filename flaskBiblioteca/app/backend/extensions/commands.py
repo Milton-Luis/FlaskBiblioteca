@@ -2,6 +2,7 @@ from app.backend.extensions.database import db
 from app.backend.extensions.security import generate_password
 from app.backend.model.models import (Admin, Books, LendingBooks, Librarian,
                                       Role, Students, User)
+from getpass import getpass
 
 
 def create_db():
@@ -17,10 +18,11 @@ def drop_db():
 
 def createSuperUser():
     """Create a super user"""
+    print("Bem vindo ao shell para criação de acesso admin")
     firstname = input("informe seu nome: ").capitalize()
     lastname = input("informe seu sobrenome: ").capitalize()
     email = input("Informe seu email: ")
-    password = input("Informe sua senha: ")
+    password = getpass("Informe sua senha: ")
     role="admin"
     admin = User(firstname=firstname, lastname=lastname, email=email, roles=Admin(rolename=role, is_admin=True, is_confirmed=True,  password=generate_password(password)))
 
@@ -36,11 +38,11 @@ def init_app(app):
     def make_shell_processor():
         return {
             "db": db,
-            "user": User,
-            "role": Role,
+            "users": User,
+            "roles": Role,
             "students": Students,
             "admin": Admin,
             "librarian": Librarian,
-            "book": Books,
+            "books": Books,
             "lending_books": LendingBooks
         }
