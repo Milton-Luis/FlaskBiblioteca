@@ -18,8 +18,7 @@ def login():
         return redirect(url_for("main.index"))
 
     if form.validate_on_submit():
-        user = db.session.query(User).filter_by(email=form.email.data).first()
-
+        user = db.session.query(User).filter_by(email=form.email.data).first_or_404()
 
         if user and check_password(user.roles.password, form.password.data):
             login_user(user)
