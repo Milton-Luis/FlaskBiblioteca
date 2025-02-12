@@ -1,8 +1,9 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 from app.backend.extensions.database import db
+from app.backend.extensions.mail import send_email
 from flask import abort, current_app
 from flask_login import UserMixin, current_user
 from sqlalchemy import func
@@ -11,26 +12,42 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 class LendingBooks(db.Model):
     __tablename__ = "lending_book"
-    book_id: Mapped[int] = mapped_column(
-        db.ForeignKey("book.id"), primary_key=True, nullable=False
-    )
-    user_id: Mapped[int] = mapped_column(
-        db.ForeignKey("user.id"), primary_key=True, nullable=False
-    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    book_id: Mapped[int] = mapped_column(db.ForeignKey("book.id"))
+    user_id: Mapped[int] = mapped_column(db.ForeignKey("user.id"))
 
     users: Mapped["User"] = db.relationship(back_populates="books")
     books: Mapped["Books"] = db.relationship(back_populates="users")
 
-    lending_date: Mapped[datetime] = mapped_column(
-        nullable=False, default=datetime.now()
-    )
+    lending_date: Mapped[datetime] = mapped_column(nullable=False)
     return_date: Mapped[datetime]
     quantity_lent: Mapped[int] = mapped_column(nullable=False, default=1)
 
-    def get_formated_date(self, date: datetime):
-        self.formated_date = date.strftime("%d/%m/%Y")
-        [self.lending_date, self.return_date] = self.formated_date
-        return self.formated_date
+    def get_formated_date(self, date):
+        return date.strftime("%d/%m/%Y")
+
+    def get_delayed_date(self):
+        self.date = datetime.now()
+        return True if self.return_date < self.date else False
+
+    def send_notification_of_return_book(self):
+        # self.notification = db.session.query(LendingBooks)
+        # self.notice_date = self.return_date - timedelta(days=2)
+
+        # if self.notice_date:
+        #     for lending in self.notification:
+        #         send_email(
+        #             lending.users.email,
+        #             f"Lembrete: Devolução do livro {lending.books.get_title()}",
+        #             "auth/email/reminder",
+        #         )
+        pass
+
+    def get_delayed_books(self):
+        delayed_books = db.session.query(
+            func.sum(self.return_date)
+        ).scalar()
+        return delayed_books if delayed_books else 0
 
 
 class User(db.Model, UserMixin):
@@ -53,8 +70,8 @@ class User(db.Model, UserMixin):
     roles_id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), nullable=True)
     roles: Mapped["Role"] = db.relationship(back_populates="user")
 
-    student: Mapped[List["Students"]] = db.relationship(
-        back_populates="user", cascade="all, delete-orphan"
+    students: Mapped[List["Students"]] = db.relationship(
+        back_populates="users", cascade="all, delete-orphan"
     )
 
     books: Mapped[list["LendingBooks"]] = db.relationship(
@@ -122,9 +139,15 @@ class Students(db.Model):
     classroom: Mapped[str] = mapped_column(db.String(15))
     grade: Mapped[str] = mapped_column(db.String(2))
 
-    user: Mapped["User"] = db.relationship(back_populates="student", uselist=False)
-
     user_id: Mapped[str] = mapped_column(db.ForeignKey("user.id"))
+
+    users: Mapped["User"] = db.relationship(back_populates="students")
+
+    def is_student(self):
+        return "Estudante"
+
+    def get_course(self):
+        return f"{self.is_student()}: {self.grade}/{self.classroom.capitalize()}"
 
 
 class Books(db.Model):
@@ -145,6 +168,8 @@ class Books(db.Model):
     def get_title(self):
         return self.title
 
-    def get_delayed_books(self):
-        delayed_books = db.session.query(func.sum(LendingBooks.return_date)).scalar()
-        return delayed_books if delayed_books else 0
+    def get_quantity_of_books(self):
+        return self.quantity_of_books
+
+    def __repr__(self):
+        return f"Livro(s): {self.title}"
