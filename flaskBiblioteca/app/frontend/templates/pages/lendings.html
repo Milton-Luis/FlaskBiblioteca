@@ -4,52 +4,42 @@
 <section class="content">
     <div class="menu-loan">
     </div>
-    <div class="table-widget">
-        <table>
-            <caption>
-                <h4>Empréstimos</h4>
-            </caption>
+</section>
+<section class=" w-full h-5/6 border-2 border-red-500">
+    <div class="flex justify-start">
+        <table class="w-full border-2 border-separate border-spacing-2">
+            <!-- <caption class="caption-top">
+                Empréstimos
+            </caption> -->
             <thead>
-                <tr class="table-header-row">
-                    <th class="table-heading-column">Livro</th>
-                    <th class="table-heading-column">Nome</th>
-                    <!-- <th class="table-heading-column">Qtd. Livros</th>
-                    <th class="table-heading-column">Data do empréstimo</th>
-                    <th class="table-heading-column">Data da devolução</th> -->
-                    <th class="table-heading-column">opções</th>
+                <tr>
+                    <th class="border border-slate-600">Título do livro</th>
+                    <th class="border border-slate-600">Nome do locatario</th>
+                    <th class="border border-slate-600">Qtd. livros alugados</th>
+                    <th class="border border-slate-600">Data do empréstimo</th>
+                    <th class="border border-slate-600">Data da devolução</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                {% for loan in loans %}
-                <tr class="table-body-row">
-                    <td class="table-body-column">{{ loan.title }}</td>
-                    <td class="table-body-column">{{ loan.author }}</td>
-                    <td class="table-body-column"><a href="{{ url_for('main.new_loan', id=loan.id) }}"
-                            class="btn btn-default">Renovar</a></td>
-                    <td class="table-body-column"><a href="#" class="btn btn-warning">Devolver</a></td>
-                    <!-- <td class="table-body-column">Fortaleza digital</td>
-                        <td class="table-body-column">Milton Luís de Carvalho Monteiro</td>
-                        <td class="table-body-column">1</td>
-                        <td class="table-body-column">06/06/2024</td>
-                        <td class="table-body-column">12/06/2024</td> -->
+                {% for lend in lends %}
+                <tr class=" {% if lend.get_delayed_date() %} border-2 border-red-600 {% endif %}">
+                    <td class="border border-slate-600">{{ lend.books.get_title() }}</td>
+                    <td class="border border-slate-600">{{ lend.users.get_fullname() }}</td>
+                    <td class="border border-slate-600">{{ lend.quantity_lent }}</td>
+                    <td class="border border-slate-600">{{ lend.get_formated_date(lend.lending_date) }}</td>
+                    <td class="border border-slate-600">{{ lend.get_formated_date(lend.return_date) }}</td>
+                    <td class="border border-slate-600"><a href="#" class="w-2 h-2 bg-blue-300 text-white">N</a></td>
+                    <td class="border border-slate-600"><a href="#" class="w-2 h-2 bg-yellow-400 text-white">R</a></td>
+                    <td class="border border-slate-600"><a href="#" class="w-2 h-2 bg-red-600 text-white">D</a></td>
                 </tr>
                 {% endfor %}
-                <tr class="table-body-row">
-
-                    <!-- <td class="table-body-column">Fortaleza digital</td>
-                    <td class="table-body-column">Milton Luís de Carvalho Monteiro</td>
-                    <td class="table-body-column">1</td>
-                    <td class="table-body-column">06/06/2024</td>
-                    <td class="table-body-column">12/06/2024</td> -->
-
-                </tr>
-
             </tbody>
         </table>
     </div>
-    <section class="pagination">
-        {% from "macros/pagination/render_pagination.html" import render_pagination %}
-            {{ render_pagination(lends, endpoint) }}
-    </section>
+</section>
+<section class="fixed bottom-2">
+    {% from "macros/pagination/render_pagination.html" import render_pagination %}
+    {{ render_pagination(lends, endpoint) }}
 </section>
 {% endblock content %}

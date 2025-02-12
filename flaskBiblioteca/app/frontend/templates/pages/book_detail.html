@@ -1,14 +1,32 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<section class="content">
-    <section class="menu-button-group-section">
-        <div class="menu-group-button">
-            <a href="{{ url_for('main.new_loan', id=book.id) }}">Emprestar livro</a>
+<section class="w-10/12 max-md:h-full max-md:w-full max-sm:w-10/12 border-2 border-blue-600">
+    <div
+        class="h-[25rem] flex justify-around gap-4 p-2  max-md:w-full max-sm:flex-col max-md:items-center max-sm:h-[30rem] max-sm:w-full">
+        <div class="w-[20rem] max-md:w-[25rem] max-md:h-full max-sm:h-[50rem] max-sm:w-6/12 border-2 border-red-600">
+            <img src="" alt="{{ book.get_title() }}" class="w-full h-full object-cover">
         </div>
-    </section>
-</section>
-<section class="books">
-    <div class="show-book">{{ book.title }}</div>
+        <div class="flex flex-col justify-start w-full border-2 border-yellow-500 max-md:w-full max-md:h-full">
+            <div>
+                <h2 class="">Título do livro: {{ book.get_title() }}</h2>
+                <h2 class="">Autor: {{ book.author }}</h2>
+                <h2 class="">Quantidade disponível:
+                    {% if book.get_quantity_of_books() < 1 %} 
+                        Nenhum disponível 
+                    {% elif book.get_quantity_of_books()==1 %} 
+                        {{book.get_quantity_of_books() }} livro 
+                    {% else %} 
+                    {{ book.get_quantity_of_books() }} livros 
+                    {% endif %} 
+                </h2>
+            </div>
+            <div class="">
+                <a href="{{ url_for('main.new_loan', title=book.title) }}"
+                    class="form-control rounded-lg bg-blue-950 hover:bg-blue-700 text-white text-base cursor-pointer">Emprestar
+                    livro</a>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock content %}
