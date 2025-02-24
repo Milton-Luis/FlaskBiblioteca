@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+{{ render_message() }}
 <section class="content">
     <div class="">
         <div class="flex flex-wrap justify-around items-start gap-y-2">
@@ -8,7 +9,7 @@
                     <h2 class="font-bold">Novos Livros</h2>
                     <div class="card-value">
                         <p class="font-bold text-[15pt]">
-                            {{ book.get_total_books() }}
+                            {{ books.get_total_books() }}
                         </p>
                     </div>
                 </div>
@@ -38,7 +39,7 @@
                 <div class="flex flex-col items-center">
                     <h2 class="font-bold">Devoluções do dia</h2>
                     <div class="card-value">
-                        <p class="font-bold text-[15pt]">0</p>
+                        <p class="font-bold text-[15pt]">{{lending.get_day_return()}}</p>
                     </div>
                 </div>
 
@@ -53,7 +54,7 @@
                 <div class="flex flex-col items-center">
                     <h2 class="font-bold">Em atraso</h2>
                     <div class="card-value">
-                        <p class="font-bold text-[15pt]">{{ book.get_delayed_books() }}</p>
+                        <p class="font-bold text-[15pt]">{{ lending.get_delayed_books() }}</p>
                     </div>
                 </div>
                 <div class="flex">
