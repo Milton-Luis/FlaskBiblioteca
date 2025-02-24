@@ -1,22 +1,26 @@
-from app.backend.model.models import User
 from flask_wtf import FlaskForm
 from wtforms import (EmailField, PasswordField, SelectField, StringField,
                      SubmitField, ValidationError)
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import (DataRequired, Email, EqualTo, InputRequired,
+                                Length)
+
+from app.backend.model.models import User
 
 
 class LoginForm(FlaskForm):
-    email = StringField(
+    email = EmailField(
         "Email",
-        validators=[DataRequired()],
+        validators=[DataRequired(message="Email é obrigatório")],
         render_kw={"placeholder": "Digite seu email"},
     )
     password = PasswordField(
         "Senha",
-        validators=[DataRequired()],
+        validators=[DataRequired(message="Senha é obrigatória")],
         render_kw={"placeholder": "Digite sua senha"},
     )
     submit = SubmitField("Entrar")
+
+    
 
 
 class AddLibrarianForm(FlaskForm):
