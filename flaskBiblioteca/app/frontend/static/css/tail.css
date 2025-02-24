@@ -49,46 +49,53 @@ body {
 	@apply text-sm max-lg:hidden;
 }
 
-.card{
+.card {
 	@apply flex justify-between items-center w-[15rem] h-[6rem] bg-white rounded-md shadow-md border-l-8 px-3  max-lg:flex-row-reverse max-lg:w-[13rem] max-lg:h-[4rem] max-lg:border-2 max-lg:border-l-2;
 }
 
-
-.input-group{
+.input-group {
 	@apply flex items-center border border-gray-300 rounded-md;
 }
 
-.input-group-text{
+.input-group-text {
 	@apply bg-gray-200 text-gray-700 px-3 py-3 rounded-l-md;
 }
 
-.mirror{
+.mirror {
 	@apply w-[40rem] bg-white/20 rounded-lg shadow-lg shadow-black/10 backdrop-blur-[6.7px] border border-white/30 px-[15px] py-[30px];
 }
 
-.label{
+.label {
 	@apply text-base;
 }
 
-.form-control{
-	@apply flex-1 p-2 focus:ring-0 rounded-r-lg w-full ;
+.input-group-control {
+	@apply flex-1 p-2 ring-0 rounded-r-lg w-full;
 }
-.alert{
+.form-control {
+	@apply flex-1 p-2 ring-0 w-full rounded-lg border-2 border-gray-400;
+}
+
+.button-control{
+	@apply flex-1 w-full p-2 bg-blue-950 text-white text-xl h-14 hover:bg-blue-700 cursor-pointer rounded-md;
+}
+
+.alert {
 	@apply flex items-center justify-between font-semibold px-4 py-3 rounded-md border-l-8;
 }
 
-.alert-danger{
-	@apply bg-red-200 border-l-red-500 ;
+.alert-danger {
+	@apply bg-red-200 border-l-red-500;
 }
 
-.alert-warning{
-	@apply bg-yellow-200 border-l-yellow-300 ;
+.alert-warning {
+	@apply bg-yellow-200 border-l-yellow-300;
 }
 
-.alert-success{
-	@apply bg-green-200 border-l-green-500 ;
-	}
+.alert-success {
+	@apply bg-green-200 border-l-green-500;
+}
 
-.alert-info{
-	@apply bg-blue-200 border-l-blue-500 ;
+.alert-info {
+	@apply bg-blue-200 border-l-blue-500;
 }
