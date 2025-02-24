@@ -2,42 +2,35 @@
 {% block content %}
 <section class="content">
     <div class="flex items-center gap-x-8">
-        <div class="">
-            <a href="{{ url_for('main.new_book') }}" id="add_book"
-                class="flex items-center max-lg:items-start gap-x-4 w-[150px] bg-blue-700 text-center  text-white py-3 px-4 max-lg:px-3 max-lg:py3 rounded-lg max-lg:w-10 max-lg:h-10">
-                <span class="nav-link-name max-md:visible fa fa-plus"></span>
-                <span class="nav-link-name max-lg:invisible font-xl">Inserir Livro</span>
-            </a>
+
+        <a href="{{ url_for('main.new_book') }}" id="add_book" class="
+                flex items-center max-lg:items-start
+                gap-x-4
+                w-[150px] max-lg:w-10 max-lg:h-10
+                bg-blue-700 text-center text-white
+                py-3 px-4 max-lg:px-3 max-lg:py3
+                rounded-lg
+            ">
+            <span class="nav-link-name max-md:visible fa fa-plus"></span>
+            <span class="nav-link-name max-lg:invisible font-xl">Inserir Livro</span>
+        </a>
+
+
+        <div class="input-group w-1/2">
+            <span class="input-group-text fa fa-search "></span>
+            {{ form.search(class="input-group-control", placeholder="Digite o título ou nome do autor", autocomplete="off") }}
         </div>
 
-        <form action="" class="w-[50rem] max-lg:w-[22rem]" method="get">
-            {{ form.csrf_token() }}
-            <div class="input-group">
-                <span class="input-group-text fa fa-search "></span>
-                {{ form.search() }}
-            </div>
-        </form>
     </div>
 </section>
 <section class="w-full h-full overflow-y-auto p-1">
-
-    <div class="flex flex-wrap justify-start items-start gap-x-8 gap-y-3 max-lg:justify-around">
-        {% for book in books %}
-        <div class="h-[220px] w-[140px] border">
-            <div class="">
-                {% if book.title %}
-                <a href="{{ url_for('main.book_details', book_id=book.id) }}">
-                    <img src="" alt="{{book.get_title()}}" class="thumb-img">
-                </a>
-                {% endif %}
-            </div>
-            <!-- TODO: implementar modal -->
-            <div class="panel-footer">
-                <span class="panel-title">{{ book.title }}</span>
-            </div>
-        </div>
+    <ul class="flex flex-wrap justify-start items-start gap-x-8 gap-y-3 max-lg:justify-around" id="books-list">
+        {% for book in books.items %}
+        <li class="h-56 w-36 border">
+            <a href="{{ url_for('main.book_details', title=book.title) }}">{{ book.title }}</a>
+        </li>
         {% endfor %}
-    </div>
+    </ul>
 </section>
 <div class="fixed bottom-2">
     {% from "macros/pagination/render_pagination.html" import render_pagination %}
