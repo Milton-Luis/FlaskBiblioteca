@@ -2,16 +2,16 @@ from flask_wtf import FlaskForm
 from wtforms.fields import (
     DateField,
     IntegerField,
+    SearchField,
     SelectField,
     StringField,
     SubmitField,
-    SearchField
+    RadioField,
 )
 from wtforms.validators import DataRequired, NumberRange
 
 
 class BookForm(FlaskForm):
-    
     title = StringField(
         "Título",
         validators=[DataRequired()],
@@ -45,7 +45,7 @@ class BookForm(FlaskForm):
 
 
 class LendingBooksForm(FlaskForm):
-    search = StringField(render_kw={"placeholder": "Digite o nome do locatario"})
+
     title = StringField(
         "Título do livro",
         validators=[DataRequired()],
@@ -53,8 +53,7 @@ class LendingBooksForm(FlaskForm):
     )
     quantity = IntegerField(
         "Quantidade a ser alugada",
-        validators=[DataRequired(), NumberRange(min=1, max=50)],
-        render_kw={"value": 1},
+        validators=[DataRequired(), NumberRange(min=1, max=50)], default=1,
     )
 
     lending_date = DateField(
@@ -69,5 +68,9 @@ class LendingBooksForm(FlaskForm):
 
 
 class SearchBookForm(FlaskForm):
-    search = SearchField()
-    
+    search = StringField()
+    submit = SubmitField(label="Buscar")
+
+
+
+    # later = RadioField()
