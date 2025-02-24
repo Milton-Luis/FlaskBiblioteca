@@ -1,12 +1,13 @@
-from app.backend.extensions.mail import send_email
-from app.backend.model.models import User
 from flask import current_app, flash
 from flask_argon2 import Argon2
+from flask_cors import CORS
 from itsdangerous import SignatureExpired
 from itsdangerous import URLSafeTimedSerializer as Serializer
 
-argon2 = Argon2()
+from app.backend.extensions.mail import send_email
+from app.backend.model.models import User
 
+argon2 = Argon2()
 
 def generate_password(password: str) -> str:
     """Generate Password
@@ -89,4 +90,4 @@ def access_confirmation(user):
 
 
 def init_app(app):
-    return argon2.init_app(app)
+    return argon2.init_app(app), CORS(app)
