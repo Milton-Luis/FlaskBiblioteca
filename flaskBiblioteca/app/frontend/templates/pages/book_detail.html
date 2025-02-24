@@ -12,19 +12,20 @@
                 <h2 class="">Título do livro: {{ book.get_title() }}</h2>
                 <h2 class="">Autor: {{ book.author }}</h2>
                 <h2 class="">Quantidade disponível:
-                    {% if book.get_quantity_of_books() < 1 %} 
-                        Nenhum disponível 
-                    {% elif book.get_quantity_of_books()==1 %} 
-                        {{book.get_quantity_of_books() }} livro 
-                    {% else %} 
-                    {{ book.get_quantity_of_books() }} livros 
-                    {% endif %} 
-                </h2>
+                    {% if book.get_quantity_of_books() < 1 %} Nenhum disponível {% elif book.get_quantity_of_books()==1
+                        %} {{book.get_quantity_of_books() }} livro {% else %} {{ book.get_quantity_of_books() }} livros
+                        {% endif %} </h2>
             </div>
             <div class="">
-                <a href="{{ url_for('main.new_loan', title=book.title) }}"
-                    class="form-control rounded-lg bg-blue-950 hover:bg-blue-700 text-white text-base cursor-pointer">Emprestar
+                {% if book.get_quantity_of_books() > 0 %}
+                <a href="{{ url_for('main.new_loan', title=book.title) }}" class="button-control">Emprestar
                     livro</a>
+                {% else %}
+                <a href="{{ url_for('main.new_loan', title=book.title) }}"
+                    class="flex-1 w-full p-2 h-14 rounded-md bg-gray-600 text-white text-lg pointer-events-none">Emprestar
+                    livro
+                </a> 
+                {% endif %}
             </div>
         </div>
     </div>
