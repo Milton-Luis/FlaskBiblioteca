@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+{% from "macros/form/form_errors.html" import render_form_errors %}
+
 <head>
-    {% from 'bootstrap5/utils.html' import render_static %}
 
     {% block meta %}
     <meta charset="UTF-8">
@@ -11,20 +12,15 @@
     {% endblock meta %}
 
     {% block styles %}
-    <!-- {{ bootstrap.load_css() }} -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
 
-
-    {{ render_static("css", "css/config.css") }}
-    {{ render_static("css", "css/style.css") }}
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
     {% endblock styles %}
 
-    {% block titles %}
-    {% if title %}
-    <title>{{ title }}</title>
-    {% endif %}
-    {% endblock titles %}
+    {% block title %}
+        <title>{{ title }}</title>
+    {% endblock title %}
 </head>
 
 <body class="font-serif w-screen">
@@ -38,7 +34,6 @@
                 <span class="fas fa-user"></span>
             </div>
         </div>
-
     </nav>
     <aside class="bg-gray-800 text-white w-64 max-lg:w-full">
         <ul class="flex flex-col p-0 max-lg:flex-row max-lg:justify-around w-full">
@@ -72,15 +67,15 @@
     {% endif %}
     <main class="flex flex-col justify-center;
 	items-center h-full py-5 mx-5">
-        <section class="w-full">
+        
             {% from "macros/messages/render_messages.html" import render_message %}
-        </section>
+       
         {% block content %}{% endblock content %}
     </main>
 
     {% block scripts %}
-    <!-- {{ bootstrap.load_js() }} -->
-    {{ render_static("js", "js/scripts.js") }}
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
     {% endblock scripts %}
 </body>
