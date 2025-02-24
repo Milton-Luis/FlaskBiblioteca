@@ -2,12 +2,13 @@ import uuid
 from datetime import datetime, timedelta
 from typing import List
 
-from app.backend.extensions.database import db
-from app.backend.extensions.mail import send_email
 from flask import abort, current_app
 from flask_login import UserMixin, current_user
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
+
+from app.backend.extensions.database import db
+from app.backend.extensions.mail import send_email
 
 
 class LendingBooks(db.Model):
@@ -28,7 +29,7 @@ class LendingBooks(db.Model):
 
     def get_delayed_date(self):
         self.date = datetime.now()
-        return True if self.return_date < self.date else False
+        return True if self.return_date.date() < self.date else False
 
     def send_notification_of_return_book(self):
         # self.notification = db.session.query(LendingBooks)
@@ -43,10 +44,21 @@ class LendingBooks(db.Model):
         #         )
         pass
 
+    def get_day_return(self):
+        current_date = datetime.now().date()
+        delayed_books = db.session.query(LendingBooks).all()
+        total_count = 0
+        for delayed_book in delayed_books:
+            if delayed_book.return_date.date() == current_date:
+                total_count += 1
+        return total_count
+
     def get_delayed_books(self):
-        delayed_books = db.session.query(
-            func.sum(self.return_date)
-        ).scalar()
+        delayed_books = (
+            db.session.query(LendingBooks)
+            .filter(LendingBooks.return_date < datetime.now())
+            .count()
+        )
         return delayed_books if delayed_books else 0
 
 
