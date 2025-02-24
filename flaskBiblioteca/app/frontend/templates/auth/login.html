@@ -1,28 +1,33 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="w-[30rem] relative right-28 top-20 max-lg:w-[25rem] max-lg:right-0">
+<div class="w-[30rem] relative right-28 top-20 max-lg:w-[25rem] max-lg:right-0" id="message">
     {{ render_message() }}
 </div>
-<div class="w-[30rem] relative right-28 top-28  max-lg:w-[28rem] max-lg:right-0 ">
+
+<div class="w-[30rem] relative right-28 top-28 max-lg:w-[28rem] max-lg:right-0 ">
+    
     <div
         class="bg-white/20 rounded-lg shadow-lg shadow-black/10 backdrop-blur-[6.7px] border border-white/30 px-[15px] py-[30px]">
         <form class="" action="{{ url_for('auth.login') }}" method="POST">
             {{ form.hidden_tag() }}
+
             <div class="mb-4">
                 <div class="input-group">
                     <span class="input-group-text fas fa-at py-3"></span>
-                    {{ form.email(class="form-control") }}
+                    {{ form.email(class="input-group-control") }}
                 </div>
             </div>
+
             <div class="mb-4">
                 <div class="input-group">
                     <span class="input-group-text fas fa-unlock py-3" id="lockUnlock"></span>
-                    {{ form.password(type="password", class="form-control password") }}
+                    {{ form.password(type="password", class="input-group-control password") }}
                 </div>
             </div>
+
             <div class="input-group">
-                {{ form.submit(class="form-control bg-blue-950 text-white text-xl h-14 hover:bg-blue-700") }}
+                {{ form.submit(class="button-control") }}
             </div>
         </form>
     </div>
