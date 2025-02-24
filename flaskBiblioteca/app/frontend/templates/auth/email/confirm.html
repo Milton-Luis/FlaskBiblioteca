@@ -5,10 +5,6 @@
 <p>Para confirmar sua conta, por favor clique no link a seguir
     <a href="{{ url_for('auth.confirm_email', token=token, _external=True) }}">Clique aqui</a></p>
 
-<p>Caso queira, você pode copiar e colar este link na barra de endereço do seu navegador</p>
-<p>{{ url_for('auth.confirm_email', token=token, _external=True) }}</p>
-<p>Att.</p>
-
 <p>Time Flasky</p>
 
 <p><small>OBS: respostas a este email não são monitoradas</small></p>
