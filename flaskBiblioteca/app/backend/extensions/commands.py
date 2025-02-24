@@ -1,8 +1,9 @@
+from getpass import getpass
+
 from app.backend.extensions.database import db
 from app.backend.extensions.security import generate_password
 from app.backend.model.models import (Admin, Books, LendingBooks, Librarian,
                                       Role, Students, User)
-from getpass import getpass
 
 
 def create_db():
