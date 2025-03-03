@@ -62,7 +62,7 @@ body {
 }
 
 .mirror {
-	@apply w-[40rem] bg-white/20 rounded-lg shadow-lg shadow-black/10 backdrop-blur-[6.7px] border border-white/30 px-[15px] py-[30px];
+	@apply w-[40rem] max-lg:w-auto bg-white/20 rounded-lg shadow-lg shadow-black/10 backdrop-blur-[6.7px] border border-white/30 px-[15px] py-[30px];
 }
 
 .label {
@@ -73,7 +73,7 @@ body {
 	@apply flex-1 p-2 ring-0 rounded-r-lg w-full;
 }
 .form-control {
-	@apply flex-1 p-2 ring-0 w-full rounded-lg border-2 border-gray-400;
+	@apply flex-1 p-2 ring-0 w-[38rem] max-lg:w-auto rounded-lg border-2 border-gray-400;
 }
 
 .button-control{
