@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from flask import (flash, jsonify, redirect, render_template, request, session,
-                   url_for)
+from flask import flash, jsonify, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
 from sqlalchemy.sql import asc, or_
 
@@ -40,7 +39,7 @@ def books():
     books = (
         db.session.query(Books)
         .order_by(asc(Books.title))
-        .paginate(page=page, per_page=3, error_out=True)
+        .paginate(page=page, per_page=10, error_out=True)
     )
 
     context = {
@@ -109,7 +108,8 @@ def new_book():
         books = Books(
             title=form.title.data,
             author=form.author.data,
-            quantity_of_books=form.quantity.data,
+            total_of_books=form.quantity.data,
+            avaiable_quantity=form.quantity.data,
             isbn=form.isbn.data,
         )
         db.session.add(books)
@@ -135,14 +135,13 @@ def search_borrower(title):
     if search_form.validate_on_submit():
         name = search_form.search.data
         get_user = (
-            db.session.query(User).filter(User.firstname.ilike(f"%{name}%")).first()
+            db.session.query(User).filter(User.fullname.ilike(f"%{name}%")).first()
         )
         if get_user:
             session["user_id"] = get_user.id
-            flash(f"Usuário encontrado - ID: {session.get('user_id')}", "success")
+            # flash(f"Usuário encontrado - ID: {session.get('user_id')}", "success")
             return redirect(url_for("main.new_loan", title=title))
         else:
-            session.pop("user_id")
             flash("Nome não cadastrado", "warning")
             return redirect(url_for("main.new_loan", title=title))
 
@@ -156,11 +155,36 @@ def search_borrower(title):
     )
 
 
+@main.route("/emprestimos/novo/<title>/search", methods=["GET"])
+@login_required
+def request_search_borrower(title):
+    get_book = db.session.query(Books).filter(Books.title == title).first()
+    search = request.args.get("q", "")
+    get_user = (
+        db.session.query(User)
+        .filter(User.fullname.ilike(f"%{search}%"))
+        .order_by(asc(User.firstname))
+    )
+
+    name_list = []
+    for user in get_user.all():
+        info = []  # Inicialize a info aqui para cada usuário
+        if user.roles_id is None:
+            for student in user.students:
+                info.append({"info": student.get_course()})
+        else:
+            info.append({"info": user.roles.get_role()})
+
+        name_list.append({"fullname": user.get_fullname(), "info": info})
+    return jsonify(name_list)
+
+
 @main.route("/emprestimos/novo/<title>/", methods=["POST", "GET"])
 @login_required
 def new_loan(title):
     form = LendingBooksForm()
     search_form = SearchBookForm()
+
 
     get_user = db.session.query(User).filter(User.id == session.get("user_id")).first()
     get_book = db.session.query(Books).filter(Books.title == title).first()
@@ -182,15 +206,18 @@ def new_loan(title):
             )
             try:
                 db.session.add(lending)
-                get_book.quantity_of_books -= form.quantity.data
+
+                get_book.subtract_avaiable_quantity(lending.quantity_lent)
+
                 db.session.commit()
                 flash("Empréstimo realizado!", "success")
                 session.pop("user_id")
                 return redirect(url_for("main.index"))
 
             except Exception as e:
-                flash(f"Erro ao criar empréstimo! {e}", "danger")
+                session.pop("user_id")
                 db.session.rollback()
+                raise Exception(f"Erro ao criar empréstimo! {e}")
         else:
             flash("Erro: ID do usuário não encontrado na sessão", "danger")
 
@@ -207,12 +234,12 @@ def new_loan(title):
 @main.route("/emprestimos/devolucao/<int:id>/", methods=["GET", "POST"])
 @login_required
 def return_book(id):
-    lending = db.session.get(LendingBooks, id)
-    book = db.session.get(Books, lending.book_id)
-    print(book)
+    lendings = db.session.query(LendingBooks).filter(LendingBooks.id == id).first()
+    get_book = db.session.query(Books).filter(Books.id == lendings.book_id).first()
 
-    # book.quantity_of_books += lending.quantity_lent
-    # db.session.delete(lending)
-    # db.session.commit()
-    # flash("Livro devolvido com sucesso!", "success")
-    # return redirect(url_for("main.index"))
+    get_book.add_avaiable_quantity(lendings.quantity_lent)
+
+    db.session.delete(lendings)
+    db.session.commit()
+    flash("Livro devolvido com sucesso!", "success")
+    return redirect(url_for("main.index"))
