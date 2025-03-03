@@ -1,3 +1,4 @@
+from ast import Is
 import uuid
 from datetime import datetime, timedelta
 from typing import List
@@ -13,7 +14,7 @@ from app.backend.extensions.mail import send_email
 
 class LendingBooks(db.Model):
     __tablename__ = "lending_book"
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, nullable=False)
     book_id: Mapped[int] = mapped_column(db.ForeignKey("book.id"))
     user_id: Mapped[int] = mapped_column(db.ForeignKey("user.id"))
 
@@ -27,9 +28,22 @@ class LendingBooks(db.Model):
     def get_formated_date(self, date):
         return date.strftime("%d/%m/%Y")
 
-    def get_delayed_date(self):
-        self.date = datetime.now()
-        return True if self.return_date.date() < self.date else False
+    def check_delayed_date(self):
+        self.current_date = datetime.now().date()
+        delayed_dates = db.session.query(LendingBooks).all()
+        for delayed_date in delayed_dates:
+            return (
+                True if delayed_date.return_date.date() < self.current_date else False
+            )
+
+    def count_delayed_books(self):
+        self.current_date = datetime.now().date()
+        books = 0
+        delayed_books = db.session.query(LendingBooks).all()
+        for delayed_book in delayed_books:
+            if delayed_book.return_date.date() < self.current_date:
+                books += 1
+        return books
 
     def send_notification_of_return_book(self):
         # self.notification = db.session.query(LendingBooks)
@@ -44,7 +58,7 @@ class LendingBooks(db.Model):
         #         )
         pass
 
-    def get_day_return(self):
+    def count_day_return(self):
         current_date = datetime.now().date()
         delayed_books = db.session.query(LendingBooks).all()
         total_count = 0
@@ -53,13 +67,17 @@ class LendingBooks(db.Model):
                 total_count += 1
         return total_count
 
-    def get_delayed_books(self):
-        delayed_books = (
-            db.session.query(LendingBooks)
-            .filter(LendingBooks.return_date < datetime.now())
-            .count()
-        )
-        return delayed_books if delayed_books else 0
+    def check_day_return(self):
+        current_date = datetime.now().date()
+
+        tomorrow = current_date + timedelta(days=1)
+
+        return_days = db.session.query(LendingBooks).all()
+
+        for return_day in return_days:
+            if return_day.return_date.date() == tomorrow:
+                return True
+        return False
 
 
 class User(db.Model, UserMixin):
@@ -71,6 +89,7 @@ class User(db.Model, UserMixin):
     )
     firstname: Mapped[str] = mapped_column(db.String(20), nullable=False)
     lastname: Mapped[str] = mapped_column(db.String(100), nullable=False)
+    fullname: Mapped[str] = mapped_column(db.String(100), nullable=False)
     email: Mapped[str] = mapped_column(db.String(100), nullable=False, unique=True)
     phone: Mapped[str] = mapped_column(
         db.String(15), nullable=False, unique=True, default="(00)90000-0000"
@@ -91,7 +110,13 @@ class User(db.Model, UserMixin):
     )
 
     def get_fullname(self):
-        return f"{self.firstname} {self.lastname}"
+        return self.fullname
+
+    def set_fullname(self, firstname, lastname):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.fullname = f"{self.firstname} {self.lastname}"
+        return self.fullname
 
     def __str__(self) -> str:
         return f"User {self.email}"
@@ -117,6 +142,9 @@ class Role(db.Model):
         "polymorphic_identity": "role",
         "polymorphic_on": "type",
     }
+
+    def get_role(self):
+        return self.type.capitalize()
 
 
 class Admin(Role):
@@ -169,19 +197,51 @@ class Books(db.Model):
     title: Mapped[str] = mapped_column(db.String(60))
     author: Mapped[str] = mapped_column(db.String(60))
     isbn: Mapped[str] = mapped_column(db.String(20))
-    quantity_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
+    total_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
+    avaiable_quantity: Mapped[int] = mapped_column(nullable=False, default=0)
 
     users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
-
-    def get_total_books(self):
-        total_books = db.session.query(func.sum(Books.quantity_of_books)).scalar()
-        return total_books if total_books else 0
 
     def get_title(self):
         return self.title
 
-    def get_quantity_of_books(self):
-        return self.quantity_of_books
+    def get_avaiable_quantity(self):
+        return self.avaiable_quantity
+
+    def get_author(self):
+        return self.author
+
+    def get_isbn(self):
+        return self.isbn
+
+    def get_total_of_books(self):
+        return self.total_of_books
+
+    def count_total_of_books(self):
+        total_books = db.session.query(func.sum(Books.total_of_books)).scalar()
+        return total_books if total_books else 0
+
+    def subtract_avaiable_quantity(self, quantity_lend: int) -> int:
+        # self.avaiable_quantity = avaiable_quantity
+        if self.avaiable_quantity is None:
+            raise Exception("Quantidade de livros disponível não definida.")
+
+        if quantity_lend > self.avaiable_quantity:
+            raise Exception("Quantidade de livros indisponível.")
+
+        self.avaiable_quantity -= quantity_lend
+        db.session.commit()
+
+        return self.avaiable_quantity
+
+    def add_avaiable_quantity(self, quantity_lend: int) -> int:
+        if self.avaiable_quantity is None:
+            raise Exception("Quantidade de livros disponível não definida.")
+
+        self.avaiable_quantity += quantity_lend
+        db.session.commit()
+
+        return self.avaiable_quantity
 
     def __repr__(self):
         return f"Livro(s): {self.title}"
