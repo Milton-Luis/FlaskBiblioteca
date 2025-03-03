@@ -2,7 +2,8 @@
 module.exports = {
   mode: "JIT",
   content: [
-    "./app/frontend/templates/**/*html"
+    "./app/frontend/templates/**/*.html",
+    "./app/frontend/static/js/*.js"
   ],
   theme: {
     
