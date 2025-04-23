@@ -19,8 +19,8 @@
 </section>
 <section class="flex items-center justify-center w-full h-5">
 
-    <p>Em atraso: {{ delayed_books.count_delayed_books() }}</p>
-    <p>devoluções de hoje: {{ delayed_books.count_day_return() }}</p>
+    <p>Em atraso: {{ lendings.count_delayed_books() }}</p>
+    <p>devoluções de hoje: {{ lendings.count_books_due_today() }}</p>
 
 </section>
 
@@ -39,23 +39,24 @@
         </thead>
         <tbody class="border py-4 ">
             {% for lend in lends %}
-            <tr class="h-10 {% if lend.check_delayed_date() %} border-2 bg-red-400 
-            {% elif lend.check_day_return() %} border-2 bg-yellow-200 {% else %} bg-white {% endif %}">
+            <tr class="h-10 {% if lendings.count_delayed_books() > 0 %} border-2 bg-red-400 
+            {% elif lendings.count_books_due_today() >0 %} border-2 bg-yellow-200 {% else %} bg-white {% endif %}">
 
                 <td class="text-center">
                     <a href="{{ url_for('main.book_details', title=lend.books.title) }}" class="hover:text-blue-600">
-                        {{ lend.books.get_title() }}
+                        {{ lend.books.title }}
                     </a>
                 </td>
-                <td class="text-center">{{ lend.users.get_fullname() }}</td>
+                <td class="text-center">{{ lend.users.fullname }}</td>
                 <td class="text-center">{{ lend.quantity_lent }}</td>
-                <td class="text-center">{{ lend.get_formated_date(lend.lending_date) }}</td>
-                <td class="text-center">{{ lend.get_formated_date(lend.return_date) }}</td>
+                <td class="text-center">{{ lendings.get_formated_date(lend.lending_date) }}</td>
+                <td class="text-center">{{ lendings.get_formated_date(lend.return_date) }}</td>
                 <td class="text-center last:bg-white">
                     <div class="flex justify-center space-x-2">
                         <a href="#" class="px-2 py-1 bg-blue-500 text-white rounded">N</a>
                         <a href="#" class="px-2 py-1 bg-green-500 text-white rounded">R</a>
-                        <a href="{{ url_for('main.return_book', id=lend.id) }}" class="px-2 py-1 bg-red-500 text-white rounded">D</a>
+                        <a href="{{ url_for('main.return_book', id=lend.book_id) }}"
+                            class="px-2 py-1 bg-red-500 text-white rounded">D</a>
                     </div>
                 </td>
             </tr>
