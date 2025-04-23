@@ -9,53 +9,53 @@ def get_formated_date(date: datetime) -> str:
 
 def check_delayed_date() -> bool:
     current_date = datetime.now().date()
-    delayed_dates = db.session.query(LendingBooks).all()
-    for delayed_date in delayed_dates:
-        return True if delayed_date.return_date.date() < current_date else False
+    lending_records = db.session.query(LendingBooks).all()
+    for lending_record in lending_records:
+        return True if lending_record.return_date.date() < current_date else False
 
 
 def count_delayed_books() -> int:
     current_date = datetime.now().date()
-    books = 0
-    delayed_books = db.session.query(LendingBooks).all()
-    for delayed_book in delayed_books:
-        if delayed_book.return_date.date() < current_date:
-            books += 1
-    return books
+    delayed_books_count = 0
+    lending_records = db.session.query(LendingBooks).all()
+    for lending_record in lending_records:
+        if lending_record.return_date.date() < current_date:
+            delayed_books_count += 1
+    return delayed_books_count
 
 
-# def send_notification_of_return_book(id:int) -> None:
-# .notification = db.session.query(LendingBooks).filter_by(
-#     user_id=idreturn_date=.return_date
-# ).all()
-# .return_date = datetime.now().date() + timedelta(days=1)
-# .notice_date = .return_date - timedelta(days=2)
+# def send_notification_of_return_book(user_id: int) -> None:
+#     notifications = db.session.query(LendingBooks).filter_by(
+#         user_id=user_id
+#     ).all()
+#     return_date = datetime.now().date() + timedelta(days=1)
+#     notice_date = return_date - timedelta(days=2)
 
-# if .notice_date:
-#     for lending in .notification:
-#         send_email(
-#             lending.users.email,
-#             f"Lembrete: Devolução do livro {lending.books.title}",
-#             "auth/email/reminder",
-#         )
+#     if notice_date:
+#         for lending in notifications:
+#             send_email(
+#                 lending.users.email,
+#                 f"Lembrete: Devolução do livro {lending.books.title}",
+#                 "auth/email/reminder",
+#             )
 
 
-def count_day_return() -> int:
+def count_books_due_today() -> int:
     current_date = datetime.now().date()
-    delayed_books = db.session.query(LendingBooks).all()
-    total_count = 0
-    for delayed_book in delayed_books:
-        if delayed_book.return_date.date() == current_date:
-            total_count += 1
-    return total_count
+    books_due_today_count = 0
+    lending_records = db.session.query(LendingBooks).all()
+    for lending_record in lending_records:
+        if lending_record.return_date.date() == current_date:
+            books_due_today_count += 1
+    return books_due_today_count
 
 
-def check_day_return() -> bool:
+def has_books_due_tomorrow() -> bool:
     current_date = datetime.now().date()
-    tomorrow = current_date + timedelta(days=1)
-    return_days = db.session.query(LendingBooks).all()
+    tomorrow_date = current_date + timedelta(days=1)
+    lending_records = db.session.query(LendingBooks).all()
 
-    for return_day in return_days:
-        if return_day.return_date.date() == tomorrow:
+    for lending_record in lending_records:
+        if lending_record.return_date.date() == tomorrow_date:
             return True
     return False
