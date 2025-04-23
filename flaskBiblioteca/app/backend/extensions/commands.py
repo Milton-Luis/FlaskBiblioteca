@@ -1,17 +1,10 @@
-from getpass import getpass
 import os
+from getpass import getpass
 
 from app.backend.extensions.database import db
 from app.backend.extensions.security import generate_password
-from app.backend.model.models import (
-    Admin,
-    Books,
-    LendingBooks,
-    Librarian,
-    Role,
-    Students,
-    User,
-)
+from app.backend.model.models import (Admin, Books, LendingBooks, Librarian,
+                                      Role, Students, User)
 
 
 def create_db():
@@ -34,6 +27,7 @@ def createSuperUser():
     lastname = input("Informe seu sobrenome: ").capitalize()
     email = input("Informe seu email: ")
     password = getpass("Informe sua senha: ")
+    confirm = getpass("Confirme sua senha: ")
     role = "admin"
     admin = User(
         firstname=firstname,
@@ -47,11 +41,19 @@ def createSuperUser():
         ),
     )
     admin.fullname = admin.set_fullname(firstname, lastname)
-
-    db.session.add(admin)
-    db.session.commit()
-    print("Super user created!")
-
+    try:
+        if confirm != password:
+            print("As senhas não conferem!")
+            return
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+    else:
+        db.session.add(admin)
+        db.session.commit()
+        print("Super user created!")
+    finally:
+        db.session.close()
 
 def init_app(app):
     for command in [create_db, drop_db, createSuperUser]:
