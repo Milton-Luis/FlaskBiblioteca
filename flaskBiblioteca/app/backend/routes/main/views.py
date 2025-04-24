@@ -1,6 +1,16 @@
 from datetime import datetime
 
-from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from app.backend.services import book_services, lending_services
+from flask import (
+    flash,
+    jsonify,
+    logging,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from flask_login import current_user, login_required
 from sqlalchemy.sql import asc, or_
 
@@ -13,9 +23,8 @@ from .forms import BookForm, LendingBooksForm, SearchBookForm
 
 @main.before_app_request
 def before_app_request():
-    lending = LendingBooks()
-
-    return lending.send_notification_of_return_book()
+    ...
+    # return lending_services.send_notification_of_return_book()
 
 
 @main.route("/")
@@ -23,16 +32,19 @@ def index():
     if current_user.is_anonymous:
         return redirect(url_for("auth.login"))
 
-    books = Books()
-    lending = LendingBooks()
+    books = book_services
+    lending = lending_services
+    # lending = LendingBooks()
 
-    context = {"books": books, "lending": lending, "title": "Início"}
-    return render_template("pages/index.html", **context)
+    context = {}
+    return render_template(
+        "pages/index.html", books=books, lending=lending, title="Início"
+    )
 
 
 @main.route("/livros/", methods=["POST", "GET"])
 @login_required
-def books():
+def view_books():
     form = SearchBookForm()
 
     page = request.args.get("page", 1, type=int)
@@ -49,27 +61,6 @@ def books():
         "title": "Livros",
     }
     return render_template("pages/books.html", **context)
-
-
-@main.route("/livros/search", methods=["GET"])
-@login_required
-def search_books():
-    search = request.args.get("q", "")
-    books_query = (
-        db.session.query(Books)
-        .filter(
-            or_(
-                Books.title.like(f"%{search}%"),
-                Books.author.startswith(f"{search}"),
-            )
-        )
-        .order_by(asc(Books.title))
-    )
-
-    books_list = [
-        {"title": book.title, "author": book.author} for book in books_query.all()
-    ]
-    return jsonify(books_list)
 
 
 @main.route("/livros/detalhes/<title>/", methods=["GET", "POST"])
@@ -89,27 +80,28 @@ def lendings():
         page=page, per_page=5, error_out=True
     )
 
-    delayed_books = LendingBooks()
+    today = datetime.now().date()
 
     context = {
         "lends": lends,
         "endpoint": "main.lendings",
         "title": "Empréstimos",
-        "delayed_books": delayed_books,
+        "today": today,
+        "lendings": lending_services,
     }
     return render_template("pages/lendings.html", **context)
 
 
 @main.route("/livros/novo/", methods=["GET", "POST"])
 @login_required
-def new_book():
+def add_books():
     form = BookForm()
     if form.validate_on_submit():
         books = Books(
             title=form.title.data,
             author=form.author.data,
             total_of_books=form.quantity.data,
-            avaiable_quantity=form.quantity.data,
+            available_quantity=form.quantity.data,
             isbn=form.isbn.data,
         )
         db.session.add(books)
@@ -119,7 +111,7 @@ def new_book():
         return redirect(url_for("main.index"))
 
     context = {"form": form, "title": "Novo Livro"}
-    return render_template("pages/new_book.html", **context)
+    return render_template("pages/add_books.html", **context)
 
 
 @main.route("/emprestimos/novo/<title>/buscar-locatario/", methods=["POST", "GET"])
@@ -155,40 +147,15 @@ def search_borrower(title):
     )
 
 
-@main.route("/emprestimos/novo/<title>/search", methods=["GET"])
-@login_required
-def request_search_borrower(title):
-    get_book = db.session.query(Books).filter(Books.title == title).first()
-    search = request.args.get("q", "")
-    get_user = (
-        db.session.query(User)
-        .filter(User.fullname.ilike(f"%{search}%"))
-        .order_by(asc(User.firstname))
-    )
-
-    name_list = []
-    for user in get_user.all():
-        info = []  # Inicialize a info aqui para cada usuário
-        if user.roles_id is None:
-            for student in user.students:
-                info.append({"info": student.get_course()})
-        else:
-            info.append({"info": user.roles.get_role()})
-
-        name_list.append({"fullname": user.get_fullname(), "info": info})
-    return jsonify(name_list)
-
-
 @main.route("/emprestimos/novo/<title>/", methods=["POST", "GET"])
 @login_required
 def new_loan(title):
     form = LendingBooksForm()
     search_form = SearchBookForm()
 
-
     get_user = db.session.query(User).filter(User.id == session.get("user_id")).first()
     get_book = db.session.query(Books).filter(Books.title == title).first()
-    form.title.data = get_book.get_title()
+    form.title.data = get_book.title
 
     if form.validate_on_submit():
         user_id = session.get("user_id")
@@ -207,17 +174,26 @@ def new_loan(title):
             try:
                 db.session.add(lending)
 
-                get_book.subtract_avaiable_quantity(lending.quantity_lent)
-
+                book_services.subtract_available_quantity(
+                    get_book.id, lending.quantity_lent
+                )
                 db.session.commit()
                 flash("Empréstimo realizado!", "success")
-                session.pop("user_id")
-                return redirect(url_for("main.index"))
 
-            except Exception as e:
+                session.pop("user_id")
+
+            except Exception:
                 session.pop("user_id")
                 db.session.rollback()
-                raise Exception(f"Erro ao criar empréstimo! {e}")
+                flash(
+                    f"O Locatário {get_user.fullname} já alugou um livro. A devolução é no dia {lending_services.get_formated_date(lending.return_date)}!",
+                    "danger",
+                )
+
+            finally:
+                db.session.close()
+                return redirect(url_for("main.index"))
+
         else:
             flash("Erro: ID do usuário não encontrado na sessão", "danger")
 
@@ -234,12 +210,13 @@ def new_loan(title):
 @main.route("/emprestimos/devolucao/<int:id>/", methods=["GET", "POST"])
 @login_required
 def return_book(id):
-    lendings = db.session.query(LendingBooks).filter(LendingBooks.id == id).first()
-    get_book = db.session.query(Books).filter(Books.id == lendings.book_id).first()
+    lendings = db.session.query(LendingBooks).filter_by(book_id=id).first()
+    book = lendings.books
 
-    get_book.add_avaiable_quantity(lendings.quantity_lent)
+    book_services.add_available_quantity(book.id, lendings.quantity_lent)
 
     db.session.delete(lendings)
     db.session.commit()
+
     flash("Livro devolvido com sucesso!", "success")
     return redirect(url_for("main.index"))

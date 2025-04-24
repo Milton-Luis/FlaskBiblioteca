@@ -1,10 +1,11 @@
 from datetime import datetime
 
+from flask import flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
+
 from app.backend.extensions.database import db
 from app.backend.extensions.security import check_password, validate_token
 from app.backend.model.models import User
-from flask import flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
 
 from . import auth
 from .forms import LoginForm
