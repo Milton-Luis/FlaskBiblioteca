@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	searchInput.addEventListener("input", function () {
 		const query = searchInput.value;
 
-		fetch(`/livros/search?q=${query}`)
+		fetch(`/api/livros/search?q=${query}`)
 			.then((response) => response.json())
 			.then((data) => {
 				booksList.innerHTML = "";
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			return;
 		}
 
-		fetch(`/emprestimos/novo/${bookTitle}/search?q=${query}`)
+		fetch(`/api/emprestimos/novo/${bookTitle}/search?q=${query}`)
 			.then((response) => response.json())
 			.then((data) => {
 				searchList.innerHTML = "";
