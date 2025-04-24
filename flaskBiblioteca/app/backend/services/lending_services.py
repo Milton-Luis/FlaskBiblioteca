@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from app.backend.extensions.database import db
 from app.backend.model.models import LendingBooks
 
@@ -6,12 +6,6 @@ from app.backend.model.models import LendingBooks
 def get_formated_date(date: datetime) -> str:
     return date.strftime("%d/%m/%Y")
 
-
-def check_delayed_date() -> bool:
-    current_date = datetime.now().date()
-    lending_records = db.session.query(LendingBooks).all()
-    for lending_record in lending_records:
-        return True if lending_record.return_date.date() < current_date else False
 
 
 def count_delayed_books() -> int:
@@ -23,6 +17,8 @@ def count_delayed_books() -> int:
             delayed_books_count += 1
     return delayed_books_count
 
+def count_monthly_returns() -> int:
+    ...
 
 # def send_notification_of_return_book(user_id: int) -> None:
 #     notifications = db.session.query(LendingBooks).filter_by(
@@ -41,21 +37,14 @@ def count_delayed_books() -> int:
 
 
 def count_books_due_today() -> int:
-    current_date = datetime.now().date()
+    today = datetime.now().date()
     books_due_today_count = 0
+    
     lending_records = db.session.query(LendingBooks).all()
     for lending_record in lending_records:
-        if lending_record.return_date.date() == current_date:
+        if lending_record.return_date.date() == today:
             books_due_today_count += 1
     return books_due_today_count
 
 
-def has_books_due_tomorrow() -> bool:
-    current_date = datetime.now().date()
-    tomorrow_date = current_date + timedelta(days=1)
-    lending_records = db.session.query(LendingBooks).all()
 
-    for lending_record in lending_records:
-        if lending_record.return_date.date() == tomorrow_date:
-            return True
-    return False
