@@ -3,7 +3,7 @@
 <section class="content">
     <div class="flex items-center gap-x-8">
 
-        <a href="{{ url_for('main.new_book') }}" id="add_book" class="
+        <a href="{{ url_for('main.add_books') }}" id="add_book" class="
                 flex items-center max-lg:items-start
                 gap-x-4
                 w-[150px] max-lg:w-10 max-lg:h-10
@@ -18,13 +18,17 @@
 
         <div class="input-group w-1/2">
             <span class="input-group-text fa fa-search "></span>
-            {{ form.search(class="input-group-control", placeholder="Digite o título ou nome do autor", autocomplete="off") }}
+            {{ form.search(class="input-group-control", placeholder="Digite o título ou nome do autor",
+            autocomplete="off") }}
         </div>
 
     </div>
 </section>
 <section class="w-full h-full overflow-y-auto p-1">
+    
     <ul class="flex flex-wrap justify-start items-start gap-x-8 gap-y-3 max-lg:justify-around" id="books-list">
+        <h1 class="error-message"></h1>
+        
         {% for book in books.items %}
         <li class="h-56 w-36 border">
             <a href="{{ url_for('main.book_details', title=book.title) }}">{{ book.title }}</a>
