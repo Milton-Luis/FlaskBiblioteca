@@ -1,16 +1,22 @@
 // window.location.reload();
 document.addEventListener("DOMContentLoaded", function () {
-	const removeMessage = () => {
-		const message = document.querySelector("#message");
-		const div = message.querySelector("div");
-		if (div) {
-			setTimeout(() => {
-				message.removeChild(div);
-			}, 2000);
-		}
-	};
-	removeMessage();
+	const calendar = () => {
+		const day = document.querySelector("#day");
+		const month = document.querySelector("#month");
+		const monthText = new Date().toLocaleString("pt-br", {
+			month: "short",
+		}).replace(".", "");
+		const dayNumber = new Date().toLocaleString("default", {
+			day: "2-digit", 
+		});
+	
+		day.textContent = dayNumber;
+		month.textContent = monthText;
+	}
+	calendar();
 });
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
 	const login = () => {
