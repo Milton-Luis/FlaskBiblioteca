@@ -6,8 +6,6 @@ from app.backend.model.models import LendingBooks
 def get_formated_date(date: datetime) -> str:
     return date.strftime("%d/%m/%Y")
 
-
-
 def count_delayed_books() -> int:
     current_date = datetime.now().date()
     delayed_books_count = 0
