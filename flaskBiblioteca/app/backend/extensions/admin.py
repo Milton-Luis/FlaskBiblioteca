@@ -1,6 +1,6 @@
 from flask_admin import Admin
 
-from app.backend.services.admin_services import AdminAccess
+from app.backend.routes.admin.views import AdminAccess
 
 admin = Admin()
 
