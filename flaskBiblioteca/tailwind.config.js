@@ -11,6 +11,7 @@ module.exports = {
       sans: ["Helvética", "sans-serif"],
       serif: ["Roboto","Times", "serif"],
     },
+    
     extend: {
 
     },
