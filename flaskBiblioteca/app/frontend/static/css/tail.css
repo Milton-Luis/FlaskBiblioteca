@@ -50,7 +50,7 @@ body {
 }
 
 .card {
-	@apply flex justify-between items-center w-[15rem] h-[6rem] bg-white rounded-md shadow-md border-l-8 px-3  max-lg:flex-row-reverse max-lg:w-[13rem] max-lg:h-[4rem] max-lg:border-2 max-lg:border-l-2;
+	@apply flex justify-between items-center w-[15rem] h-[6rem] bg-white rounded-md shadow-md border-l-8  max-lg:flex-row-reverse max-lg:w-[13rem] max-lg:h-[4rem] max-lg:border-2 max-lg:border-l-2;
 }
 
 .input-group {
@@ -76,7 +76,7 @@ body {
 	@apply flex-1 p-2 ring-0 w-[38rem] max-lg:w-auto rounded-lg border-2 border-gray-400;
 }
 
-.button-control{
+.button-control {
 	@apply flex-1 w-full p-2 bg-blue-950 text-white text-xl h-14 hover:bg-blue-700 cursor-pointer rounded-md;
 }
 

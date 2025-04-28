@@ -614,6 +614,14 @@ video {
   left: 0px;
 }
 
+.right-10{
+  right: 2.5rem;
+}
+
+.right-11{
+  right: 2.75rem;
+}
+
 .right-2{
   right: 0.5rem;
 }
@@ -636,6 +644,10 @@ video {
 
 .top-28{
   top: 7rem;
+}
+
+.top-5{
+  top: 1.25rem;
 }
 
 .z-10{
@@ -719,6 +731,10 @@ video {
   width: 9rem;
 }
 
+.w-52{
+  width: 13rem;
+}
+
 .w-64{
   width: 16rem;
 }
@@ -745,10 +761,6 @@ video {
 
 .w-screen{
   width: 100vw;
-}
-
-.w-52{
-  width: 13rem;
 }
 
 .flex-1{
@@ -1080,6 +1092,10 @@ video {
   line-height: 2rem;
 }
 
+.text-\[1\.5rem\]{
+  font-size: 1.5rem;
+}
+
 .text-\[14pt\]{
   font-size: 14pt;
 }
@@ -1113,6 +1129,10 @@ video {
 
 .font-bold{
   font-weight: 700;
+}
+
+.uppercase{
+  text-transform: uppercase;
 }
 
 .text-blue-600{
@@ -1256,8 +1276,6 @@ body{
   border-left-width: 8px;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
@@ -1462,6 +1480,10 @@ body{
 
   .max-lg\:bottom-1{
     bottom: 0.25rem;
+  }
+
+  .max-lg\:left-\[10px\]{
+    left: 10px;
   }
 
   .max-lg\:right-0{
