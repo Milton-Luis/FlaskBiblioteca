@@ -13,30 +13,27 @@
 
     {% block styles %}
 
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
     {% endblock styles %}
 
     {% block title %}
-        <title>{{ title }}</title>
+    <title>{{ title }}</title>
     {% endblock title %}
 </head>
 
-<body class="font-serif w-screen">
+<body class="font-serif w-screen min-h-dvh bg-gray-200 flex flex-row overflow-hidden">
+
+
     {% if current_user.is_authenticated %}
-    <nav class="text-white bg-black text-2xl max-lg:w-auto">
-        <div class="flex justify-between items-center h-12 px-9 ">
-            <div class="navbar-menu">
-                <a href="#" class="navbar-brand">Flask Biblioteca</a>
-            </div>
-            <div class="navbar-profile">
-                <span class="fas fa-user"></span>
-            </div>
+    <aside class="bg-gray-800 text-white w-[16rem] max-lg:w-full h-screen">
+        
+        <div class="border-0 rounded-full bg-gray-200 w-[6rem] h-[6rem] my-3 mx-auto flex items-center justify-center max-lg:flex-col"
+            id="navbar-profile">
+            <a href=""><span class="fas fa-user text-[4rem]"></span></a>
         </div>
-    </nav>
-    <aside class="bg-gray-800 text-white w-64 max-lg:w-full">
-        <ul class="flex flex-col p-0 max-lg:flex-row max-lg:justify-around w-full">
+        <ul class="flex flex-col justify-start w-full overflow-y-scroll h-[inherit]">
             <li class="sidebar-item">
                 <a href="{{ url_for('main.index') }}" class="sidebar-link">
                     <span class="fas fa-home"></span>
@@ -65,11 +62,13 @@
 
     </aside>
     {% endif %}
-    <main class="flex flex-col justify-center;
-	items-center h-full py-5 mx-5">
-        
-            {% from "macros/messages/render_messages.html" import render_message %}
-       
+    <div class="w-auto ">
+        <button class="fas fa-bars text-[1.5rem]" id="collapse-sidebar"></button>
+    </div>
+    <main class="flex flex-col justify-center items-center  w-full h-full py-5 mx-5">
+
+        {% from "macros/messages/render_messages.html" import render_message %}
+
         {% block content %}{% endblock content %}
     </main>
 
