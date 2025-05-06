@@ -8,13 +8,12 @@
 
 body {
 	display: grid;
-	grid-template-rows: 50px auto;
+	grid-template-rows: auto;
 	grid-template-columns: 2fr 5fr 5fr 1fr;
 	grid-template-areas:
-		"nav nav nav nav"
 		"aside main main main";
 	min-height: 100dvh;
-	overflow-x: hidden;
+	/* overflow-x: hidden; */
 }
 nav {
 	grid-area: nav;
