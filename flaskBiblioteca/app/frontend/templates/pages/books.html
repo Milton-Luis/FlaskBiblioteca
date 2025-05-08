@@ -25,13 +25,13 @@
     </div>
 </section>
 <section class="w-full h-full overflow-y-auto p-1">
-    
+
     <ul class="flex flex-wrap justify-start items-start gap-x-8 gap-y-3 max-lg:justify-around" id="books-list">
         <h1 class="error-message"></h1>
-        
+
         {% for book in books.items %}
         <li class="h-56 w-36 border">
-            <a href="{{ url_for('main.book_details', title=book.title) }}">{{ book.title }}</a>
+            <a href="{{ url_for('main.book_details', slug=book.slug) }}">{{ book.title }}</a>
         </li>
         {% endfor %}
     </ul>
