@@ -2,11 +2,10 @@ import uuid
 from datetime import datetime
 from typing import List
 
+from app.backend.extensions.database import db
 from flask import abort, current_app
 from flask_login import UserMixin, current_user
 from sqlalchemy.orm import Mapped, mapped_column
-
-from app.backend.extensions.database import db
 
 
 class LendingBooks(db.Model):
@@ -135,12 +134,26 @@ class Books(db.Model):
 
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     title: Mapped[str] = mapped_column(db.String(60))
+    slug: Mapped[str] = mapped_column(
+        db.String(60), nullable=False, server_default=""
+    )
+    description: Mapped[str] = mapped_column(
+        db.Text, nullable=False, server_default="default_description"
+    )
+    image: Mapped[str] = mapped_column(
+        db.String(100), nullable=False, server_default="default_image"
+    )
     author: Mapped[str] = mapped_column(db.String(60))
     isbn: Mapped[str] = mapped_column(db.String(20))
     total_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
     available_quantity: Mapped[int] = mapped_column(nullable=False, default=0)
 
     users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
+
+    __table_args__ = (
+        db.UniqueConstraint("slug", name="uq_slug"),
+        db.UniqueConstraint("isbn", name="uq_isbn"),
+    )
 
     def __str__(self) -> str:
         return f"Livro(s): {self.title} - Autor: {self.author} - Quantidade: {self.total_of_self} - Disponível: {self.available_quantity}"
