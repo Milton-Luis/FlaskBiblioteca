@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import (DateField, IntegerField, RadioField, SearchField,
-                            SelectField, StringField, SubmitField)
+                            SelectField, StringField, SubmitField, Slug)
 from wtforms.validators import DataRequired, NumberRange
 
 
@@ -24,16 +24,7 @@ class BookForm(FlaskForm):
         validators=[DataRequired(), NumberRange(min=1, max=50)],
         render_kw={"value": 1},
     )
-    # classification = SelectField(
-    #     "Classificação dos livros",
-    #     validators=[DataRequired()],
-    #     choices=[
-    #         ("Didático", "Didático"),
-    #         ("Informática", "Informática"),
-    #         ("Literatura", "Literatura"),
-    #         ("Logística", "Logísitca"),
-    #     ],
-    # )
+    
     submit = SubmitField("Adicionar novo livro")
 
 
