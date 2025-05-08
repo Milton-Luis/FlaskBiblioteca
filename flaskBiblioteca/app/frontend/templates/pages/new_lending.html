@@ -11,7 +11,7 @@
         {{ form.hidden_tag() }}
         <div class="input-group max-lg:w-full">
             <span class="input-group-text fa fa-search "></span>
-            {{ search_form.search(class="flex-1 p-2 ring-0 w-[40rem] max-lg:w-auto", placeholder="Digite o nome completo do locatário")}}
+            {{ search_form.search(class="flex-1 p-2 ring-0 w-[40rem] max-lg:w-auto", placeholder="Digite o nome completo do locatário", value=get_user.fullname) }}
             {{ search_form.submit(class="p-2 hover:bg-blue-500 bg-blue-950 text-white text-base h-10 rounded-r-lg
             cursor-pointer") }}
         </div>
