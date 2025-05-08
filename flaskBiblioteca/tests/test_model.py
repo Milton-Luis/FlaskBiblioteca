@@ -1,5 +1,4 @@
 import pytest
-
 from app.backend.extensions.database import db
 from app.backend.model.models import Books, User
 

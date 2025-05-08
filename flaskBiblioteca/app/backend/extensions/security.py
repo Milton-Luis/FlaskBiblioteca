@@ -1,11 +1,10 @@
+from app.backend.extensions.mail import send_email
+from app.backend.model.models import User
 from flask import current_app, flash
 from flask_argon2 import Argon2
 from flask_cors import CORS
 from itsdangerous import SignatureExpired
 from itsdangerous import URLSafeTimedSerializer as Serializer
-
-from app.backend.extensions.mail import send_email
-from app.backend.model.models import User
 
 argon2 = Argon2()
 
