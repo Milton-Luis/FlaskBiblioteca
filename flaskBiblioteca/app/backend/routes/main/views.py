@@ -1,21 +1,12 @@
 from datetime import datetime
 
-from app.backend.services import book_services, lending_services
-from flask import (
-    flash,
-    jsonify,
-    logging,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
-from flask_login import current_user, login_required
-from sqlalchemy.sql import asc, or_
-
 from app.backend.extensions.database import db
 from app.backend.model.models import Books, LendingBooks, Students, User
+from app.backend.services import book_services, lending_services
+from app.backend.services.services import slugify
+from flask import flash, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required
+from sqlalchemy.sql import asc
 
 from . import main
 from .forms import BookForm, LendingBooksForm, SearchBookForm
@@ -36,7 +27,6 @@ def index():
     lending = lending_services
     # lending = LendingBooks()
 
-    context = {}
     return render_template(
         "pages/index.html", books=books, lending=lending, title="Início"
     )
@@ -54,22 +44,23 @@ def view_books():
         .paginate(page=page, per_page=10, error_out=True)
     )
 
-    context = {
-        "books": books,
-        "endpoint": "main.books",
-        "form": form,
-        "title": "Livros",
-    }
-    return render_template("pages/books.html", **context)
+    return render_template(
+        "pages/books.html",
+        books=books,
+        endpoint="main.books",
+        form=form,
+        title="Livros",
+    )
 
 
-@main.route("/livros/detalhes/<title>/", methods=["GET", "POST"])
+@main.route("/livros/detalhes/<slug>/", methods=["GET", "POST"])
 @login_required
-def book_details(title):
-    book = db.session.query(Books).filter_by(title=title).first()
+def book_details(slug):
+    book = db.session.query(Books).filter_by(slug=slug).first()
 
-    context = {"book": book, "title": f"Livro - {title}"}
-    return render_template("pages/book_detail.html", **context)
+    return render_template(
+        "pages/book_detail.html", book=book, title=f"Livro - {book.title}"
+    )
 
 
 @main.route("/emprestimos/")
@@ -82,14 +73,14 @@ def lendings():
 
     today = datetime.now().date()
 
-    context = {
-        "lends": lends,
-        "endpoint": "main.lendings",
-        "title": "Empréstimos",
-        "today": today,
-        "lendings": lending_services,
-    }
-    return render_template("pages/lendings.html", **context)
+    return render_template(
+        "pages/lendings.html",
+        lends=lends,
+        endpoint="main.lendings",
+        title="Empréstimos",
+        today=today,
+        lendings=lending_services,
+    )
 
 
 @main.route("/livros/novo/", methods=["GET", "POST"])
@@ -100,6 +91,7 @@ def add_books():
         books = Books(
             title=form.title.data,
             author=form.author.data,
+            slug=slugify(form.title.data),
             total_of_books=form.quantity.data,
             available_quantity=form.quantity.data,
             isbn=form.isbn.data,
@@ -110,8 +102,7 @@ def add_books():
         flash("Livro adicionado com sucesso!", "success")
         return redirect(url_for("main.index"))
 
-    context = {"form": form, "title": "Novo Livro"}
-    return render_template("pages/add_books.html", **context)
+    return render_template("pages/add_books.html", form=form, title="Novo Livro")
 
 
 @main.route("/emprestimos/novo/<title>/buscar-locatario/", methods=["POST", "GET"])
@@ -197,14 +188,14 @@ def new_loan(title):
         else:
             flash("Erro: ID do usuário não encontrado na sessão", "danger")
 
-    context = {
-        "form": form,
-        "title": "Novo Empréstimo",
-        "get_book": get_book,
-        "get_user": get_user,
-        "search_form": search_form,
-    }
-    return render_template("pages/new_lending.html", **context)
+    return render_template(
+        "pages/new_lending.html",
+        form=form,
+        title="Novo Empréstimo",
+        get_book=get_book,
+        get_user=get_user,
+        search_form=search_form,
+    )
 
 
 @main.route("/emprestimos/devolucao/<int:id>/", methods=["GET", "POST"])
