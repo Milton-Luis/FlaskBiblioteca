@@ -1,9 +1,12 @@
-from . import api
-from flask_login import login_required
 from flask import jsonify, request
+from flask_login import login_required
 from sqlalchemy.sql import asc, or_
+
 from app.backend.extensions.database import db
 from app.backend.model.models import Books, User
+
+from . import api
+
 
 @api.route("/livros/search", methods=["GET"])
 @login_required
