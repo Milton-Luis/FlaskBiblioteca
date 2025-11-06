@@ -1,21 +1,13 @@
 from datetime import datetime
 
-from app.backend.services import book_services, lending_services
-from flask import (
-    flash,
-    jsonify,
-    logging,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
+from flask import (flash, jsonify, logging, redirect, render_template, request,
+                   session, url_for)
 from flask_login import current_user, login_required
 from sqlalchemy.sql import asc, or_
 
 from app.backend.extensions.database import db
 from app.backend.model.models import Books, LendingBooks, Students, User
+from app.backend.services import book_services, lending_services
 
 from . import main
 from .forms import BookForm, LendingBooksForm, SearchBookForm
