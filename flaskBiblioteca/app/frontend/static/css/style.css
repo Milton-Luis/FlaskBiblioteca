@@ -209,10 +209,6 @@
   --base-border-width-2: 2px;
   --base-border-style: solid;
 }
-body {
-  width: 100vw;
-  font-family: var(--font-sans);
-}
 .content {
   margin-bottom: calc(var(--spacing) * 4);
   width: 100%;

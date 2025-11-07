@@ -26,10 +26,6 @@
 	--base-border-style: solid;
 }
 
-body {
-	@apply font-sans w-screen;
-}
-
 .content {
 	@apply w-full mb-4 px-1 py-1;
 }
