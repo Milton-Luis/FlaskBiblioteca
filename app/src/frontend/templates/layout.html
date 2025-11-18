@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+<head>
+    {% block meta %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    {% endblock meta %}
+
+    {% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    {% endblock styles %}
+
+    {% block title %}
+    <title>{{ title }}</title>
+    {% endblock title %}
+</head>
+
+<body class="bg-gray-100 min-h-screen flex">
+    <main class="">
+        {% if current_user.is_authenticated %}
+        <aside class="">
+            <div class="">
+                <a href=""><span class="fas fa-user text-[4rem]"></span></a>
+            </div>
+            <ul class="">
+                <li class="sidebar-item">
+                    <a href="{{ url_for('main.index') }}" class="sidebar-link">
+                        <span class="fas fa-home"></span>
+                        <span class="sidebar-name">Início</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ url_for('main.index') }}" class="sidebar-link">
+                        <span class="fas fa-book"></span>
+                        <span class="sidebar-name">Livros</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ url_for('main.index') }}" class="sidebar-link">
+                        <span class="fas fa-exchange-alt"></span>
+                        <span class="sidebar-name">Empréstimos</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ url_for('auth.logout') }}" class="sidebar-link">
+                        <span class="fas fa-door-open"></span>
+                        <span class="sidebar-name">Sair</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        {% endif %}
+
+        <section class="">
+            {% from "macros/messages/render_messages.html" import
+            render_message %}
+            {%block content %}
+            <h1 class="text-blue-500 text-4xl">olá</h1>
+            {% endblock content %}
+        </section>
+    </main>
+
+    {% block scripts %}
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+    {% endblock scripts %}
+</body>
+
+</html>
