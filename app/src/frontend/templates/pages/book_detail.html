@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="w-10/12 max-md:h-full max-md:w-full max-sm:w-10/12 border-2 border-blue-600">
+    <div
+        class="h-[25rem] flex justify-around gap-4 p-2  max-md:w-full max-sm:flex-col max-md:items-center max-sm:h-[30rem] max-sm:w-full">
+        <div class="w-[20rem] max-md:w-[25rem] max-md:h-full max-sm:h-[50rem] max-sm:w-6/12 border-2 border-red-600">
+            <img src="" alt="{{ book.title }}" class="w-full h-full object-cover">
+        </div>
+        <div class="flex flex-col justify-start w-full border-2 border-yellow-500 max-md:w-full max-md:h-full">
+            <div>
+                <h2 class="">Título do livro: {{ book.title }}</h2>
+                <h2 class="">Autor: {{ book.author }}</h2>
+                <h2 class="">ISBN: {{ book.isbn }}</h2>
+                <h2 class="">Total de livros: {{ book.total_of_books }}</h2>
+                <h2 class="">Quantidade disponível:
+                    {% if book.available_quantity < 1 %} 
+                        Nenhum disponível 
+                    {% elif book.available_quantity==1 %}
+                        {{book.available_quantity }} livro 
+                    {% else %} 
+                    {{ book.available_quantity }} 
+                        livros 
+                    {% endif %}
+                </h2>
+            </div>
+            <div class="">
+                {% if book.available_quantity > 0 %}
+                <a href="{{ url_for('main.new_loan', title=book.title) }}" class="button-control">Emprestar
+                    livro</a>
+                {% else %}
+                <a href="{{ url_for('main.new_loan', title=book.title) }}"
+                    class="flex-1 w-full p-2 h-14 rounded-md bg-gray-600 text-white text-lg pointer-events-none">Emprestar
+                    livro
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
