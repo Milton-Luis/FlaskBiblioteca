@@ -1,0 +1,71 @@
+[default]
+
+# =========== SYSTEM BLOCK =========== #
+APP_NAME = "FlaskBiblioteca"
+DEBUG = false
+DEBUG_TB_ENABLED = false
+DEBUG_TB_INTERCEPT_REDIRECTS = false
+
+SERVER_NAME = "localhost:5000"
+PREFERRED_URL_SCHEME = "https://"
+
+
+# =========== ADMIN BLOCK ============ #
+FLASK_ADMIN_TITLE = "FlaskBiblioteca - controle principal"
+FLASK_ADMIN_TEMPLATE = "bootstrap4"
+FLASK_ADMIN_SWATCH = "cerulean"
+
+
+# =========== DATABASE BLOCK =========== #
+SQLALCHEMY_DATABASE_URI = "sqlite:///biblioteca.db"
+SQLALCHEMY_TRACK_MODIFICATIONS = false
+
+
+# =========== SECURITY BLOCK =========== #
+PASSWORD_SCHEMES = ["pbkdf2_sha512", "md5_crypt"]
+
+
+# =========== LOGIN BLOCK =========== #
+LOGIN_VIEW = "auth.login"
+LOGIN_MESSAGE_CATEGORY = "info"
+LOGIN_REFRESH_VIEW = "accounts.reauthenticate"
+LOGIN_SESSION_PROTECTION = "strong"
+
+# =========== FORM BLOCK =========== #
+WTF_CSRF_ENABLED = true
+
+
+# =========== MAIL BLOCK =========== #
+MAIL_SERVER = "smtp.googlemail.com"
+MAIL_PORT = 587
+MAIL_USE_TLS = true
+MAIL_USE_SSL = false
+MAIL_SUBJECT_PREFIX = "[Flasky]"
+MAIL_DEBUG = false
+
+# =========== ROLES BLOCK =========== #
+ROLES.ADMIN = "ADMIN"
+ROLE_PREFIX = "LIBRARIAN"
+
+
+# =========== DEFAULT EXTENSIONS BLOCK =========== #
+EXTENSIONS = [
+    "src.backend.extensions.security:init_app",
+    "src.backend.extensions.database:init_app",
+    "src.backend.extensions.admin:init_app",
+    "src.backend.extensions.authentication:init_app",
+    "src.backend.extensions.mail:init_app",
+    "src.backend.extensions.commands:init_app",
+]
+
+
+[development]
+DEBUG = true
+EXTENSIONS = [
+    "dynaconf_merge_unique", # to reuse extensions list from [default]
+]
+
+[testing]
+DEBUG = false
+TESTING = true
+SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
