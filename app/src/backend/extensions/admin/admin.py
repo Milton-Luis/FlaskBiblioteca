@@ -1,0 +1,48 @@
+from flask_admin import Admin
+from flask_admin.theme import Bootstrap4Theme
+from flask_admin.menu import MenuLink
+from flask_admin.contrib.sqla import ModelView
+
+from src.backend.models.models import Books
+from src.backend.extensions.database import db
+from src.backend.extensions.admin.views import AdminAccess
+
+
+admin = Admin()
+
+
+def admin_view_controller():
+    """ModelView's anager"""
+    admin_views = [admin.add_view(ModelView(Books, db.session, menu_icon_type="fa", menu_icon_value="fa-book"))]
+    return admin_views
+
+
+def admin_link_controller():
+    """MenuLink's manager"""
+    admin_link = [
+        admin.add_link(
+            MenuLink(
+                name="",
+                endpoint="auth.logout",
+                icon_type="fa",
+                icon_value="fa-sign-out",
+            )
+        )
+    ]
+    return admin_link
+
+
+def init_app(app):
+    admin.init_app(
+        app,
+        index_view=AdminAccess(
+            name="Home",
+            endpoint=app.config["FLASK_ADMIN_ENDPOINT"],
+            url=app.config["FLASK_ADMIN_URL"],
+            template="templates/admin",
+        ),
+    )
+    admin.name = app.config["FLASK_ADMIN_TITLE"]
+    admin.theme = Bootstrap4Theme(swatch="cerulean")
+    admin_view_controller()
+    admin_link_controller()
