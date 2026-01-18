@@ -1,7 +1,7 @@
 from threading import Thread
 
 from flask import current_app, render_template
-from flask_mailman import Mail, EmailMessage
+from flask_mailman import EmailMessage, Mail
 
 mail = Mail()
 
@@ -27,14 +27,15 @@ def send_email(to, subject, template, **kwargs):
     """
 
     app = current_app._get_current_object()
-
+    
     message = EmailMessage(
-        f"{app.config['MAIL_SUBJECT_PREFIX']} - {subject}",
-        sender=app.config["MAIL_DEFAULT_SENDER"],
-        recipients=[to],
+        subject=f"{app.config['MAIL_SUBJECT_PREFIX']} - {subject}",
+        body = render_template(f"{template}.html", **kwargs),
+        from_email=app.config["MAIL_DEFAULT_SENDER"],
+        to=[to],
     )
 
-    message.html = render_template(f"{template}.html", **kwargs)
+    message.content_subtype = "html"
     thread_email = Thread(target=send_async_email, args=[app, message]).start()
     return thread_email
 
