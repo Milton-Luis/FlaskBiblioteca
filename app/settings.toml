@@ -11,9 +11,7 @@ PREFERRED_URL_SCHEME = "https://"
 
 
 # =========== ADMIN BLOCK ============ #
-FLASK_ADMIN_TITLE = "FlaskBiblioteca - controle principal"
-FLASK_ADMIN_TEMPLATE = "bootstrap4"
-FLASK_ADMIN_SWATCH = "cerulean"
+FLASK_ADMIN_TITLE = "FlaskBiblioteca"
 FLASK_ADMIN_ENDPOINT = "admin"
 FLASK_ADMIN_URL = "/admin"
 
@@ -40,8 +38,10 @@ WTF_CSRF_ENABLED = true
 # =========== MAIL BLOCK =========== #
 MAIL_SERVER = "smtp.googlemail.com"
 MAIL_PORT = 587
+MAIL_USERNAME = "noreply.flasky@gmail.com"
 MAIL_USE_TLS = true
 MAIL_USE_SSL = false
+MAIL_DEFAULT_SENDER = "Time Flasky <noreply@flasky.com>"
 MAIL_SUBJECT_PREFIX = "[Flasky]"
 MAIL_DEBUG = false
 
@@ -56,7 +56,7 @@ EXTENSIONS = [
     "src.backend.extensions.security:init_app",
     "src.backend.extensions.database:init_app",
     "src.backend.extensions.authentication:init_app",
-    "src.backend.extensions.admin:init_app",
+    "src.backend.extensions.admin.admin:init_app",
     "src.backend.extensions.mail:init_app",
     "src.backend.extensions.commands:init_app",
 ]
