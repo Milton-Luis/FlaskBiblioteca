@@ -3,7 +3,9 @@ from getpass import getpass
 
 from src.backend.extensions.database import db
 from src.backend.extensions.security import generate_password
-from src.backend.models.models import Admin, Books, LendingBooks, Librarian, Role, User
+from src.backend.models.models import (Admin, Books, LendingBooks, Librarian,
+                                       Role, User)
+from src.backend.services.seeds import seed_roles
 
 
 def create_db():
@@ -18,10 +20,23 @@ def drop_db():
     print("Cleaned!")
 
 
-def createSuperUser():
-    """Create a super user"""
+def create_super_user():
+    """Cria super user, apenas se não existir"""
     os.system("clear")
-    print("Bem vindo ao shell para criação de acesso admin")
+    print("Bem-vindo ao shell para criação de super user")
+
+    # Verifica se já existe super user
+    existing_super = User.query.join(Role).filter(Role.type == "admin").first()
+    if existing_super:
+        print(f"Super user já existe: {existing_super.email}")
+        return
+
+    # Recupera role Admin
+    admin_role = Role.query.filter_by(type="admin").first()
+    if not admin_role:
+        print("Role Admin não encontrada. Execute o seed primeiro.")
+        return
+
     firstname = input("Informe seu nome: ").capitalize()
     lastname = input("Informe seu sobrenome: ").capitalize()
     email = input("Informe seu email: ").lower()
@@ -34,32 +49,36 @@ def createSuperUser():
             print("As senhas não conferem!")
         else:
             break
-    admin = User(
+
+    # Cria super user
+    super_user = User(
         firstname=firstname,
         lastname=lastname,
+        fullname=f"{firstname} {lastname}",
         email=email,
         phone=phone,
         is_confirmed=True,
         password=generate_password(password),
-        role=Admin(
-            is_admin=True,
-        ),
+        role=admin_role,
     )
-    admin.fullname = admin.set_fullname(firstname, lastname)
 
     try:
-        db.session.add(admin)
+        db.session.add(super_user)
         db.session.commit()
-        
     except Exception as e:
-        print(e)
+        print("Erro ao criar super user:", e)
         db.session.rollback()
     else:
-        print("Super user created!")
+        print(f"Super user criado: {email}")
+
+
+def seed_all():
+    """Seed default Roles"""
+    seed_roles()
 
 
 def init_app(app):
-    for command in [create_db, drop_db, createSuperUser]:
+    for command in [create_db, drop_db, seed_all, create_super_user]:
         app.cli.add_command(app.cli.command()(command))
 
     @app.shell_context_processor
