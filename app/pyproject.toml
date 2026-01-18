@@ -17,6 +17,7 @@ dependencies = [
     "dynaconf (>=3.2.12,<4.0.0)",
     "flask-migrate (>=4.1.0,<5.0.0)",
     "flask-shell-ipython (>=0.5.3,<0.6.0)",
+    "python-dotenv (>=1.2.1,<2.0.0)",
 ]
 
 [dependency-groups]
