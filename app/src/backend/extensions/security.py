@@ -1,11 +1,10 @@
 from flask import current_app, flash
-from src.backend.extensions.flask_argon2 import Argon2
 from flask_cors import CORS
 from itsdangerous import SignatureExpired
 from itsdangerous import URLSafeTimedSerializer as Serializer
 
+from src.backend.extensions.flask_argon2 import Argon2
 from src.backend.extensions.mail import send_email
-from src.backend.models.models import User
 
 argon2 = Argon2()
 
@@ -80,7 +79,7 @@ def access_confirmation(user):
         send_email(
             user.email,
             "Confirme seu email",
-            "pages/auth/email/confirm",
+            "pages/email/confirm",
             user=user,
             token=token,
         )
