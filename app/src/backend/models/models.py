@@ -90,7 +90,7 @@ class Role(db.Model):
         "polymorphic_on": "type",
     }
 
-    def get_role(self) -> str:
+    def __str__(self) -> str:
         return self.type.capitalize()
 
 
