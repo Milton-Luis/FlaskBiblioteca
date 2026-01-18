@@ -1,6 +1,7 @@
+from dataclasses import dataclass, field
+
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
-from dataclasses import dataclass, field
 
 
 @dataclass
