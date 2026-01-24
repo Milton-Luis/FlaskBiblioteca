@@ -1,19 +1,24 @@
 from flask_admin import Admin
-from flask_admin.theme import Bootstrap4Theme
-from flask_admin.menu import MenuLink
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.menu import MenuLink
+from flask_admin.theme import Bootstrap4Theme
 
-from src.backend.models.models import Books
+from src.backend.extensions.admin.views import AdminAccess, LibrarianView
 from src.backend.extensions.database import db
-from src.backend.extensions.admin.views import AdminAccess
-
+from src.backend.models.models import Books, User
 
 admin = Admin()
 
 
 def admin_view_controller():
     """ModelView's anager"""
-    admin_views = [admin.add_view(ModelView(Books, db.session, menu_icon_type="fa", menu_icon_value="fa-book"))]
+    admin_views = [
+        admin.add_view(LibrarianView(User, db.session)),
+        admin.add_view(
+            ModelView(Books, db.session, menu_icon_type="fa", menu_icon_value="fa-book")
+        ),
+    ]
+
     return admin_views
 
 
