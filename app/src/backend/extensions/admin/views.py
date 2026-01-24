@@ -1,16 +1,14 @@
-from flask import current_app, flash, redirect, url_for, request
+from dynaconf import settings
+from flask import redirect, request, url_for
 from flask_admin.base import AdminIndexView, expose
+from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, login_required
+from wtforms.fields import PasswordField
 
 from src.backend.extensions.database import db
-from src.backend.extensions.security import (
-    access_confirmation,
-    generate_password,
-)
-from src.backend.models.models import Librarian, User
-from src.backend.routes.auth.forms import AddLibrarianForm
+from src.backend.extensions.security import access_confirmation, generate_password
+from src.backend.models.models import Role
 from src.backend.services import book_services
-from dynaconf import settings
 
 
 class AdminAccess(AdminIndexView):
@@ -28,27 +26,38 @@ class AdminAccess(AdminIndexView):
         books = book_services
         return self.render("admin/index.html", books=books, title="Admin Dashboard")
 
-    @expose("/new-register/", methods=["GET", "POST"])
-    @login_required
-    def add_librarian(self):
-        form = AddLibrarianForm()
 
-        if form.validate_on_submit():
-            librarian = User(
-                firstname=form.firstname.data,
-                lastname=form.lastname.data,
-                email=form.email.data,
-                phone=form.phone.data,
-                roles=Librarian(
-                    rolename=current_app.config["ROLE_PREFIX"],
-                    password=generate_password(form.password.data),
-                ),
-            )
-            db.session.add(librarian)
-            db.session.commit()
+class LibrarianView(ModelView):
+    form_columns = (
+        "firstname",
+        "lastname",
+        "email",
+        "password",
+        "phone",
+        "role",
+    )
 
-            access_confirmation(librarian)
+    column_list = ("fullname", "email", "phone", "is_confirmed", "role")
 
-            flash("Inserido com sucesso", "success")
-            return redirect(url_for("admin.index"))
-        return self.render("admin/librarian.html", form=form, title="New Register")
+    form_extra_fields = {
+         "password": PasswordField("Password")
+    }
+
+    form_args = {
+        "role": {
+            "query_factory": lambda: Role.query.all(),
+            "default": lambda: Role.query.filter_by(type="librarian").first(),
+        },
+    }
+
+    def on_model_change(self, form, model, is_created):
+        model.fullname = f"{form.firstname.data} {form.lastname.data}"
+
+        if form.password.data:
+            model.password = generate_password(form.password.data)
+        try:
+            if is_created:
+                access_confirmation(model)
+        except Exception:
+            db.session.rollback()
+ 
