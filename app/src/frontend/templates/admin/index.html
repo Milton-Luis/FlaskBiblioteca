@@ -1,0 +1,209 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+<h2 class="page-title">Dashboard</h2>
+
+
+<!-- GRÁFICOS -->
+
+<div class="row mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card chart-card">
+
+            <h5>Empréstimos no mês</h5>
+
+            <canvas id="chartMes"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card chart-card">
+
+            <h5>Empréstimos no trimestre</h5>
+
+            <canvas id="chartTri"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card chart-card">
+
+            <h5>Empréstimos no semestre</h5>
+
+            <canvas id="chartSem"></canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- TABELAS -->
+
+<div class="card">
+
+    <div class="card-body">
+
+        <ul class="nav nav-tabs">
+
+            <li class="nav-item">
+
+                <a class="nav-link active" data-toggle="tab" href="#populares">
+
+                    Mais emprestados
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-link" data-toggle="tab" href="#atrasados">
+
+                    Devoluções atrasadas
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-link" data-toggle="tab" href="#hoje">
+
+                    Devoluções hoje
+
+                </a>
+
+            </li>
+
+        </ul>
+
+
+
+        <div class="tab-content mt-3">
+
+            <!-- POPULARES -->
+
+            <div class="tab-pane fade show active" id="populares">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Livro</th>
+                            <th>Total</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+
+
+                    </tbody>
+
+                </table>
+
+                <a href="{{ url_for('user.index_view') }}" class="btn btn-animated">
+
+                    Ver mais
+
+                </a>
+
+            </div>
+
+
+
+            <!-- ATRASADOS -->
+
+            <div class="tab-pane fade" id="atrasados">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Livro</th>
+                            <th>Usuário</th>
+                            <th>Data</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+
+
+                    </tbody>
+
+                </table>
+
+                <a href="{{ url_for('user.index_view') }}" class="btn btn-animated">
+
+                    Ver mais
+
+                </a>
+
+            </div>
+
+
+
+            <!-- HOJE -->
+
+            <div class="tab-pane fade" id="hoje">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Livro</th>
+                            <th>Usuário</th>
+                            <th>Hora</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+
+
+                    </tbody>
+
+                </table>
+
+                <a href="{{ url_for('user.index_view') }}" class="btn btn-animated">
+
+                    Ver mais
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

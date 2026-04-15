@@ -17,9 +17,13 @@ FLASK_ADMIN_URL = "/admin"
 
 
 # =========== DATABASE BLOCK =========== #
+# SQLALCHEMY_DATABASE_URI = "sqlite:///${INSTANCE_PATH}/biblioteca.db"
 SQLALCHEMY_DATABASE_URI = "sqlite:///biblioteca.db"
 SQLALCHEMY_TRACK_MODIFICATIONS = false
 
+# =========== I18N BLOCK =========== #
+BABEL_DEFAULT_LOCALE = "pt-BR"
+BABEL_DEFAULT_TIMEZONE = "America/Sao_Paulo"
 
 # =========== SECURITY BLOCK =========== #
 PASSWORD_SCHEMES = ["pbkdf2_sha512", "md5_crypt"]
@@ -53,11 +57,12 @@ ROLE_PREFIX = "LIBRARIAN"
 
 # =========== DEFAULT EXTENSIONS BLOCK =========== #
 EXTENSIONS = [
-    "src.backend.extensions.security:init_app",
     "src.backend.extensions.database:init_app",
+    "src.backend.extensions.i18n:init_app",
+    "src.backend.extensions.security:init_app",
     "src.backend.extensions.authentication:init_app",
-    "src.backend.extensions.admin.admin:init_app",
     "src.backend.extensions.mail:init_app",
+    "src.backend.extensions.admin.admin:init_app",
     "src.backend.extensions.commands:init_app",
 ]
 

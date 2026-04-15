@@ -1,0 +1,81 @@
+body{
+    font-family: Roboto, sans-serif;
+    color: #000;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* wrapper com sidebar + main */
+.admin-wrapper{
+    display: flex;
+    flex: 1; /* ocupa o espaço restante do body */
+}
+
+/* sidebar */
+.sidebar{
+    width: 240px;
+    background: #2c3e50;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* menu */
+.sidebar .nav-link{
+    color: #D9DCD6;
+    position: relative;
+    padding: 8px 0;
+    display: block;
+    text-decoration: none;
+}
+
+/* underline animado */
+.sidebar .nav-link::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0%;
+    height: 2px;
+    background: #81C3D7;
+    transition: 0.3s;
+}
+
+.sidebar .nav-link:hover::after{
+    width: 100%;
+}
+
+/* main */
+.main-area{
+    flex: 1;
+    padding: 20px;
+}
+
+/* títulos */
+h1,h2,h3,h4,h5{
+    color:#16425B;
+}
+
+/* botão */
+.btn-animated{
+    border: 2px solid #3A7CA5;
+    background: transparent;
+    color: #000;
+    transition: 0.3s;
+}
+.btn-animated:hover{
+    background: #2F6690;
+    border-color: #16425B;
+    color:white;
+}
+
+/* footer fixo no final */
+.admin-footer{
+    background: #16425B;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    flex-shrink: 0;
+}

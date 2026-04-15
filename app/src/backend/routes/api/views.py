@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from flask_login import login_required
 from sqlalchemy.sql import asc, or_
 
@@ -8,20 +8,30 @@ from src.backend.models.models import Books, User
 from . import api
 
 
-@api.route("/livros/search", methods=["GET"])
+@api.get("/livros/search")
 @login_required
 def search_books():
     search = request.args.get("q", "")
-    books_query = Books.query.filter(
-        or_(
-            Books.title.like(f"%{search}%"),
-            Books.author.startswith(f"{search}"),
+    books = (
+        Books.query.filter(
+            or_(
+                Books.title.like(f"%{search}%"),
+                Books.author.startswith(f"{search}"),
+            )
         )
-    ).order_by(asc(Books.title))
-    books_list = [
-        {"title": book.title, "author": book.author} for book in books_query.all()
-    ]
-    return jsonify(books_list)
+        .order_by(asc(Books.title))
+        .all()
+    )
+
+    if (
+        request.args.get("format") == "json"
+        or request.accept_mimetypes["application/json"]
+    ):
+        books_list = [
+            {"title": book.title, "author": book.author} for book in books
+        ]
+        return jsonify(books_list)
+    return render_template("partials/_books_list.html", books=books)
 
 
 @api.route("/emprestimos/novo/<slug>/search", methods=["GET"])

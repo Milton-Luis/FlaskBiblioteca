@@ -20,14 +20,10 @@ class RoleMixin:
 class LendingBooks(db.Model):
     __tablename__ = "lending_book"
 
-    _id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    _book_id: Mapped[int] = mapped_column(
-        db.ForeignKey("books._id"), primary_key=True, nullable=False
-    )
-    _user_id: Mapped[int] = mapped_column(
-        db.ForeignKey("users._id"), primary_key=True, nullable=False
-    )
+    book_id: Mapped[int] = mapped_column(db.ForeignKey("books.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(db.ForeignKey("users.id"), nullable=False)
 
     users: Mapped["User"] = db.relationship(back_populates="books")
     books: Mapped["Books"] = db.relationship(back_populates="users")
@@ -40,8 +36,8 @@ class LendingBooks(db.Model):
 class User(db.Model, UserMixin, RoleMixin):
     __tablename__ = "users"
 
-    _id: Mapped[int] = mapped_column(primary_key=True)
-    _uuid: Mapped[str] = mapped_column(
+    id: Mapped[int] = mapped_column(primary_key=True)
+    uuid: Mapped[str] = mapped_column(
         db.String(100), unique=True, default=str(uuid.uuid4())
     )
     firstname: Mapped[str] = mapped_column(db.String(20), nullable=False)
@@ -55,7 +51,7 @@ class User(db.Model, UserMixin, RoleMixin):
         nullable=True, default=datetime.now()
     )
 
-    role_id: Mapped[int] = mapped_column(db.ForeignKey("roles._id"), nullable=True)
+    role_id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), nullable=True)
     role: Mapped["Role"] = db.relationship(back_populates="user")
 
     books: Mapped[list["LendingBooks"]] = db.relationship(
@@ -63,19 +59,19 @@ class User(db.Model, UserMixin, RoleMixin):
     )
 
     def get_id(self) -> str:
-        return str(self._id)
+        return str(self.id)
 
     def set_fullname(self, firstname: str, lastname: str) -> str:
         return f"{firstname} {lastname}"
 
     def __str__(self) -> str:
-        return f"User {self.email}"
+        return f"{self.fullname} - {self.email}"
 
 
 class Role(db.Model):
     __tablename__ = "roles"
 
-    _id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     type: Mapped[str] = mapped_column(db.String(11))
 
     user: Mapped["User"] = db.relationship(
@@ -97,7 +93,7 @@ class Role(db.Model):
 class Admin(Role):
     __tablename__ = "admin"
 
-    _id: Mapped[int] = mapped_column(db.ForeignKey("roles._id"), primary_key=True)
+    id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), primary_key=True)
     is_admin: Mapped[bool] = mapped_column(default=True, unique=True)
 
     __mapper_args__ = {"polymorphic_identity": "admin"}
@@ -106,7 +102,7 @@ class Admin(Role):
 class Librarian(Role):
     __tablename__ = "librarian"
 
-    _id: Mapped[int] = mapped_column(db.ForeignKey("roles._id"), primary_key=True)
+    id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), primary_key=True)
 
     __mapper_args__ = {"polymorphic_identity": "librarian"}
 
@@ -114,7 +110,7 @@ class Librarian(Role):
 class Books(db.Model):
     __tablename__ = "books"
 
-    _id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     title: Mapped[str] = mapped_column(db.String(60))
     slug: Mapped[str] = mapped_column(db.String(60))
     author: Mapped[str] = mapped_column(db.String(60))
@@ -124,5 +120,8 @@ class Books(db.Model):
 
     users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return f"Livro(s): {self.title} - Autor: {self.author} - Quantidade: {self.total_of_books} - Disponível: {self.available_quantity}"
+
+    def __str__(self):
+        return self.title

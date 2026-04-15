@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+    <main class="unconfirmed">
+        <h1>
+            <strong>Olá, {{ current_user.firstname }}!</strong>
+        </h1>
+        <h2>
+            <strong>Você não confirmou sua conta ainda.</strong>
+        </h2>
+        <p>Antes que você possa acessar o site, você precisa confirmar a sua conta. Verifique a sua caixa de entrada ou sua caixa de spans, você deve ter recebido um email com um link de confirmação</p>
+    </main>
+{% endblock content %}

@@ -18,7 +18,7 @@ class BookForm(FlaskForm):
         "ISBN",
         render_kw={"placeholder": "ISBN do livro"},
     )
-    quantity = IntegerField(
+    total_of_books = IntegerField(
         "Quantidade de livros",
         validators=[DataRequired(), NumberRange(min=1, max=50)],
         render_kw={"value": 1},

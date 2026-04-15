@@ -1,0 +1,1 @@
+assert app.instance_path in app.config["SQLALCHEMY_DATABASE_URI"]

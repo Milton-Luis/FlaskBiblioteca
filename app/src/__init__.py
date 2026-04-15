@@ -18,9 +18,9 @@ def create_app():
         __name__, template_folder="frontend/templates", static_folder="frontend/static"
     )
 
-    register_app_on_blueprint(app)
     configuration.init_app(app)
     configuration.load_extensions(app)
+    register_app_on_blueprint(app)
 
 
     return app
