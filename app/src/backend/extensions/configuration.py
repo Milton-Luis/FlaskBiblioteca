@@ -1,5 +1,7 @@
 from importlib import import_module
+
 from dynaconf import FlaskDynaconf, Validator
+
 
 def load_extensions(app):
     extensions = app.config.get("EXTENSIONS", [])

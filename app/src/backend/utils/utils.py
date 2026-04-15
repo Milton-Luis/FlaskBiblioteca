@@ -1,12 +1,12 @@
-from datetime import datetime, timedelta
 import re
 import unicodedata
+from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
 from dynaconf import settings
 from flask import Response, redirect, request, url_for
 
-from src.backend.models.models import User
+from src.backend.models.users import User
 
 
 def slugfy(text: str) -> str:
@@ -38,7 +38,7 @@ def redirect_user_dashboard(user: User) -> Response:
 
 def is_safe_url(url) -> bool:
     if not url:
-        return False 
+        return False
     try:
         parsed_url = urlparse(url)
         return (
@@ -46,6 +46,7 @@ def is_safe_url(url) -> bool:
         ) or parsed_url.netloc == request.host
     except Exception:
         return False
+
 
 def renew_loan(loan):
     if loan.return_date:
