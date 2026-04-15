@@ -1,9 +1,9 @@
-from flask import jsonify, request, render_template
+from flask import jsonify, render_template, request
 from flask_login import login_required
 from sqlalchemy.sql import asc, or_
 
 from src.backend.extensions.database import db
-from src.backend.models.models import Books, User
+from src.backend.models.users import Books, User
 
 from . import api
 
@@ -27,9 +27,7 @@ def search_books():
         request.args.get("format") == "json"
         or request.accept_mimetypes["application/json"]
     ):
-        books_list = [
-            {"title": book.title, "author": book.author} for book in books
-        ]
+        books_list = [{"title": book.title, "author": book.author} for book in books]
         return jsonify(books_list)
     return render_template("partials/_books_list.html", books=books)
 

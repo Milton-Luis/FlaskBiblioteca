@@ -1,8 +1,7 @@
 from datetime import datetime
 
-
 from src.backend.extensions.database import db
-from src.backend.models.models import LendingBooks
+from src.backend.models.lending import LendingBooks
 
 
 def get_formated_date(date: datetime) -> str:

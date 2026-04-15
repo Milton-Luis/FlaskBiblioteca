@@ -1,5 +1,5 @@
 from src.backend.extensions.database import db
-from src.backend.models.models import Admin, Librarian, Role
+from src.backend.models.users import Admin, Librarian, Role
 
 
 def seed_roles():
@@ -7,10 +7,7 @@ def seed_roles():
 
     if Role.query.first():
         return
-    
-    db.session.add_all([
-        Admin(),
-        Librarian()
-    ])
+
+    db.session.add_all([Admin(), Librarian()])
 
     db.session.commit()

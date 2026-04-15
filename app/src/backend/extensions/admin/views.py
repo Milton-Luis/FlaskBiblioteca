@@ -1,3 +1,6 @@
+# from src.backend.services import book_services
+from datetime import datetime, timedelta
+
 from dynaconf import settings
 from flask import redirect, request, url_for
 from flask_admin.base import AdminIndexView, BaseView, expose
@@ -5,13 +8,11 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, login_required
 from wtforms.fields import PasswordField
 
-from src.backend.utils.utils import slugfy
 from src.backend.extensions.database import db
-from src.backend.extensions.security import access_confirmation, generate_password
-from src.backend.models.models import Role
-
-# from src.backend.services import book_services
-from datetime import datetime, timedelta
+from src.backend.extensions.security import (access_confirmation,
+                                             generate_password)
+from src.backend.models.users import Role
+from src.backend.utils.utils import slugfy
 
 
 class AdminAccess(AdminIndexView):
@@ -99,7 +100,7 @@ class BookView(ModelView):
         return super().on_model_change(form, model, is_created)
 
 
-class LoanView(ModelView):
+class LendingView(ModelView):
     form_columns = ["users", "books", "lending_date", "return_date", "quantity_lent"]
     column_labels = {
         "users": "Usuário",
@@ -110,12 +111,8 @@ class LoanView(ModelView):
     }
 
     form_args = {
-        "lending_date":{
-            "format": "%d/%m/%Y"
-        },
-        "return_date":{
-            "format": "%d/%m/%Y"
-        }
+        "lending_date": {"format": "%d/%m/%Y"},
+        "return_date": {"format": "%d/%m/%Y"},
     }
 
     def create_form(self, obj=None):
@@ -130,9 +127,10 @@ class LoanView(ModelView):
             form.return_date.data = now + timedelta(days=7)
 
         return form
-    
+
     def on_model_change(self, form, model, is_created):
         return super().on_model_change(form, model, is_created)
+
 
 """SAWarning: Column 'lending_book.id' is marked as a member of the primary key for table 'lending_book', but has no Python-side or server-side default generator indicated, nor does it indicate 'autoincrement=True' or 'nullable=True', and no explicit value is passed.  Primary key columns typically may not store NULL. Note that as of SQLAlchemy 1.1, 'autoincrement=True' must be indicated explicitly for composite (e.g. multicolumn) primary keys if AUTO_INCREMENT/SERIAL/IDENTITY behavior is expected for one of the columns in the primary key. CREATE TABLE statements are impacted by this change as well on most backends.
   self.session.commit()"""

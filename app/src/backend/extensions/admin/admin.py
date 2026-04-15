@@ -3,14 +3,12 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
 from flask_admin.theme import Bootstrap4Theme
 
-from src.backend.extensions.admin.views import (
-    AdminAccess,
-    LibrarianView,
-    LoanView,
-    BookView,
-)
+from src.backend.extensions.admin.views import (AdminAccess, BookView,
+                                                LendingView, LibrarianView)
 from src.backend.extensions.database import db
-from src.backend.models.models import Books, User, LendingBooks
+from src.backend.models.books import Books
+from src.backend.models.lending import LendingBooks
+from src.backend.models.users import User
 
 admin = Admin()
 
@@ -22,7 +20,7 @@ def admin_view_controller():
         admin.add_view(
             BookView(Books, db.session, menu_icon_type="fa", menu_icon_value="fa-book")
         ),
-        admin.add_view(LoanView(LendingBooks, db.session, name="Empréstimo")),
+        admin.add_view(LendingView(LendingBooks, db.session, name="Empréstimo")),
     ]
 
     return admin_views

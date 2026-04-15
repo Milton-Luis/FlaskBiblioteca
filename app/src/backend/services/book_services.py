@@ -1,7 +1,7 @@
 from sqlalchemy import func
 
 from src.backend.extensions.database import db
-from src.backend.models.models import Books
+from src.backend.models.books import Books
 from src.backend.utils.utils import slugfy
 
 

@@ -5,7 +5,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from src.backend.extensions.database import db
 from src.backend.extensions.security import check_password, validate_token
-from src.backend.models.models import User
+from src.backend.models.users import User
 from src.backend.utils.utils import is_safe_url, redirect_user_dashboard
 
 from . import auth

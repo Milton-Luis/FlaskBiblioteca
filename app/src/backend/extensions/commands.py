@@ -3,8 +3,9 @@ from getpass import getpass
 
 from src.backend.extensions.database import db
 from src.backend.extensions.security import generate_password
-from src.backend.models.models import (Admin, Books, LendingBooks, Librarian,
-                                       Role, User)
+from src.backend.models.books import Books
+from src.backend.models.lending import LendingBooks
+from src.backend.models.users import Admin, Librarian, Role, User
 from src.backend.services.seeds import seed_roles
 
 

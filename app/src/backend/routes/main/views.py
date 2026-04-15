@@ -5,7 +5,9 @@ from flask_login import current_user, login_required
 from sqlalchemy.sql import asc
 
 from src.backend.extensions.database import db
-from src.backend.models.models import Books, LendingBooks, User
+from src.backend.models.books import Books
+from src.backend.models.lending import LendingBooks
+from src.backend.models.users import User
 from src.backend.services import book_services, lending_services
 
 from . import main
@@ -44,7 +46,6 @@ def view_books():
     return render_template(
         "pages/books.html",
         books=books,
-        
         form=form,
         title="Livros",
     )
