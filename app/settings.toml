@@ -54,7 +54,11 @@ ROLES = ["Admin", "Librarian"]
 URL_FOR = ["admin.index", "main.index"]
 ROLE_PREFIX = "LIBRARIAN"
 
-
+# ========== BLUEPRINTS BLOCK =========== #
+BLUEPRINTS = [
+        "src.backend.routes.main:main",
+        "src.backend.routes.auth:auth",
+    ]
 # =========== DEFAULT EXTENSIONS BLOCK =========== #
 EXTENSIONS = [
     "src.backend.extensions.database:init_app",
