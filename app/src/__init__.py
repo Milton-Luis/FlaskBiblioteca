@@ -15,8 +15,6 @@ def register_app_on_blueprint(app):
         app.register_blueprint(blueprint)
 
 
-
-
 def create_app():
     app = Flask(
         __name__, template_folder="frontend/templates", static_folder="frontend/static"
@@ -28,7 +26,5 @@ def create_app():
     import src.backend.models
 
     register_app_on_blueprint(app)
-
-
 
     return app
