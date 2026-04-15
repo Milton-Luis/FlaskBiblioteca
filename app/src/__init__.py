@@ -1,16 +1,20 @@
 from flask import Flask
 
 from src.backend.extensions import configuration
+from importlib import import_module
 
 
 def register_app_on_blueprint(app):
-    from src.backend.routes.main import main as main_blueprint
+    blueprints = app.config["BLUEPRINTS"]
 
-    app.register_blueprint(main_blueprint)
+    for bp_path in blueprints:
+        module_path, bp_name = bp_path.split(":")
+        module = import_module(module_path)
+        blueprint = getattr(module, bp_name)
 
-    from src.backend.routes.auth import auth as auth_blueprint
+        app.register_blueprint(blueprint)
 
-    app.register_blueprint(auth_blueprint)
+
 
 
 def create_app():
@@ -20,7 +24,11 @@ def create_app():
 
     configuration.init_app(app)
     configuration.load_extensions(app)
+
+    import src.backend.models
+
     register_app_on_blueprint(app)
+
 
 
     return app
