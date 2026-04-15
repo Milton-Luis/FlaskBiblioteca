@@ -1,9 +1,8 @@
-from flask import jsonify, request, render_template
+from flask import jsonify, render_template, request
 from flask_login import login_required
 from sqlalchemy.sql import asc, or_
 
-
-from src.backend.models.models import Books
+from src.backend.models.users import Books
 
 from . import api
 

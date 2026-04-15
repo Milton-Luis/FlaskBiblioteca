@@ -3,7 +3,7 @@ from flask_login import login_required
 from sqlalchemy.sql import asc
 
 from src.backend.extensions.database import db
-from src.backend.models.models import Books, User
+from src.backend.models.users import Books, User
 
 from . import api
 
