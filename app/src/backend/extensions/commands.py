@@ -5,7 +5,8 @@ from src.backend.extensions.database import db
 from src.backend.extensions.security import generate_password
 from src.backend.models.books import Books
 from src.backend.models.lending import LendingBooks
-from src.backend.models.users import Admin, Librarian, Role, User
+from src.backend.models.users import  User
+from src.backend.models.roles import Roles, Admin, Librarian
 from src.backend.services.seeds import seed_roles
 
 
@@ -27,15 +28,14 @@ def create_super_user():
     print("Bem-vindo ao shell para criação de super user")
 
     # Verifica se já existe super user
-    existing_super = User.query.join(Role).filter(Role.type == "admin").first()
+    existing_super = User.query.join(Roles).filter(Roles.type == "admin").first()
     if existing_super:
         print(f"Super user já existe: {existing_super.email}")
         return
 
     # Recupera role Admin
-    admin_role = Role.query.filter_by(type="admin").first()
+    admin_role = Roles.query.filter_by(type="admin").first()
     if not admin_role:
-        print("Role Admin não encontrada. Execute o seed primeiro.")
         return
 
     firstname = input("Informe seu nome: ").capitalize()
@@ -74,7 +74,7 @@ def create_super_user():
 
 
 def seed_all():
-    """Seed default Roles"""
+    """Seed defaultRoless"""
     seed_roles()
 
 
@@ -87,7 +87,7 @@ def init_app(app):
         return {
             "db": db,
             "users": User,
-            "roles": Role,
+            "roles": Roles,
             "admin": Admin,
             "librarian": Librarian,
             "books": Books,
