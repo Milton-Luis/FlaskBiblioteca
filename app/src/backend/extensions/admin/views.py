@@ -9,16 +9,16 @@ from flask_login import current_user, login_required
 from wtforms.fields import PasswordField
 
 from src.backend.extensions.database import db
-from src.backend.extensions.security import (access_confirmation,
-                                             generate_password)
-from src.backend.models.users import Role
+from src.backend.extensions.security import access_confirmation, generate_password
 from src.backend.utils.utils import slugfy
+
+from src.backend.models.roles import Roles
 
 
 class AdminAccess(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_role(
-            settings.ROLES[0]
+            settings.ROLES["admin"]
         )
 
     def inaccessible_callback(self, name, **kwargs):
@@ -64,8 +64,8 @@ class LibrarianView(ModelView):
 
     form_args = {
         "role": {
-            "query_factory": lambda: Role.query.all(),
-            "default": lambda: Role.query.filter_by(type="librarian").first(),
+            "query_factory": lambda: Roles.query.all(),
+            "default": lambda: Roles.query.filter_by(type="librarian").first(),
         },
     }
 
@@ -101,19 +101,18 @@ class BookView(ModelView):
 
 
 class LendingView(ModelView):
-    form_columns = ["users", "books", "lending_date", "return_date", "quantity_lent"]
+    form_columns = ["users", "books", "lending_date", "return_date"]
     column_labels = {
         "users": "Usuário",
         "books": "Livro",
         "lending_date": "Data do empréstimo",
         "return_date": "Data de devolução",
-        "quantity_lent": "Quantidade emprestada",
     }
 
-    form_args = {
-        "lending_date": {"format": "%d/%m/%Y"},
-        "return_date": {"format": "%d/%m/%Y"},
-    }
+    # form_args = {
+    #     "lending_date": {"format": "%d/%m/%Y"},
+    #     "return_date": {"format": "%d/%m/%Y"},
+    # }
 
     def create_form(self, obj=None):
         form = super().create_form(obj)
@@ -129,7 +128,8 @@ class LendingView(ModelView):
         return form
 
     def on_model_change(self, form, model, is_created):
-        return super().on_model_change(form, model, is_created)
+        print("MODEL:", model)
+        print("IS CREATED:", is_created)
 
 
 """SAWarning: Column 'lending_book.id' is marked as a member of the primary key for table 'lending_book', but has no Python-side or server-side default generator indicated, nor does it indicate 'autoincrement=True' or 'nullable=True', and no explicit value is passed.  Primary key columns typically may not store NULL. Note that as of SQLAlchemy 1.1, 'autoincrement=True' must be indicated explicitly for composite (e.g. multicolumn) primary keys if AUTO_INCREMENT/SERIAL/IDENTITY behavior is expected for one of the columns in the primary key. CREATE TABLE statements are impacted by this change as well on most backends.
