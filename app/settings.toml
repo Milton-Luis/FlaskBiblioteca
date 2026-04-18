@@ -50,15 +50,12 @@ MAIL_SUBJECT_PREFIX = "[Flasky]"
 MAIL_DEBUG = false
 
 # =========== ROLES BLOCK =========== #
-ROLES = ["Admin", "Librarian"]
-URL_FOR = ["admin.index", "main.index"]
+ROLES = { "admin" = "Admin", "librarian" = "Librarian" }
+URL_FOR = {"admin"="admin.index", "main"="main.index"}
 ROLE_PREFIX = "LIBRARIAN"
 
 # ========== BLUEPRINTS BLOCK =========== #
-BLUEPRINTS = [
-        "src.backend.routes.main:main",
-        "src.backend.routes.auth:auth",
-    ]
+BLUEPRINTS = ["src.backend.routes.main:main", "src.backend.routes.auth:auth"]
 # =========== DEFAULT EXTENSIONS BLOCK =========== #
 EXTENSIONS = [
     "src.backend.extensions.database:init_app",
