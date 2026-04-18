@@ -27,10 +27,10 @@ def send_email(to, subject, template, **kwargs):
     """
 
     app = current_app._get_current_object()
-    
+
     message = EmailMessage(
         subject=f"{app.config['MAIL_SUBJECT_PREFIX']} - {subject}",
-        body = render_template(f"{template}.html", **kwargs),
+        body=render_template(f"{template}.html", **kwargs),
         from_email=app.config["MAIL_DEFAULT_SENDER"],
         to=[to],
     )

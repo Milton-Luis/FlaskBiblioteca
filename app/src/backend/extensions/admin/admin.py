@@ -1,10 +1,13 @@
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
 from flask_admin.theme import Bootstrap4Theme
 
-from src.backend.extensions.admin.views import (AdminAccess, BookView,
-                                                LendingView, LibrarianView)
+from src.backend.extensions.admin.views import (
+    AdminAccess,
+    BookView,
+    LendingView,
+    LibrarianView,
+)
 from src.backend.extensions.database import db
 from src.backend.models.books import Books
 from src.backend.models.lending import LendingBooks

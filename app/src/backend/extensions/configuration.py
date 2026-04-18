@@ -25,10 +25,8 @@ def load_extensions(app):
             app.logger.info(f"Loaded extension: {extension}")
 
         except Exception as e:
-            app.logger.critical(
-                f"Failed to load extension: {extension}. Error: {e}"
-            )
-            raise 
+            app.logger.critical(f"Failed to load extension: {extension}. Error: {e}")
+            raise
 
 
 def init_app(app, **config):
@@ -46,5 +44,5 @@ def init_app(app, **config):
         #     messages={"eq": "DEBUG deve ser False em produção"}
         # ))
     )
-    
+
     app.config.validators.validate()

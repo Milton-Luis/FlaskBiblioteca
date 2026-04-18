@@ -73,8 +73,8 @@ class Argon2:
             raise ValueError("Argon2 salt_len is insecure")
 
     def init_app(self, app) -> None:
-        " Initialize Argon2 with Flask app configuration."
-        
+        "Initialize Argon2 with Flask app configuration."
+
         config_map = {
             "time_cost": "ARGON2_TIME_COST",
             "memory_cost": "ARGON2_MEMORY_COST",
@@ -95,9 +95,8 @@ class Argon2:
             hash_len=self.hash_len,
             salt_len=self.salt_len,
         )
-        
-        app.extensions["argon2"] = self
 
+        app.extensions["argon2"] = self
 
     def generate_hash_password(self, password: str) -> str:
         if self.ph is None:
