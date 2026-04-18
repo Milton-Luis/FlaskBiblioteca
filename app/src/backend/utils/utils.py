@@ -30,10 +30,10 @@ def slugfy(text: str) -> str:
 
 
 def redirect_user_dashboard(user: User) -> Response:
-    if user.has_role(settings.ROLES[0]):
-        return redirect(url_for(settings.URL_FOR[0]))
+    if user.has_role(settings.ROLES["admin"]):
+        return redirect(url_for(settings.URL_FOR["admin"]))
     else:
-        return redirect(url_for(settings.URL_FOR[1]))
+        return redirect(url_for(settings.URL_FOR["main"]))
 
 
 def is_safe_url(url) -> bool:
@@ -48,7 +48,7 @@ def is_safe_url(url) -> bool:
         return False
 
 
-def renew_loan(loan):
+def renew_lend(loan):
     if loan.return_date:
         loan.return_date += timedelta(days=7)
     else:
