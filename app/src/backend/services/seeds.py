@@ -1,11 +1,11 @@
 from src.backend.extensions.database import db
-from src.backend.models.users import Admin, Librarian, Role
+from src.backend.models.roles import Admin, Librarian, Roles
 
 
 def seed_roles():
     """Create default system roles"""
 
-    if Role.query.first():
+    if Roles.query.first():
         return
 
     db.session.add_all([Admin(), Librarian()])
