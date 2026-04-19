@@ -48,8 +48,12 @@ def is_safe_url(url) -> bool:
         return False
 
 
-def renew_lend(loan):
+def renew_loan(loan):
     if loan.return_date:
         loan.return_date += timedelta(days=7)
     else:
         loan.return_date = datetime.now() + timedelta(days=7)
+
+
+def get_formated_date(date: datetime | None) -> str:
+    return date.strftime("%d/%m/%Y")
