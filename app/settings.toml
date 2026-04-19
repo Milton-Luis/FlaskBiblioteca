@@ -51,11 +51,15 @@ MAIL_DEBUG = false
 
 # =========== ROLES BLOCK =========== #
 ROLES = { "admin" = "Admin", "librarian" = "Librarian" }
-URL_FOR = {"admin"="admin.index", "main"="main.index"}
+URL_FOR = { "admin" = "admin.index", "main" = "main.index" }
 ROLE_PREFIX = "LIBRARIAN"
 
 # ========== BLUEPRINTS BLOCK =========== #
-BLUEPRINTS = ["src.backend.routes.main:main", "src.backend.routes.auth:auth"]
+BLUEPRINTS = [
+    "src.backend.routes.main:main",
+    "src.backend.routes.auth:auth",
+    "src.backend.routes.api:api",
+]
 # =========== DEFAULT EXTENSIONS BLOCK =========== #
 EXTENSIONS = [
     "src.backend.extensions.database:init_app",
