@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.backend.extensions.database import db
 
+
 if TYPE_CHECKING:
-    from .lending import LendingBooks
+    from .book_loan import BookLoan
 
 
 class Books(db.Model):
@@ -20,25 +20,23 @@ class Books(db.Model):
     total_of_books: Mapped[int] = mapped_column(nullable=False, default=1)
     available_quantity: Mapped[int] = mapped_column(nullable=False, default=0)
 
-    users: Mapped[list["LendingBooks"]] = db.relationship(back_populates="books")
+    loan: Mapped[list["BookLoan"]] = db.relationship(back_populates="book")
 
-    def add_available_quantity(book_id: int, quantity_to_lend: int) -> int:
-        book = db.session.query(Books).filter_by(id=book_id).first()
-        if quantity_to_lend > book.available_quantity:
+    def increase_stock(self, quantity) -> int:
+        new_available_quantity = self.available_quantity + quantity
+
+        if new_available_quantity > self.total_of_books:
             raise ValueError("mais livros disponíveis do que o total")
-        book.available_quantity += quantity_to_lend
-        return book.available_quantity
 
-    def subtract_available_quantity(book_id: int, quantity_to_lend: int) -> int:
-        book = db.session.query(Books).filter_by(id=book_id).first()
-        if quantity_to_lend > book.available_quantity:
+        self.available_quantity += quantity
+
+    def decrease_stock(self, quantity: int) -> int:
+        new_available_quantity = self.available_quantity - quantity
+
+        if new_available_quantity > self.total_of_books:
             raise ValueError("Quantidade de livros indisponível")
-        book.available_quantity -= quantity_to_lend
-        return book.available_quantity
 
-    def sum_total_of_books():
-        total_books = db.session.query(func.sum(Books.total_of_books)).scalar()
-        return total_books or 0
+        self.available_quantity -= quantity
 
     def __repr__(self) -> str:
         return f"Livro(s): {self.title} - Autor: {self.author} - Quantidade: {self.total_of_books} - Disponível: {self.available_quantity}"

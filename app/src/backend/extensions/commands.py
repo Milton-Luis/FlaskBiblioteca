@@ -4,8 +4,8 @@ from getpass import getpass
 from src.backend.extensions.database import db
 from src.backend.extensions.security import generate_password
 from src.backend.models.books import Books
-from src.backend.models.lending import LendingBooks
-from src.backend.models.users import  User
+from src.backend.models.book_loan import BookLoan
+from src.backend.models.users import User
 from src.backend.models.roles import Roles, Admin, Librarian
 from src.backend.services.seeds import seed_roles
 
@@ -38,8 +38,8 @@ def create_super_user():
     if not admin_role:
         return
 
-    firstname = input("Informe seu nome: ").capitalize()
-    lastname = input("Informe seu sobrenome: ").capitalize()
+    firstname = input("Informe seu nome: ").title()
+    lastname = input("Informe seu sobrenome: ").title()
     email = input("Informe seu email: ").lower()
     phone = input("Informe seu número de telefone: ")
 
@@ -91,5 +91,5 @@ def init_app(app):
             "admin": Admin,
             "librarian": Librarian,
             "books": Books,
-            "lending_books": LendingBooks,
+            "loan_books": BookLoan,
         }

@@ -10,7 +10,7 @@ from src.backend.extensions.database import db
 from src.backend.models.roles import RolesMixin
 
 if TYPE_CHECKING:
-    from .lending import LendingBooks
+    from .book_loan import BookLoan
 
     from .roles import Roles
 
@@ -36,8 +36,8 @@ class User(db.Model, UserMixin, RolesMixin):
     role_id: Mapped[int] = mapped_column(db.ForeignKey("roles.id"), nullable=True)
     role: Mapped["Roles"] = db.relationship(back_populates="user")
 
-    books: Mapped[list["LendingBooks"]] = db.relationship(
-        back_populates="users", cascade="all, delete-orphan"
+    loan: Mapped[list["BookLoan"]] = db.relationship(
+        back_populates="user", cascade="all, delete-orphan"
     )
 
     def get_id(self) -> str:
