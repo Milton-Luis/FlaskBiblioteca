@@ -1,5 +1,0 @@
-{% for book in books.items %}
-<li class="h-56 w-36 border">
-    <a href="{{ url_for('main.book_details', slug=book.slug) }}">{{ book.title }}</a>
-</li>
-{% endfor %}
