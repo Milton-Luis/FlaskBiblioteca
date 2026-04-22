@@ -1,6 +1,7 @@
 from .books import Books
-from .book_loan import BookLoan
+from .loan import BookLoan
 from .roles import Roles
 from .users import User
+from .reader import Reader
 
-__all__ = ["User", "Books", "BookLoan", "Roles"]
+__all__ = ["User", "Books", "BookLoan", "Roles", "Reader"]
