@@ -4,7 +4,7 @@ from getpass import getpass
 from src.backend.extensions.database import db
 from src.backend.extensions.security import generate_password
 from src.backend.models.books import Books
-from app.src.backend.models.loan import BookLoan
+from src.backend.models.loan import BookLoan
 from src.backend.models.users import User
 from src.backend.models.roles import Roles, Admin, Librarian
 from src.backend.services.seeds import seed_roles

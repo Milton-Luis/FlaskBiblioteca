@@ -10,7 +10,7 @@ from src.backend.extensions.admin.views import (
 )
 from src.backend.extensions.database import db
 from src.backend.models.books import Books
-from app.src.backend.models.loan import BookLoan
+from src.backend.models.loan import BookLoan
 from src.backend.models.users import User
 
 admin = Admin()

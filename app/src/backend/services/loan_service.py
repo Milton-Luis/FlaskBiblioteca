@@ -1,6 +1,6 @@
 from datetime import datetime
 from src.backend.extensions.database import db
-from app.src.backend.models.loan import BookLoan
+from src.backend.models.loan import BookLoan
 
 
 def create_loan(form, reader_id: int, book_id: int) -> BookLoan:
