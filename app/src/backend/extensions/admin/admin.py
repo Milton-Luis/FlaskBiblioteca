@@ -5,12 +5,12 @@ from flask_admin.theme import Bootstrap4Theme
 from src.backend.extensions.admin.views import (
     AdminAccess,
     BookView,
-    LendingView,
+    LoanView,
     LibrarianView,
 )
 from src.backend.extensions.database import db
 from src.backend.models.books import Books
-from src.backend.models.book_loan import BookLoan
+from app.src.backend.models.loan import BookLoan
 from src.backend.models.users import User
 
 admin = Admin()
@@ -19,11 +19,17 @@ admin = Admin()
 def admin_view_controller():
     """ModelView's anager"""
     admin_views = [
-        admin.add_view(LibrarianView(User, db.session)),
+        admin.add_view(LibrarianView(User, db.session, name="Usuário")),
         admin.add_view(
-            BookView(Books, db.session, menu_icon_type="fa", menu_icon_value="fa-book")
+            BookView(
+                Books,
+                db.session,
+                name="Livros",
+                menu_icon_type="fa",
+                menu_icon_value="fa-book",
+            )
         ),
-        admin.add_view(LendingView(BookLoan, db.session, name="Empréstimo")),
+        admin.add_view(LoanView(BookLoan, db.session, name="Empréstimo")),
     ]
 
     return admin_views
