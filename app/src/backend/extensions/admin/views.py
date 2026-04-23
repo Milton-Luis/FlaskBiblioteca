@@ -40,22 +40,16 @@ class DashboardView(BaseView):
 
 class LibrarianView(ModelView):
     form_columns = (
-        "firstname",
-        "lastname",
+       
         "email",
         "password",
-        "phone",
         "role",
     )
 
-    column_list = ("fullname", "email", "phone", "role", "is_confirmed")
+    column_list = ( "email", "role", "is_confirmed")
 
     column_labels = {
-        "firstname": "Nome",
-        "lastname": "Sobrenome",
-        "fullname": "Nome completo",
         "email": "Email",
-        "phone": "Telefone/Celular",
         "is_confirmed": "Confirmado?",
         "role": "Atividade",
     }
@@ -70,7 +64,6 @@ class LibrarianView(ModelView):
     }
 
     def on_model_change(self, form, model, is_created):
-        model.fullname = f"{form.firstname.data} {form.lastname.data}"
 
         if form.password.data:
             model.password = generate_password(form.password.data)
@@ -88,8 +81,8 @@ class BookView(ModelView):
         "title": "Título",
         "author": "Autor",
         "isbn": "ISBN",
-        "total_of_books": "Quantidade de livros",
-        "available_quantity": "Quantidade disponível",
+        "total_of_books": "Quantidade em estoque",
+        "available_quantity": "Disponível para empréstimo",
     }
 
     def on_model_change(self, form, model, is_created):
@@ -97,20 +90,22 @@ class BookView(ModelView):
         model.author = form.author.data.title()
         model.slug = slugfy(model.title)
         model.available_quantity = model.total_of_books
+
         return super().on_model_change(form, model, is_created)
 
 
-class LendingView(ModelView):
-    form_columns = ["users", "books", "lending_date", "return_date"]
+class LoanView(ModelView):
+    ...
+    form_columns = ["reader", "book", "loan_date", "return_date"]
     column_labels = {
-        "users": "Usuário",
-        "books": "Livro",
-        "lending_date": "Data do empréstimo",
+        "reader": "Leitor(a)",
+        "book": "Livro",
+        "loan_date": "Data do empréstimo",
         "return_date": "Data de devolução",
     }
 
     # form_args = {
-    #     "lending_date": {"format": "%d/%m/%Y"},
+    #     "loan_date": {"format": "%d/%m/%Y"},
     #     "return_date": {"format": "%d/%m/%Y"},
     # }
 
@@ -119,8 +114,8 @@ class LendingView(ModelView):
 
         now = datetime.now()
 
-        if not form.lending_date.data:
-            form.lending_date.data = now
+        if not form.loan_date.data:
+            form.loan_date.data = now
 
         if not form.return_date.data:
             form.return_date.data = now + timedelta(days=7)
@@ -132,5 +127,5 @@ class LendingView(ModelView):
         print("IS CREATED:", is_created)
 
 
-"""SAWarning: Column 'lending_book.id' is marked as a member of the primary key for table 'lending_book', but has no Python-side or server-side default generator indicated, nor does it indicate 'autoincrement=True' or 'nullable=True', and no explicit value is passed.  Primary key columns typically may not store NULL. Note that as of SQLAlchemy 1.1, 'autoincrement=True' must be indicated explicitly for composite (e.g. multicolumn) primary keys if AUTO_INCREMENT/SERIAL/IDENTITY behavior is expected for one of the columns in the primary key. CREATE TABLE statements are impacted by this change as well on most backends.
-  self.session.commit()"""
+# """SAWarning: Column 'loan_book.id' is marked as a member of the primary key for table 'loan_book', but has no Python-side or server-side default generator indicated, nor does it indicate 'autoincrement=True' or 'nullable=True', and no explicit value is passed.  Primary key columns typically may not store NULL. Note that as of SQLAlchemy 1.1, 'autoincrement=True' must be indicated explicitly for composite (e.g. multicolumn) primary keys if AUTO_INCREMENT/SERIAL/IDENTITY behavior is expected for one of the columns in the primary key. CREATE TABLE statements are impacted by this change as well on most backends.
+#   self.session.commit()"""
