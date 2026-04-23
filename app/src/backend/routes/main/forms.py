@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import DateField, IntegerField, StringField, SubmitField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired, NumberRange, Email
 
 
 class BookForm(FlaskForm):
@@ -36,27 +36,46 @@ class BookForm(FlaskForm):
     submit = SubmitField("Adicionar novo livro")
 
 
-class LendingBooksForm(FlaskForm):
+class BookLoanForm(FlaskForm):
     title = StringField(
         "Título do livro",
         validators=[DataRequired()],
         render_kw={"disabled": "disabled"},
     )
-    quantity = IntegerField(
-        "Quantidade a ser alugada",
-        validators=[DataRequired(), NumberRange(min=1, max=50)],
-        default=1,
-    )
 
-    lending_date = DateField(
+    loan_date = DateField(
         "Data do empréstimo",
         render_kw={"disabled": "disabled"},
     )
-    return_date = DateField(
+    due_date = DateField(
         "Data de devolução",
         validators=[DataRequired()],
     )
     submit = SubmitField("Efetuar empréstimo")
+
+
+class ReaderForm(FlaskForm):
+    firstname = StringField(
+        "Nome",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Digite o nome do leitor"},
+    )
+    lastname = StringField(
+        "Sobrenome",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Digite o sobrenome do leitor"},
+    )
+    email = StringField(
+        "Email",
+        validators=[DataRequired(), Email()],
+        render_kw={"placeholder": "Digite o email do leitor"},
+    )
+    phone = StringField(
+        "Telefone",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Digite o nº de telefone do leitor"},
+    )
+    submit = SubmitField(label="Adicionar novo leitor")
 
 
 class SearchBookForm(FlaskForm):
