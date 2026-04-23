@@ -4,7 +4,7 @@ from getpass import getpass
 from src.backend.extensions.database import db
 from src.backend.extensions.security import generate_password
 from src.backend.models.books import Books
-from src.backend.models.book_loan import BookLoan
+from app.src.backend.models.loan import BookLoan
 from src.backend.models.users import User
 from src.backend.models.roles import Roles, Admin, Librarian
 from src.backend.services.seeds import seed_roles
@@ -28,20 +28,17 @@ def create_super_user():
     print("Bem-vindo ao shell para criação de super user")
 
     # Verifica se já existe super user
-    existing_super = User.query.join(Roles).filter(Roles.type == "admin").first()
+    existing_super = db.session.query(User).join(Roles).filter_by(type="admin").first()
     if existing_super:
         print(f"Super user já existe: {existing_super.email}")
         return
 
     # Recupera role Admin
-    admin_role = Roles.query.filter_by(type="admin").first()
+    admin_role = db.session.query(Roles).filter_by(type="admin").first()
     if not admin_role:
         return
 
-    firstname = input("Informe seu nome: ").title()
-    lastname = input("Informe seu sobrenome: ").title()
     email = input("Informe seu email: ").lower()
-    phone = input("Informe seu número de telefone: ")
 
     while True:
         password = getpass("Informe sua senha: ")
@@ -53,11 +50,7 @@ def create_super_user():
 
     # Cria super user
     super_user = User(
-        firstname=firstname,
-        lastname=lastname,
-        fullname=f"{firstname} {lastname}",
         email=email,
-        phone=phone,
         is_confirmed=True,
         password=generate_password(password),
         role=admin_role,
@@ -66,16 +59,16 @@ def create_super_user():
     try:
         db.session.add(super_user)
         db.session.commit()
+        print(f"Super user criado: {email}")
     except Exception as e:
         print("Erro ao criar super user:", e)
         db.session.rollback()
-    else:
-        print(f"Super user criado: {email}")
 
 
 def seed_all():
     """Seed defaultRoless"""
     seed_roles()
+    print("seeded!!")
 
 
 def init_app(app):
