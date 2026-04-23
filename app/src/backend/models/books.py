@@ -6,7 +6,7 @@ from src.backend.extensions.database import db
 
 
 if TYPE_CHECKING:
-    from .book_loan import BookLoan
+    from .loan import BookLoan
 
 
 class Books(db.Model):
