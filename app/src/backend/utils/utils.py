@@ -55,5 +55,12 @@ def renew_loan(loan):
         loan.return_date = datetime.now() + timedelta(days=7)
 
 
-def get_formated_date(date: datetime | None) -> str:
-    return date.strftime("%d/%m/%Y")
+def format_date(date_value: str) -> str:
+    if isinstance(date_value, datetime):
+        return date_value.strftime("%d/%m/%Y")
+
+    try:
+        parsed_date = datetime.fromisoformat(date_value)
+        return parsed_date.strftime("%d/%m/%Y")
+    except Exception:
+        return "N/A"
