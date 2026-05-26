@@ -23,10 +23,21 @@ def index():
     if current_user.is_anonymous:
         return redirect(url_for("auth.login"))
 
-    books = book_service
-    loan = loan_service
+    flash("Bem-vindo à Biblioteca!", "success")
 
-    return render_template("pages/index.html", title="Início", books=books, loan=loan)
+    book_total = book_service.sum_total_of_books()
+    monthly_loans = loan_service.count_monthly_returns()
+    delayed_loans = loan_service.count_delayed_loans()
+    due_today = loan_service.count_books_due_today()
+
+    return render_template(
+        "pages/index.html",
+        title="Início",
+        book_total=book_total,
+        monthly_loans=monthly_loans,
+        delayed_loans=delayed_loans,
+        due_today=due_today,
+    )
 
 
 @main.route("/leitor/novo", methods=["POST", "GET"])
@@ -90,11 +101,10 @@ def new_book():
             db.session.commit()
 
             flash("Livro adicionado com sucesso!", "success")
+            return redirect(url_for("main.index"))
         except Exception:
             db.session.rollback()
             flash("Erro ao criar novo livro!", "danger")
-
-        return redirect(url_for("main.index"))
 
     return render_template("pages/new_book.html", form=form, title="Novo Livro")
 
@@ -130,30 +140,31 @@ def new_loan(slug):
             flash("Usuário não encontrado.", "danger")
             return redirect(url_for("main.new_loan", slug=book.slug))
 
-        if loan_service.has_active_loan(session_id, book.id):
+        if loan_service.has_active_loan(session_id):
             flash(
                 f"{reader.fullname} já possui um empréstimo ativo para este livro.",
                 "warning",
             )
+            session.pop("reader_id")
             return redirect(url_for("main.new_loan", slug=book.slug))
 
     if form.validate_on_submit():
         if not session_id or not reader:
             flash("Selecione um usuário para realizar o empréstimo.", "warning")
             return redirect(url_for("main.new_loan", slug=book.slug))
+
         try:
             loan_service.create_loan(form, session_id, book.id)
             book_service.borrow_book(book.id)
 
             db.session.commit()
-            flash("Empréstimo realizado!", "success")
+            flash("Empréstimo realizado!", "primary")
         except ValueError as e:
             db.session.rollback()
             flash(f"Erro ao criar empréstimo: {str(e)}", "danger")
-        except Exception as e:
+        except Exception:
             db.session.rollback()
             flash(f"{reader.fullname} já alugou um livro. ", "danger")
-            print(f"Erro ao criar empréstimo: {e}")
 
         session.pop("reader_id")
         return redirect(url_for("main.index"))
@@ -173,12 +184,19 @@ def new_loan(slug):
 def return_book(slug):
     loans = db.session.query(BookLoan).join(Books).filter_by(slug=slug).first()
 
-    book_service.return_book(loans.book_id)
+    try:
+        book_service.return_book(loans.book_id)
 
-    db.session.delete(loans)
-    db.session.commit()
+        db.session.delete(loans)
+        db.session.commit()
 
-    flash("Livro devolvido com sucesso!", "success")
+        flash("Livro devolvido com sucesso!", "success")
+    except ValueError as e:
+        db.session.rollback()
+        flash(f"Erro ao devolver livro: {str(e)}", "danger")
+    except Exception:
+        db.session.rollback()
+        flash("Erro ao processar devolução!", "danger")
     return redirect(url_for("main.index"))
 
 
