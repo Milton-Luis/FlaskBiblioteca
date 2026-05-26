@@ -1,0 +1,15 @@
+.reader-name{
+	font-size: 1.5rem;
+}
+"cursor-pointer",
+							"hover:bg-slate-500",
+							"hover:text-white",
+							"py-2",
+							"pl-2",
+							"border",
+							"border-slate-400",
+							"w-full",
+							"flex",
+							"justify-start",
+							"gap-8",
+							"first:mt-2"

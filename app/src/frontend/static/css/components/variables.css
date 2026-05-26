@@ -1,0 +1,20 @@
+:root{
+    /* COLORS */
+    --primary-color: #9BC4BC;
+    --secondary-color: #D3FFE9;
+    --terciary-color: #8DDBE0;
+
+    --hover-color: #81C3D7;
+
+    --primary-bg-color: #012040;
+    --secondary-bg-color: #2c3e50;
+    
+    --text-color:#4B5043;
+
+    --light-color: #F5F5F5;
+
+
+    --paragraph-size: 1.4rem;
+    --max-icon-size: 4rem;
+    --min-icon-size: 1.8rem;
+}

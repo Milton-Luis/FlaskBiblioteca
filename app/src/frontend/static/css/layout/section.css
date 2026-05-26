@@ -1,0 +1,14 @@
+.section-main-block {
+    min-height: inherit;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.content {
+    min-height: inherit;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
