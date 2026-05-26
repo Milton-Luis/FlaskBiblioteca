@@ -45,5 +45,5 @@ def return_book(book_id: int) -> int:
 
 
 def sum_total_of_books():
-    total_books = db.session.query(func.sum(Books.total_of_books)).scalar()
+    total_books = db.session.query(func.count(func.distinct(Books.title))).scalar()
     return total_books or 0
