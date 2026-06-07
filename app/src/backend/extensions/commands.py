@@ -2,7 +2,6 @@ import os
 from getpass import getpass
 
 from src.backend.extensions.database import db
-from src.backend.extensions.security import generate_password
 from src.backend.models.books import Books
 from src.backend.models.loan import BookLoan
 from src.backend.models.users import User
@@ -52,7 +51,7 @@ def create_super_user():
     super_user = User(
         email=email,
         is_confirmed=True,
-        password=generate_password(password),
+        password=password,
         role=admin_role,
     )
 
