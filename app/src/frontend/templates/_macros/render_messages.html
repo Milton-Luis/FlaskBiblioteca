@@ -1,0 +1,26 @@
+
+{% macro render_message() %}
+
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% for category, message in messages %}
+	<div class="toast text-bg-{{ category }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000"
+		data-bs-autohide="true">
+
+		<div class="d-flex">
+			<div class="toast-body">
+				{{ message }}
+			</div>
+			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+		</div>
+
+		<!-- barra de tempo -->
+		<div class="progress" style="height: 3px;">
+			<div class="progress-bar bg-light" role="progressbar"></div>
+		</div>
+
+	</div>
+	{% endfor %}
+	{% endwith %}
+
+{% endmacro %}
