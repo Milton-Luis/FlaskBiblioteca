@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-
 <head>
     {% block meta %}
     <meta charset="UTF-8" />
@@ -10,64 +9,41 @@
     {% endblock meta %}
 
     {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     {% endblock styles %}
 
     {% block title %}
-    <title>{{ title }}</title>
+        <title>{{ title }}</title>
     {% endblock title %}
 </head>
 
-<body class="bg-gray-100 min-h-screen flex">
-    <main class="">
+{% from "_macros/render_messages.html" import render_message %}
+{% from "_macros/render_pagination.html" import render_pagination %}
+
+<body>
+    {% if current_user.is_authenticated %}
+        {% include "partials/nav.html" %}
+    {% endif %}
+    
+    <main>
         {% if current_user.is_authenticated %}
-        <aside class="">
-            <div class="">
-                <a href=""><span class="fas fa-user text-[4rem]"></span></a>
-            </div>
-            <ul class="">
-                <li class="sidebar-item">
-                    <a href="{{ url_for('main.index') }}" class="sidebar-link">
-                        <span class="fas fa-home"></span>
-                        <span class="sidebar-name">Início</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="{{ url_for('main.view_books') }}" class="sidebar-link">
-                        <span class="fas fa-book"></span>
-                        <span class="sidebar-name">Livros</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="{{ url_for('main.index') }}" class="sidebar-link">
-                        <span class="fas fa-exchange-alt"></span>
-                        <span class="sidebar-name">Empréstimos</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="{{ url_for('auth.logout') }}" class="sidebar-link">
-                        <span class="fas fa-door-open"></span>
-                        <span class="sidebar-name">Sair</span>
-                    </a>
-                </li>
-            </ul>
-        </aside>
+            {% include "partials/aside.html" %}
         {% endif %}
 
-        <section class="">
-            {% from "macros/messages/render_messages.html" import
-            render_message %}
+        <section class="section-main-block">
+            <div class="toast-container">
+                {{ render_message() }}
+            </div>
             {%block content %}
-            <h1 class="text-blue-500 text-4xl">olá</h1>
             {% endblock content %}
         </section>
     </main>
 
     {% block scripts %}
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-
     {% endblock scripts %}
 </body>
 
