@@ -4,12 +4,23 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from src.backend.extensions.database import db
-from src.backend.extensions.security import check_password, validate_token
+from src.backend.security.tokens import validate_token
 from src.backend.models.users import User
 from src.backend.utils.utils import is_safe_url, redirect_user_dashboard
 
 from . import auth
 from .forms import LoginForm
+
+
+@auth.before_app_request
+def before_request():
+    if (
+        current_user.is_authenticated
+        and not current_user.is_confirmed
+        and request.blueprint != "auth"
+        and request.endpoint not in ("static", "unconfirmed")
+    ):
+        return redirect(url_for("auth.unconfirmed"))
 
 
 @auth.route("/login", methods=["POST", "GET"])
@@ -22,7 +33,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
-        if user and check_password(user.password, form.password.data):
+        if user and user.check_password(form.password.data):
             login_user(user)
 
             next_page = request.args.get("next")
@@ -60,19 +71,8 @@ def confirm_email():
         user.registered_on = datetime.now()
         db.session.add(user)
         db.session.commit()
-        flash("Seu acesso foi confirmado, bem vindo.", "success")
+        flash("Seu acesso foi confirmado, bem vindo.", "info")
     return redirect(url_for("auth.login"))
-
-
-@auth.before_app_request
-def before_request():
-    if (
-        current_user.is_authenticated
-        and not current_user.is_confirmed
-        and request.blueprint != "auth"
-        and request.endpoint not in ("static", "unconfirmed")
-    ):
-        return redirect(url_for("auth.unconfirmed"))
 
 
 @auth.route("/unconfirmed")
@@ -81,3 +81,7 @@ def unconfirmed():
     if current_user.is_confirmed:
         return redirect("main.index")
     return render_template("pages/auth/unconfirmed.html")
+
+@auth.route("/perfil", methods=["POST", "GET"])
+def profile():
+    return render_template("pages/auth/profile.html", title="Perfil")
