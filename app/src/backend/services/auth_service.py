@@ -1,5 +1,7 @@
 from src.backend.security.tokens import generate_confirmation_token
 from src.backend.extensions.mail import send_email
+from src.backend.models.users import User
+from dynaconf import settings
 
 
 def access_confirmation(user):
@@ -13,3 +15,8 @@ def access_confirmation(user):
         token=token,
     )
 
+def redirect_user_dashboard(user: User) -> str:
+    if user.has_role(settings.ROLES["admin"]):
+        return settings.URL_FOR["admin"]
+    else:
+        return settings.URL_FOR["main"]
