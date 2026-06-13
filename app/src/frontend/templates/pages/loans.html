@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="content">
+    <h4 class="text-lg">Empréstimos</h4>
+    <div class="menu-loan">
+        <form action="" method="GET">
+            <div class="flex">
+                <input type="radio" id="all_lends" name="all_lends" value="all_lends" checked>
+                <label for="all_lends">Todos</label><br>
+            </div>
+            <div class="flex">
+                <input type="radio" id="laters" name="laters" value="laters">
+                <label for="laters">Atrasados</label><br>
+            </div>
+
+        </form>
+    </div>
+</section>
+<section class="flex items-center justify-center w-full h-5">
+
+    <p>Em atraso: {{ delayed_count }}</p>
+    <p>devoluções de hoje: {{ due_today_count }}</p>
+
+</section>
+
+<section class="w-full">
+    <table class="w-full border border-slate-500 rounded-[50%]">
+        <thead class=" text-white ">
+            <tr class=" h-10">
+                <th class="">Título do livro</th>
+                <th class="">Nome do locatario</th>
+                <th class="">Data do empréstimo</th>
+                <th class="">Data da devolução</th>
+                <th class="">Status</th>
+                <th class="last:bg-slate-600">menu</th>
+
+            </tr>
+        </thead>
+        <tbody class="border py-4 ">
+            {% for loan in loans %}
+            <tr class="h-10 
+            {% if loan.is_overdue() %} 
+                border-2 bg-red-400 
+            {% elif loan.is_due_today() %} 
+                border-2 bg-yellow-200 
+            {% else %}
+                bg-white 
+            {% endif %}">
+
+                <td class="text-center">
+                    <a href="{{ url_for('main.book_details', slug=loan.book.slug) }}" class="hover:text-blue-600">
+                        {{ loan.book.title }}
+                    </a>
+                </td>
+                <td class="text-center">{{ loan.reader.fullname }}</td>
+                <td class="text-center">{{ loan.formatted_loan_date() }}</td>
+                <td class="text-center">{{ loan.formatted_due_date()  }}</td>
+                <td class="text-center">{{ loan.status  }}</td>
+                <td class="text-center last:bg-white">
+                    <div class="flex justify-center space-x-2">
+                        <a href="{{ url_for('main.new_loan', slug=loan.book.slug) }}"
+                            class="px-2 py-1 bg-green-500  rounded">Renovar</a>
+
+                        <a href="{{ url_for('main.return_book', slug=loan.book.slug) }}"
+                            class="px-2 py-1 bg-red-500  rounded">Devolver</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+<section class="fixed bottom-2">
+    {% from "_macros/render_pagination.html" import render_pagination %}
+    {{ render_pagination(loans, endpoint) }}
+</section>
+{% endblock content %}
