@@ -3,11 +3,6 @@ import unicodedata
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
-from dynaconf import settings
-from flask import Response, redirect, request, url_for
-
-from src.backend.models.users import User
-
 
 def slugfy(text: str) -> str:
     # remove os acentos
@@ -29,21 +24,14 @@ def slugfy(text: str) -> str:
     return text
 
 
-def redirect_user_dashboard(user: User) -> Response:
-    if user.has_role(settings.ROLES["admin"]):
-        return redirect(url_for(settings.URL_FOR["admin"]))
-    else:
-        return redirect(url_for(settings.URL_FOR["main"]))
-
-
-def is_safe_url(url) -> bool:
+def is_safe_url(url: str, host:str) -> bool:
     if not url:
         return False
     try:
         parsed_url = urlparse(url)
         return (
             parsed_url.scheme == "" and parsed_url.netloc == ""
-        ) or parsed_url.netloc == request.host
+        ) or parsed_url.netloc == host
     except Exception:
         return False
 
