@@ -2,15 +2,15 @@
 from datetime import datetime, timedelta
 
 from dynaconf import settings
-from flask import redirect, request, url_for
+from flask import redirect, request, url_for, current_app, flash
 from flask_admin.base import AdminIndexView, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, login_required
 from wtforms.fields import PasswordField
 
 from src.backend.extensions.database import db
-from src.backend.extensions.security import access_confirmation, generate_password
 from src.backend.utils.utils import slugfy
+from src.backend.services.auth_service import access_confirmation
 
 from src.backend.models.roles import Roles
 
@@ -40,13 +40,12 @@ class DashboardView(BaseView):
 
 class LibrarianView(ModelView):
     form_columns = (
-       
         "email",
         "password",
         "role",
     )
 
-    column_list = ( "email", "role", "is_confirmed")
+    column_list = ("email", "role", "is_confirmed")
 
     column_labels = {
         "email": "Email",
@@ -64,13 +63,14 @@ class LibrarianView(ModelView):
     }
 
     def on_model_change(self, form, model, is_created):
-
         if form.password.data:
-            model.password = generate_password(form.password.data)
+            model.password = form.password.data
         try:
-            if is_created:
-                access_confirmation(model)
-        except Exception:
+            access_confirmation(model)
+            flash("Email de confirmação enviado com sucesso", "success")
+        except Exception as e:
+            current_app.logger.error(f"Erro ao enviar email: {e}")
+            flash("Erro ao enviar email de confirmação", "error")
             db.session.rollback()
 
 
