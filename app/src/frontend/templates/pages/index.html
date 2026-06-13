@@ -1,73 +1,56 @@
 {% extends 'layout.html' %}
-{#% block content %#}
-{{ render_message() }}
-<section class="content">
-    <div class="w-full">
-        <div class="flex flex-wrap justify-around items-start gap-y-2">
-            <div class="card border-l-blue-500 max-lg:border-blue-500">
-                <div class="flex flex-col items-center">
-                    <h2 class="font-bold">Novos Livros</h2>
-                    <div class="card-value">
-                        <p class="font-bold text-[15pt]">
-                            {#{ books.sum_total_of_books() }#}
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-row">
-                    <span
-                        class="fa fa-book text-[60px] max-lg:text-[40px] max-lg:relative max-lg:right-1 max-lg:bottom-1"></span>
-                    <span
-                        class="fa fa-plus text-[25px] self-end max-lg:text-[20px] max-lg:relative max-lg:right-2.5 max-lg:bottom-1"></span>
-                </div>
+{% block content %}
+
+<div class="content">
+    <div class="cards">
+        <div class="card">
+            <div class="card-title">
+                <span class="fas fa-book card-span"></span>
+                <p class="">Total de obras</p>
             </div>
-            <div class="card border-l-orange-500 border-orange-500">
-                <div class="flex flex-col items-center">
-                    <h2 class="font-bold">Devoluções do mês</h2>
-                    <div class="card-value">
-                        <p class="font-bold text-[15pt]">0</p>
-                    </div>
-                </div>
-                <div class="flex">
-                    <span
-                        class="fa-regular fa-calendar text-[60px] max-lg:text-[40px] max-lg:relative max-lg:right-2.5 max-lg:bottom-1"></span>
-                    <span class="text-[1.5rem] relative right-11 top-5 uppercase" id="month"></span>
-                </div>
+            <div class="card-value">
+                <h2 class="">
+                    {{ book_total }}
+                </h2>
             </div>
-            <div class="card border-l-green-500  max-lg:border-green-500">
-                <div class="flex flex-col items-center">
-                    <h2 class="font-bold">Devoluções do dia</h2>
-                    <div class="card-value">
-                        <p class="font-bold text-[15pt]">{#{lending.count_books_due_today()}#}</p>
-                    </div>
-                </div>
-                <div class="flex">
-                    <span
-                        class="fa-regular fa-calendar text-[60px] max-lg:text-[40px] max-lg:relative max-lg:left-2.5 max-lg:bottom-1">
-                    </span>
-                    <span class="text-[1.5rem] relative right-10 top-5" id="day"></span>
-                </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span class="far fa-calendar card-span"></span>
+                <p class="">Devoluções do mês</p>
             </div>
-            <div class="card border-l-yellow-500  max-lg:border-yellow-500">
-                <div class="flex flex-col items-center">
-                    <h2 class="font-bold">Em atraso</h2>
-                    <div class="card-value">
-                        <p class="font-bold text-[15pt]">{#{ lending.count_delayed_books() }#}</p>
-                    </div>
+            <div class="card-value">
+                <h2 class="">{{ monthly_loans }}</h2>
+            </div>
+            <span id="month"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span class="far fa-calendar card-span"></span>
+                <p class="">Devoluções do dia</p>
+            </div>
+            <div class="card-value">
+                <h2 class="">{{due_today}}</h2>
+            </div>
+            <span class="" id="day"></span>
+        </div>
+        <div class="card">
+            <div class="card-title">
+                <div class="card-span-group">
+                    <span class="far fa-clock card-span"></span>
+                    <span class="fas fa-exclamation-triangle card-span"></span>
                 </div>
-                <div class="flex">
-                    <span
-                        class="fa-regular fa-clock text-[60px] max-lg:text-[40px] max-lg:relative max-lg:right-2.5 max-lg:bottom-1"></span>
-                    <span
-                        class="fa fa-warning text-[25px] self-end relative right-2 max-lg:text-[20px] max-lg:relative max-lg:right-[15px] max-lg:bottom-1">
-                    </span>
-                </div>
+                <p class="">Em atraso</p>
+            </div>
+            <div class="card-value">
+                <h2 class="">{{ delayed_loans }}</h2>
             </div>
         </div>
     </div>
-</section>
-<!--  Livros mais lidos-->
-<section class="list-section">
-    <div class="list-group">
+
+    <div class="">
         <h4>Os 10 livros mais lidos</h4>
         <div class="book-list">
             {#{ current_user.fullname }#}
@@ -77,9 +60,6 @@
             <button class="bi bi-arrow-right-circle"></button>
         </div>
     </div>
-    <div>
+</div>
 
-    </div>
-</section>
-
-{#% endblock content %#}
+{% endblock content %}
