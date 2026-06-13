@@ -64,3 +64,6 @@ def format_date(date_value: str) -> str:
         return parsed_date.strftime("%d/%m/%Y")
     except Exception:
         return "N/A"
+
+def today_date() -> str:
+    return datetime.now().date()
