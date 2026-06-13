@@ -1,4 +1,5 @@
 from pathlib import Path
+# from .conftest import app
 
 def test_instance_path(app):
     db_path = Path(app.config["SQLALCHEMY_DATABASE_URI"].replace("sqlite:///", ""))
