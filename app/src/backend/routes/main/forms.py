@@ -73,13 +73,18 @@ class ReaderForm(FlaskForm):
     phone = StringField(
         "Telefone",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Digite o nº de telefone do leitor"},
+        render_kw={"placeholder": "Digite o telefone do leitor"},
     )
     submit = SubmitField(label="Adicionar novo leitor")
 
 
 class SearchBookForm(FlaskForm):
-    search = StringField()
+    search = StringField(
+        render_kw={
+            "placeholder": "Digite o título do livro ou o nome do autor",
+            "autocomplete": "off",
+        }
+    )
     submit = SubmitField(label="Buscar")
 
     # later = RadioField()
