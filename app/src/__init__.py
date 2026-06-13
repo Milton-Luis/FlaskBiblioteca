@@ -24,10 +24,7 @@ def create_app():
     configuration.init_app(app)
     configuration.load_extensions(app)
 
-    # Replace ${INSTANCE_PATH} with actual instance path
-    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('${INSTANCE_PATH}', app.instance_path)
-
-    import src.backend.models
+    import src.backend.models  # noqa: F401
 
     register_app_on_blueprint(app)
 
