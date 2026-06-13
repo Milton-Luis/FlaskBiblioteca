@@ -78,7 +78,7 @@ document.addEventListener( "DOMContentLoaded", function () {
 	const date = new Date();
 	const formated_date = format_date( date );
 
-	document.querySelector( "#lending_date" ).value = formated_date;
+	document.querySelector( "#loan_date" ).value = formated_date;
 } );
 
 document.addEventListener( "DOMContentLoaded", () => {
@@ -91,10 +91,14 @@ document.addEventListener( "DOMContentLoaded", () => {
 		fetch( `/api/livros/search?q=${query}` )
 			.then( ( response ) => response.text() )
 			.then( ( data ) => {
-				booksList.innerHTML = html;
+				booksList.innerHTML = data;
 			} )
 			.catch( err => console.error( "Error fetching search results:", err ) );
 	} );
+} );
+
+document.getElementById( "reader-form" ).addEventListener( "submit", ( e ) => {
+	e.preventDefault();
 } );
 
 document.addEventListener( "DOMContentLoaded", function () {
@@ -117,19 +121,57 @@ document.addEventListener( "DOMContentLoaded", function () {
 		fetch( `/api/emprestimos/novo/${slug}/search?q=${query}` )
 			.then( ( response ) => response.json() )
 			.then( ( data ) => {
-				// searchList.innerHTML = html;
-				// Limitar a exibição a 5 resultados
-				const limitedData = data.slice( 0, 5 );
+				searchList.innerHTML = "";
 
-				// Gerar HTML para os resultados limitados
-				const html = limitedData.map( item => `
-					<li class="list-group-item list-group-item-action" data-name="${item.name}">
-						${item.name}
-					</li>
-				` ).join( "" );
+				if ( data.length === 0 ) {
+					const noResults = document.createElement( "li" );
+					noResults.classList.add( "mt-2", "pl-2" )
+					noResults.textContent = "Nome não encontrado!";
+					searchList.appendChild( noResults );
+				} else {
+					data.forEach( ( name ) => {
+						const li = document.createElement( "li" );
+						li.classList.add( "reader-name" );
 
-				searchList.innerHTML = html;
-			} )
-			.catch( err => console.error( "Error fetching search results:", err ) );
+						const nameParagraph = document.createElement( "p" );
+						nameParagraph.textContent = `Nome: ${name.fullname}`;
+
+						li.addEventListener( "click", () => {
+							selectedName = name.fullname;
+							searchInput.value = selectedName;
+
+							fetch( "/api/emprestimos/selecionar-usuario", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json"
+								},
+								body: JSON.stringify( {
+									reader_id: name.id
+								} )
+							} )
+								.then( res => res.json() )
+								.then( data => {
+									if ( data.ok ) {
+										console.log( "Usuário salvo na sessão" )
+									}
+								} );
+
+							searchList.innerHTML = "";
+						} );
+						li.appendChild( nameParagraph );
+						searchList.appendChild( li );
+					} );
+				}
+			} );
+	} );
+} );
+
+
+document.addEventListener( "DOMContentLoaded", function () {
+	const toasts = document.querySelectorAll( ".toast" );
+
+	toasts.forEach( toastEl => {
+		const toast = new bootstrap.Toast( toastEl );
+		toast.show();
 	} );
 } );
