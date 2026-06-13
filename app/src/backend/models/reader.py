@@ -30,3 +30,7 @@ class Reader(db.Model):
     @fullname.expression
     def fullname(cls):
         return func.concat(cls.firstname, " ", cls.lastname)
+
+
+    def __str__(self):
+        return self.fullname
