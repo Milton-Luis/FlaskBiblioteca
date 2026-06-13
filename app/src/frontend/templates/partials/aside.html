@@ -1,0 +1,44 @@
+<aside>
+    <ul class="sidebar-items">
+        <li class="sidebar-item">
+            <a href="{{ url_for('main.index') }}" class="sidebar-link">
+                <span class="fas fa-home"></span>
+                <span class="sidebar-name">Início</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link " role="button" data-bs-toggle="collapse"
+                data-bs-target="#sidebarItemCollapse" aria-expanded="true" aria-controls="sidebarItemCollapse">
+                <span class="fas fa-book"></span>
+                <span class="sidebar-name">Livros</span>
+            </a>
+
+            <ul class="collapse show" id="sidebarItemCollapse">
+                <li class="sidebar-item">
+                    <a href="{{ url_for('main.new_book') }}" class="sidebar-link">
+                        <span class="fas fa-book"></span>
+                        <span class="sidebar-name">Adicionar livros</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ url_for('main.books_page') }}" class="sidebar-link">
+                        <span class="fas fa-book"></span>
+                        <span class="sidebar-name">Ver livros</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="{{ url_for('main.new_reader') }}" class="sidebar-link">
+                <span class="fas fa-book-reader"></span>
+                <span class="sidebar-name">Adicionar leitor</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="{{ url_for('main.loans_page') }}" class="sidebar-link">
+                <span class="fas fa-exchange-alt"></span>
+                <span class="sidebar-name">Empréstimos</span>
+            </a>
+        </li>
+    </ul>
+</aside>
