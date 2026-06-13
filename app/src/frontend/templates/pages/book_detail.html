@@ -14,15 +14,9 @@
                 <h2 class="">ISBN: {{ book.isbn }}</h2>
                 <h2 class="">Total de livros: {{ book.total_of_books }}</h2>
                 <h2 class="">Quantidade disponível:
-                    {% if book.available_quantity < 1 %} 
-                        Nenhum disponível 
-                    {% elif book.available_quantity==1 %}
-                        {{book.available_quantity }} livro 
-                    {% else %} 
-                    {{ book.available_quantity }} 
-                        livros 
-                    {% endif %}
-                </h2>
+                    {% if book.available_quantity < 1 %} Nenhum disponível {% elif book.available_quantity==1 %}
+                        {{book.available_quantity }} livro {% else %} {{ book.available_quantity }} livros {% endif %}
+                        </h2>
             </div>
             <div class="">
                 {% if book.available_quantity > 0 %}
