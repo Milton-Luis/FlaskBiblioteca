@@ -6,7 +6,8 @@ from flask_login import current_user, login_required, login_user, logout_user
 from src.backend.extensions.database import db
 from src.backend.security.tokens import validate_token
 from src.backend.models.users import User
-from src.backend.utils.utils import is_safe_url, redirect_user_dashboard
+from src.backend.utils.utils import is_safe_url
+from src.backend.services.auth_service import redirect_user_dashboard
 
 from . import auth
 from .forms import LoginForm
@@ -38,10 +39,11 @@ def login():
 
             next_page = request.args.get("next")
 
-            if next_page and is_safe_url(next_page):
+            if next_page and is_safe_url(next_page, request.host):
                 return redirect(next_page)
-
-            return redirect_user_dashboard(user)
+            
+            endpoint = redirect_user_dashboard(user)
+            return redirect(url_for(endpoint))
 
         flash("Usuário ou senha invalidos", "danger")
     return render_template("pages/auth/login.html", form=form, title="Login")
@@ -81,6 +83,7 @@ def unconfirmed():
     if current_user.is_confirmed:
         return redirect("main.index")
     return render_template("pages/auth/unconfirmed.html")
+
 
 @auth.route("/perfil", methods=["POST", "GET"])
 def profile():
