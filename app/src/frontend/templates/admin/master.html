@@ -20,9 +20,18 @@
   <aside class="sidebar">
     <div class="sidebar-header">{{ admin_view.admin.name }}</div>
     <nav class="sidebar-nav">
-      <ul class="nav flex-column">
-        {{ layout.menu() }}
-      </ul>
+      
+        {% block main_menu %}
+        <ul class="nav navbar-nav mr-auto flex-column">
+          {{ layout.menu() }}
+        </ul>
+        {% endblock %}
+
+        {% block menu_links %}
+        <ul class="nav navbar-nav navbar-right">
+          {{ layout.menu_links() }}
+        </ul>
+        {% endblock %}
     </nav>
   </aside>
 
