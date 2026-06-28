@@ -1,7 +1,8 @@
 from datetime import datetime
+
+from src.backend.components.components import STATUS_MAPPING
 from src.backend.extensions.database import db
 from src.backend.models.loan import BookLoan
-from src.backend.components.components import STATUS_MAPPING
 
 
 def create_loan(form, reader_id: int, book_id: int) -> BookLoan:
@@ -33,7 +34,7 @@ def count_books_due_today() -> int:
     )
 
 
-def has_active_loan(reader_id: int):
+def has_active_loan(reader_id: int) -> int:
     """Verifica se o usuário já possui um empréstimo ativo para o mesmo livro."""
     return (
         db.session.query(BookLoan)

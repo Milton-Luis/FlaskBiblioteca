@@ -2,11 +2,11 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import and_, func
-from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.hybrid import hybrid_property
-from src.backend.utils.utils import format_date, today_date
-from src.backend.extensions.database import db
+from sqlalchemy.orm import Mapped, mapped_column
 from src.backend.components.components import STATUS_MAPPING
+from src.backend.extensions.database import db
+from src.backend.utils.utils import format_date, today_date
 
 if TYPE_CHECKING:
     from .books import Books

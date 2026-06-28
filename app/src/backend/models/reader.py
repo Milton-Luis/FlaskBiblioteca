@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import func
-
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import Mapped, mapped_column
 from src.backend.extensions.database import db
 
 if TYPE_CHECKING:

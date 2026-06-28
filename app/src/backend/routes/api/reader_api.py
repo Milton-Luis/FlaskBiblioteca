@@ -1,7 +1,6 @@
 from flask import jsonify, request, session
 from flask_login import login_required
 from sqlalchemy.sql import asc
-
 from src.backend.extensions.database import db
 from src.backend.models.reader import Reader
 

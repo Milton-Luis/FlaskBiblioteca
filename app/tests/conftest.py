@@ -1,6 +1,5 @@
 import pytest
 from dynaconf import settings
-
 from src import create_app
 
 settings.configure(ENV_FOR_DYNACONF="testing")

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import DateField, IntegerField, StringField, SubmitField
-from wtforms.validators import DataRequired, NumberRange, Email
+from wtforms.validators import DataRequired, Email, NumberRange
 
 
 class BookForm(FlaskForm):

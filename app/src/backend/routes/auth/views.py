@@ -2,12 +2,11 @@ from datetime import datetime
 
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-
 from src.backend.extensions.database import db
-from src.backend.security.tokens import validate_token
 from src.backend.models.users import User
-from src.backend.utils.utils import is_safe_url
+from src.backend.security.tokens import validate_token
 from src.backend.services.auth_service import redirect_user_dashboard
+from src.backend.utils.utils import is_safe_url
 
 from . import auth
 from .forms import LoginForm

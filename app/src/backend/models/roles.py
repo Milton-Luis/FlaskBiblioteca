@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Mapped, mapped_column
-
 from src.backend.extensions.database import db
 
 if TYPE_CHECKING:

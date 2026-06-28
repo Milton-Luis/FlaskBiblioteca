@@ -4,10 +4,8 @@ from typing import TYPE_CHECKING
 
 from flask_login import UserMixin
 from sqlalchemy.orm import Mapped, mapped_column
-
 from src.backend.extensions.database import db
 from src.backend.extensions.security import argon2
-
 from src.backend.models.roles import RolesMixin
 
 if TYPE_CHECKING:

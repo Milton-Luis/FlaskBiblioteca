@@ -1,7 +1,7 @@
-from src.backend.security.tokens import generate_confirmation_token
+from dynaconf import settings
 from src.backend.extensions.mail import send_email
 from src.backend.models.users import User
-from dynaconf import settings
+from src.backend.security.tokens import generate_confirmation_token
 
 
 def access_confirmation(user):

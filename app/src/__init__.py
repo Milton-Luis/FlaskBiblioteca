@@ -1,7 +1,6 @@
 from importlib import import_module
 
 from flask import Flask
-
 from src.backend.extensions import configuration
 
 
