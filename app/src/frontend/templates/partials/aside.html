@@ -7,6 +7,12 @@
             </a>
         </li>
         <li class="sidebar-item">
+            <a href="{{ url_for('main.new_reader') }}" class="sidebar-link">
+                <span class="fas fa-book-reader"></span>
+                <span class="sidebar-name">Adicionar leitor</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
             <a href="#" class="sidebar-link " role="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarItemCollapse" aria-expanded="true" aria-controls="sidebarItemCollapse">
                 <span class="fas fa-book"></span>
@@ -28,12 +34,7 @@
                 </li>
             </ul>
         </li>
-        <li class="sidebar-item">
-            <a href="{{ url_for('main.new_reader') }}" class="sidebar-link">
-                <span class="fas fa-book-reader"></span>
-                <span class="sidebar-name">Adicionar leitor</span>
-            </a>
-        </li>
+        
         <li class="sidebar-item">
             <a href="{{ url_for('main.loans_page') }}" class="sidebar-link">
                 <span class="fas fa-exchange-alt"></span>
