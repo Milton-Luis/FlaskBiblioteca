@@ -67,7 +67,7 @@ EXTENSIONS = [
     "src.backend.extensions.security:init_app",
     "src.backend.extensions.authentication:init_app",
     "src.backend.extensions.mail:init_app",
-    "src.backend.extensions.admin.admin:init_app",
+    "src.backend.extensions.admin:init_app",
     "src.backend.extensions.commands:init_app",
 ]
 
@@ -75,7 +75,7 @@ EXTENSIONS = [
 [development]
 DEBUG = true
 EXTENSIONS = [
-    "dynaconf_merge_unique", # to reuse extensions list from [default]
+    "dynaconf_merge", # to reuse extensions list from [default]
 ]
 
 [testing]
