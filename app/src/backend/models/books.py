@@ -31,7 +31,7 @@ class Books(db.Model):
     def decrease_stock(self, quantity: int) -> int:
         new_available_quantity = self.available_quantity - quantity
 
-        if new_available_quantity > self.total_of_books:
+        if new_available_quantity < 0:
             raise ValueError("Quantidade de livros indisponível")
 
         self.available_quantity -= quantity
