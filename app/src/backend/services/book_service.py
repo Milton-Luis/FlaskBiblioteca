@@ -16,6 +16,11 @@ def create_book(form):
 
     return book
 
+def get_book_by_slug(slug: str):
+    book = db.session.query(Books).filter_by(slug=slug).first()
+    if not book:
+        raise ValueError("Livro não encontrado")
+    return book
 
 def get_book(book_id: int):
     book = db.session.get(Books, book_id)
@@ -24,8 +29,8 @@ def get_book(book_id: int):
     return book
 
 
-def borrow_book(book_id: int) -> int:
-    book = get_book(book_id)
+def borrow_book(book: int) -> int:
+    # book = get_book(book_id)
 
     if not book:
         raise ValueError("Livro não encontrado")
