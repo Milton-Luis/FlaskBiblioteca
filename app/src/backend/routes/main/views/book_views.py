@@ -4,14 +4,14 @@ from sqlalchemy import asc
 from src.backend.extensions.database import db
 from src.backend.models.books import Books
 from src.backend.routes.main import main
-from src.backend.routes.main.forms import BookForm, SearchBookForm
+from src.backend.routes.main.forms import BookForm, SearchForm
 from src.backend.services import book_service
 
 
 @main.route("/livros", methods=["POST", "GET"])
 @login_required
 def books_page():
-    form = SearchBookForm()
+    form = SearchForm()
 
     page = request.args.get("page", 1, type=int)
     books = (

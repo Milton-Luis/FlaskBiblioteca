@@ -78,13 +78,11 @@ class ReaderForm(FlaskForm):
     submit = SubmitField(label="Adicionar novo leitor")
 
 
-class SearchBookForm(FlaskForm):
+class SearchForm(FlaskForm):
     search = StringField(
         render_kw={
-            "placeholder": "Digite o título do livro ou o nome do autor",
             "autocomplete": "off",
         }
     )
-    submit = SubmitField(label="Buscar")
 
     # later = RadioField()
