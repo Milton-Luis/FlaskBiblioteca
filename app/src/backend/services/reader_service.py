@@ -11,3 +11,14 @@ def create_reader(form):
     db.session.add(reader)
 
     return reader
+
+def get_valid_reader(reader_id: int):
+    if reader_id is None:
+        return None
+    
+    reader = db.session.get(Reader, reader_id)
+
+    if reader is None:
+        raise ValueError("Leitor não encontrado")
+    
+    return reader
