@@ -4,6 +4,7 @@ from src.backend.extensions.database import db
 from src.backend.routes.main import main
 from src.backend.routes.main.forms import ReaderForm
 from src.backend.services import reader_service
+from sqlalchemy.exc import SQLAlchemyError
 
 
 @main.route("/reader/novo", methods=["POST", "GET"])
@@ -16,12 +17,12 @@ def new_reader():
             reader_service.create_reader(form)
             db.session.commit()
 
-            flash("Leitor adicionado!!", "success")
-        except Exception:
-            flash("Erro ao adicionar leitor", "danger")
+        except SQLAlchemyError as error:
             db.session.rollback()
-        return redirect(url_for("main.index"))
+            flash("Erro ao adicionar leitor", "danger")
+            raise error
+        else:
+            flash("Leitor adicionado!!", "success")
+            return redirect(url_for("main.index"))
 
-    return render_template(
-        "pages/new_reader.html", form=form, title="Adicionar leitor"
-    )
+    return render_template("pages/new_reader.html", form=form, title="Adicionar leitor")
