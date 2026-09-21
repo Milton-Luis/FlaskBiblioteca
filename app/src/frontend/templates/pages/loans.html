@@ -3,69 +3,68 @@
 {% block content %}
 <div class="content">
     <h2 class="">Empréstimos</h4>
-    <div class="menu-loan">
-        <form action="" method="GET">
-            <div class="">
-                <input type="radio" id="all_lends" name="all_lends" value="all_lends" checked>
-                <label for="all_lends">Todos</label><br>
-            </div>
-            <div class="">
-                <input type="radio" id="laters" name="laters" value="laters">
-                <label for="laters">Atrasados</label><br>
-            </div>
-        </form>
-    </div>
-    <div class="">
+        <div class="menu-loan">
+            <form action="" method="GET">
+                <div class="">
+                    <input type="radio" id="all_lends" name="all_lends" value="all_lends" checked>
+                    <label for="all_lends">Todos</label><br>
+                </div>
+                <div class="">
+                    <input type="radio" id="laters" name="laters" value="laters">
+                    <label for="laters">Atrasados</label><br>
+                </div>
+            </form>
+        </div>
+        <div class="">
 
-        <p>Em atraso: {{ delayed_count }}</p>
-        <p>devoluções de hoje: {{ due_today_count }}</p>
+            <p>Em atraso: {{ delayed_count }}</p>
+            <p>devoluções de hoje: {{ due_today_count }}</p>
 
-    </div>
+        </div>
 
-    <div class="">
-        <table class="table">
-            <thead class="">
-                <tr class="">
-                    <th class="">Título do livro</th>
-                    <th class="">Nome do locatario</th>
-                    <th class="">Data do empréstimo</th>
-                    <th class="">Data da devolução</th>
-                    <th class="">Status</th>
-                    <th class="">menu</th>
+        <div class="">
+            <table class="table">
+                <thead class="">
+                    <tr class="">
+                        <th class="">Título do livro</th>
+                        <th class="">Nome do locatario</th>
+                        <th class="">Data do empréstimo</th>
+                        <th class="">Data da devolução</th>
+                        <th class="">Status</th>
+                        <th class="">menu</th>
 
-                </tr>
-            </thead>
-            <tbody class="">
-                {% for loan in loans %}
-                <tr
-                    class="loan_status {% if loan.is_overdue() %} loan_overdue {% elif loan.is_due_today() %} loan_due_today {% endif %}">
+                    </tr>
+                </thead>
+                <tbody class="">
+                    {% for loan in loans %}
+                    <tr
+                        class="loan_status {% if loan.is_overdue() %} loan_overdue {% elif loan.is_due_today() %} loan_due_today {% endif %}">
 
-                    <td class="">
-                        <a href="{{ url_for('main.book_details', slug=loan.book.slug) }}" class="hover:text-blue-600">
-                            {{ loan.book.title }}
-                        </a>
-                    </td>
-                    <td class="">{{ loan.reader.fullname }}</td>
-                    <td class="">{{ loan.formatted_loan_date() }}</td>
-                    <td class="">{{ loan.formatted_due_date() }}</td>
-                    <td class="">{{ loan.status }}</td>
-                    <td class="">
-                        <div class="">
-                            <a href="{{ url_for('main.new_loan', slug=loan.book.slug) }}"
-                                class="">Renovar</a>
+                        <td class="">
+                            <a href="{{ url_for('main.book_details', slug=loan.book.slug) }}"
+                                class="hover:text-blue-600">
+                                {{ loan.book.title }}
+                            </a>
+                        </td>
+                        <td class="">{{ loan.reader.fullname }}</td>
+                        <td class="">{{ loan.formatted_loan_date() }}</td>
+                        <td class="">{{ loan.formatted_due_date() }}</td>
+                        <td class="">{{ loan.status }}</td>
+                        <td class="">
+                            <div class="">
+                                <a href="{{ url_for('main.new_loan', slug=loan.book.slug) }}" class="">Renovar</a>
 
-                            <a href="{{ url_for('main.return_book', slug=loan.book.slug) }}"
-                                class="">Devolver</a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="ft_paginate">
-        {% from "_macros/render_pagination.html" import render_pagination %}
-        {{ render_pagination(loans, "main.loans_page") }}
-    </div>
+                                <a href="{{ url_for('main.return_loan', slug=loan.book.slug) }}" class="">Devolver</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="ft_paginate">
+            {% from "_macros/render_pagination.html" import render_pagination %}
+            {{ render_pagination(loans, "main.loans_page") }}
+        </div>
 </div>
 {% endblock content %}
