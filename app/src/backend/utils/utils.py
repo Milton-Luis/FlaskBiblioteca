@@ -24,16 +24,16 @@ def slugfy(text: str) -> str:
     return text
 
 
-def is_safe_url(url: str, host:str) -> bool:
+def is_safe_url(url: str, host: str) -> bool:
     if not url:
         return False
     try:
         parsed_url = urlparse(url)
-        return (
-            parsed_url.scheme == "" and parsed_url.netloc == ""
-        ) or parsed_url.netloc == host
-    except Exception:
+    except ValueError:
         return False
+    return (
+        parsed_url.scheme == "" and parsed_url.netloc == ""
+    ) or parsed_url.netloc == host
 
 
 def renew_loan(loan):
@@ -52,6 +52,7 @@ def format_date(date_value: str) -> str:
         return parsed_date.strftime("%d/%m/%Y")
     except Exception:
         return "N/A"
+
 
 def today_date() -> str:
     return datetime.now().date()
