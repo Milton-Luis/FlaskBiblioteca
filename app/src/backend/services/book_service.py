@@ -1,7 +1,8 @@
-from sqlalchemy import func
+from sqlalchemy import func, asc
 from src.backend.extensions.database import db
 from src.backend.models.books import Books
 from src.backend.utils.utils import slugfy
+from src.backend.exceptions.book import BookNotFoundError
 
 
 def create_book(form):
@@ -16,21 +17,28 @@ def create_book(form):
 
     return book
 
-def get_book_by_slug(slug: str):
+
+def get_all_books():
+    books = db.select(Books).order_by(asc(Books.title))
+    return books
+
+
+def get_book_by_slug(slug: str) -> Books:
     book = db.session.query(Books).filter_by(slug=slug).first()
-    if not book:
-        raise ValueError("Livro não encontrado")
+    if book is None:
+        raise BookNotFoundError(slug)
     return book
 
-def get_book(book_id: int):
+
+def get_book_by_id(book_id: int) -> Books:
     book = db.session.get(Books, book_id)
-    if not book:
-        raise ValueError("Livro não encontrado")
+    if book is None:
+        raise BookNotFoundError(book_id)
     return book
 
 
 def borrow_book(book: int) -> int:
-    # book = get_book(book_id)
+    # book = get_book_by_id(book_id)
 
     if not book:
         raise ValueError("Livro não encontrado")
@@ -40,7 +48,7 @@ def borrow_book(book: int) -> int:
 
 
 def return_book(book_id: int) -> int:
-    book = get_book(book_id)
+    book = get_book_by_id(book_id)
 
     if not book:
         raise ValueError("Livro não encontrado")
