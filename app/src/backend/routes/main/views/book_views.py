@@ -1,24 +1,17 @@
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required
-from sqlalchemy import asc
 from src.backend.extensions.database import db
-from src.backend.models.books import Books
 from src.backend.routes.main import main
 from src.backend.routes.main.forms import BookForm, SearchForm
 from src.backend.services import book_service
+from sqlalchemy.exc import SQLAlchemyError
 
 
 @main.route("/livros", methods=["POST", "GET"])
 @login_required
 def books_page():
     form = SearchForm()
-
-    page = request.args.get("page", 1, type=int)
-    books = (
-        db.session.query(Books)
-        .order_by(asc(Books.title))
-        .paginate(page=page, per_page=10, error_out=True)
-    )
+    books = db.paginate(book_service.get_all_books(), per_page=2, max_per_page=10)
 
     return render_template(
         "pages/books.html",
@@ -37,11 +30,13 @@ def new_book():
             book_service.create_book(form)
             db.session.commit()
 
-            flash("Livro adicionado com sucesso!", "success")
-            return redirect(url_for("main.index"))
-        except Exception:
+        except SQLAlchemyError as error:
             db.session.rollback()
             flash("Erro ao criar novo livro!", "danger")
+            raise error
+        else:
+            flash("Livro adicionado com sucesso!", "success")
+            return redirect(url_for("main.index"))
 
     return render_template("pages/new_book.html", form=form, title="Novo Livro")
 
@@ -49,7 +44,7 @@ def new_book():
 @main.route("/livros/detalhes/<slug>", methods=["GET", "POST"])
 @login_required
 def book_details(slug):
-    book = Books.query.filter_by(slug=slug).first()
+    book = book_service.get_book_by_slug(slug)
 
     return render_template(
         "pages/book_detail.html", book=book, title=f"Livro - {book.title}"
