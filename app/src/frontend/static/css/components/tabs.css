@@ -1,0 +1,32 @@
+.content-tab-list{
+    display:block;
+}
+.tabs {
+    margin-top: 4rem;
+    margin-inline: 2rem;
+}
+
+.nav-tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+}
+
+.nav-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: var(--primary-bg-color);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-item:has(.nav-link.active) {
+    --bs-nav-tabs-link-active-bg: var(--primary-bg-color);
+    --bs-nav-tabs-link-active-color: var(--light-color);
+    --bs-nav-tabs-link-active-border-color: var(--primary-bg-color);
+}
