@@ -1,9 +1,6 @@
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import login_required
 from src.backend.extensions.database import db
-from src.backend.models.books import Books
-from src.backend.models.loan import BookLoan
-from src.backend.models.reader import Reader
 from src.backend.routes.main import main
 from src.backend.routes.main.forms import BookLoanForm, SearchForm
 from src.backend.services import book_service, loan_service, reader_service
@@ -12,8 +9,9 @@ from src.backend.services import book_service, loan_service, reader_service
 @main.route("/emprestimos")
 @login_required
 def loans_page():
-    page = request.args.get("page", 1, type=int)
-    loans = BookLoan.query.paginate(page=page, per_page=5, error_out=True)
+    loans = db.paginate(
+        loan_service.get_all_loans(), per_page=5, max_per_page=10, error_out=True
+    )
 
     return render_template(
         "pages/loans.html",
@@ -22,28 +20,34 @@ def loans_page():
     )
 
 
-@main.route("/emprestimos/novo/<slug>", methods=["POST", "GET"])
+@main.route("/emprestimos/novo/", methods=["POST", "GET"])
 @login_required
-def new_loan(slug):
+def new_loan():
     loan_form = BookLoanForm()
     search_form = SearchForm()
 
+    slug = request.args.get("slug")
+
     reader_id = session.get("reader_id")
     reader = reader_service.get_valid_reader(reader_id)
-    book = book_service.get_book_by_slug(slug)
 
-    if book:
+    book = None
+    if slug:
+        book = book_service.get_book_by_slug(slug)
         loan_form.title.data = book.title
 
     if loan_form.validate_on_submit():
         try:
-            loan_service.create_loan(loan_form, reader, book)
+            if loan_service.has_active_loan(reader.id):
+                flash("Leitor já possui um empréstimo ativo.", "warning")
 
+            loan_service.create_loan(loan_form, reader, book)
             db.session.commit()
             flash("Empréstimo realizado!", "success")
-        except ValueError as e:
+
+        except ValueError as error:
             db.session.rollback()
-            flash(f"Erro ao criar empréstimo: {str(e)}", "danger")
+            raise error from ValueError
 
         session.pop("reader_id")
         return redirect(url_for("main.index"))
@@ -60,8 +64,8 @@ def new_loan(slug):
 
 @main.route("/emprestimos/devolucao/<slug>", methods=["GET", "POST"])
 @login_required
-def return_book(slug):
-    loans = db.session.query(BookLoan).join(Books).filter_by(slug=slug).first()
+def return_loan(slug):
+    loans = loan_service.get_loan_by_book_slug(slug)
 
     try:
         book_service.return_book(loans.book_id)
@@ -80,22 +84,22 @@ def return_book(slug):
 
 
 # TODO ajustar a tora renew loan com tratamento de exceções e rollback
-@main.route("/emprestimos/renovar/<int:id>/", methods=["GET", "POST"])
-@login_required
-def renew_loan(id):
-    search_form = SearchForm()
-    reader_id = session.get("reader_id")
+# @main.route("/emprestimos/renovar/<int:id>/", methods=["GET", "POST"])
+# @login_required
+# def renew_loan(id):
+#     search_form = SearchForm()
+#     reader_id = session.get("reader_id")
 
-    loan = db.session.get(BookLoan, id)
-    reader = reader_service.get_valid_reader(reader_id)
+#     loan = db.session.get(BookLoan, id)
+#     reader = reader_service.get_valid_reader(reader_id)
 
-    search_form.search.data = reader.fullname
+#     search_form.search.data = reader.fullname
 
-    if loan:
-        loan_service.create_loan(loan, reader, loan.book_id)
-        db.session.commit()
-        flash("Empréstimo renovado com sucesso!", "success")
-    else:
-        flash("Empréstimo não encontrado.", "danger")
+#     if loan:
+#         loan_service.create_loan(loan, reader, loan.book_id)
+#         db.session.commit()
+#         flash("Empréstimo renovado com sucesso!", "success")
+#     else:
+#         flash("Empréstimo não encontrado.", "danger")
 
-    return redirect(url_for("main.loans"))
+#     return redirect(url_for("main.loans"))
