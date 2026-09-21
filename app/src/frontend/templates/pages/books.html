@@ -1,18 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="content">
-    <div class="search-block">
-        <div class="input-group">
-            <span class="input-group-text fa fa-search"></span>
-            {{ form.search(class="form-control") }}
-        </div>
-    </div>
-    <div class="books-block">
-        <ul class="" id="books-list">
-            <h1 class="error-message"></h1>
-            {% include "partials/_books_list.html" %}
-        </ul>
-    </div>
+     {% include "partials/_books_search.html" %}
     <div class="pagination-block">
         {{ render_pagination(books, "main.books_page") }}
     </div>
