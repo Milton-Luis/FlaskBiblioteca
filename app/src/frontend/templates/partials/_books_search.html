@@ -1,0 +1,18 @@
+<div class="search-block">
+    <div class="input-group">
+        <span class="input-group-text fa fa-search"></span>
+        {% if form %}
+            {{ form.search(class="form-control") }}
+            
+        {% else %}
+            {{ search_form.search(class="form-control") }}
+            
+        {% endif %}
+    </div>
+</div>
+<div class="books-block">
+    <ul class="" id="books-list">
+        <h1 class="error-message"></h1>
+        {% include "partials/_books_list.html" %}
+    </ul>
+</div>

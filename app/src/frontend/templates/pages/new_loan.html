@@ -2,45 +2,77 @@
 
 
 {% block content %}
+<div class="content">
 
-
-<section class="content">
-
-    <form class="h-auto " id="reader-form" autocomplete="off">
-        {{ form.hidden_tag() }}
-        <div class="input-group max-lg:w-full">
+    <form class="" id="reader-form">
+        {{ search_form.hidden_tag() }}
+        <div class="">
             <span class="input-group-text fa fa-search "></span>
-            {{ search_form.search(class="", placeholder="Digite o nome completo dolocatário")}}
-
+            {{ search_form.search(class="form-control", placeholder="Digite o nome do leitor")}}
         </div>
-        <ul id="search-list" class="z-10"></ul>
+        <ul id="search-list" class=""></ul>
     </form>
-</section>
+</div>
 
 
-<section class="max-lg:w-full">
+<div class="">
     <div class="mirror">
         <form action="{{ url_for('main.new_loan', slug=book.slug) }}" method="POST">
-            {{ form.hidden_tag() }}
+            {{ loan_form.hidden_tag() }}
 
             <div class="flex flex-col mt-3">
-                {{ form.title.label}}
-                {{ form.title(class="form-control") }}
+                {{ loan_form.title.label}}
+                {{ loan_form.title(class="form-control") }}
             </div>
             <div class="flex flex-col mt-3">
-                {{ form.loan_date.label}}
-                {{ form.loan_date(class="form-control") }}
+                {{ loan_form.loan_date.label}}
+                {{ loan_form.loan_date(class="form-control") }}
             </div>
             <div class="flex flex-col mt-3">
-                {{ form.due_date.label}}
-                {{ form.due_date(class="form-control") }}
+                {{ loan_form.due_date.label}}
+                {{ loan_form.due_date(class="form-control") }}
             </div>
             <div class="mt-3">
-                {{ form.submit(class="button-control", value="Efetuar Empréstimo")
+                {{ loan_form.submit(class="button-control", value="Efetuar Empréstimo")
                 }}
             </div>
         </form>
     </div>
-</section>
+</div>
+<!-- <div class="content">
+    <div class="content-tab-list">
+
+        <div class="tabs">
+            <ul class="nav nav-tabs" id="loanTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" href="#books" id="books-tab" data-bs-toggle="tab" role="tab"
+                        aria-controls="book" aria-selected="true">Livro</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="#reader" id="reader-tab" data-bs-toggle="tab" role="tab"
+                        aria-controls="reader" aria-selected="false">Leitor</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="#loan" id="loan-tab" data-bs-toggle="tab" role="tab" aria-controls="loan"
+                        aria-selected="true">Empréstimo</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content" id="loanTabContent">
+            <div class="tab-pane fade show active" id="books" role="tabpanel" aria-labelledby="books-tab">
+                {#% include "partials/_books_search.html" %#}
+            </div>
+            <div class="tab-pane fade" id="reader" role="tabpanel" aria-labelledby="reader-tab">
+                reader
+            </div>
+            <div class="tab-pane fade" id="loan" role="tabpanel" aria-labelledby="loan-tab">
+                loan
+            </div>
+        </div>
+
+
+    </div>
+</div> -->
 
 {% endblock content %}
